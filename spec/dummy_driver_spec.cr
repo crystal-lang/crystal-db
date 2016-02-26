@@ -1,6 +1,4 @@
-require "spec"
-require "db"
-require "./dummy_driver"
+require "./spec_helper"
 
 describe DummyDriver do
   it "with_dummy executes the block with a database" do

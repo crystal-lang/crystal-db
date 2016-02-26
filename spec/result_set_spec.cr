@@ -1,6 +1,4 @@
-require "spec"
-require "db"
-require "./dummy_driver"
+require "./spec_helper"
 
 describe DB::ResultSet do
   it "should enumerate records using each" do

@@ -1,4 +1,5 @@
 require "spec"
+require "../src/db"
 
 class DummyDriver < DB::Driver
   def build_connection(db : DB::Database) : DB::Connection

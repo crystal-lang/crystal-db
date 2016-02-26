@@ -1,6 +1,4 @@
-require "spec"
-require "db"
-require "./dummy_driver"
+require "./spec_helper"
 
 private def connections
   DummyDriver::DummyConnection.connections

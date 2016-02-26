@@ -1,6 +1,4 @@
-require "spec"
-require "db"
-require "./dummy_driver"
+require "./spec_helper"
 
 describe DB::Statement do
   it "should prepare statements" do

@@ -118,10 +118,10 @@ module DB
   end
 end
 
-require "./query_methods"
-require "./disposable"
-require "./database"
-require "./driver"
-require "./connection"
-require "./statement"
-require "./result_set"
+require "./db/query_methods"
+require "./db/disposable"
+require "./db/database"
+require "./db/driver"
+require "./db/connection"
+require "./db/statement"
+require "./db/result_set"
