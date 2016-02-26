@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bcardiff/crystal-db.svg?branch=master)](https://travis-ci.org/bcardiff/crystal-db)
+
 # crystal-db
 
 Common db api for crystal
@@ -46,16 +48,17 @@ DB.open "sqlite3:./file.db" do |db|
   end
 end
 ```
+
 ## Roadmap
 
 Issues not yet addressed
 
-[ ] Support non prepared statements.
-[ ] Time data type.
-[ ] Data type extensibility. Allow each driver to extend the data types allowed.
-[ ] Transactions.
-[ ] Connection pool.
-[ ] Direct access to `IO` to avoid memory allocation for blobs.
+* Support non prepared statements.
+* Time data type.
+* Data type extensibility. Allow each driver to extend the data types allowed.
+* Transactions.
+* Connection pool.
+* Direct access to `IO` to avoid memory allocation for blobs.
 
 ## Contributing
 
