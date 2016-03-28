@@ -41,6 +41,13 @@ module DB
       end
     end
 
+    # Iterates over all the columns
+    def each_column
+      column_count.times do |x|
+        yield column_name(x), column_type(x)
+      end
+    end
+
     # Move the next row in the result.
     # Return `false` if no more rows are available.
     # See `#each`
