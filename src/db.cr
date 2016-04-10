@@ -70,7 +70,7 @@ module DB
   # Types supported to interface with database driver.
   # These can be used in any `ResultSet#read` or any `Database#query` related
   # method to be used as query parameters
-  TYPES = [String, Int32, Int64, Float32, Float64, Slice(UInt8)]
+  TYPES = [Nil, String, Int32, Int64, Float32, Float64, Slice(UInt8)]
 
   # See `DB::TYPES` in `DB`. `Any` is a nillable version of the union of all types in `DB::TYPES`
   alias Any = Nil | String | Int32 | Int64 | Float32 | Float64 | Slice(UInt8)

@@ -55,7 +55,7 @@ class DummyDriver < DB::Driver
     private def set_params(args)
       @params.clear
       args.each_with_index do |arg, index|
-        @params[index] = arg
+        @params[index] = arg.as(DB::Any)
       end
     end
 
@@ -114,10 +114,14 @@ class DummyDriver < DB::Driver
       return nil if n == "NULL"
 
       if n == "?"
-        return @statement.params[0]
+        return (@statement.as(DummyStatement)).params[0]
       end
 
       return n
+    end
+
+    def read?(t : Nil.class)
+      read?.as(Nil)
     end
 
     def read?(t : String.class)

@@ -72,6 +72,11 @@ module DB
       end
     {% end %}
 
+    # Reads the next column as a Nil.
+    def read(t : Nil.class) : Nil
+      read?(Nil)
+    end
+
     # def read_blob
     #   yield ... io ....
     # end
