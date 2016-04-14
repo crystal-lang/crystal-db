@@ -76,30 +76,8 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query
-      perform_query(Slice(Any).new(0)).tap do |rs|
-        begin
-          yield rs
-        ensure
-          rs.close
-        end
-      end
-    end
-
-    # See `QueryMethods#query`
     def query(args : Array)
       perform_query args
-    end
-
-    # See `QueryMethods#query`
-    def query(args : Array)
-      perform_query(args).tap do |rs|
-        begin
-          yield rs
-        ensure
-          rs.close
-        end
-      end
     end
 
     # See `QueryMethods#query`
@@ -109,7 +87,7 @@ module DB
 
     # See `QueryMethods#query`
     def query(*args)
-      perform_query(args).tap do |rs|
+      query(*args).tap do |rs|
         begin
           yield rs
         ensure

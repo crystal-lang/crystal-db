@@ -167,6 +167,13 @@ describe DB do
       db.query("query", Slice(UInt8).new(4)) { }
       db.query("query", 1, "string", FooValue.new(5)) { }
       db.query "query", [1, "string", FooValue.new(5)] { }
+
+      db.query("query").close
+      db.query("query", 1).close
+      db.query("query", 1, "string").close
+      db.query("query", Slice(UInt8).new(4)).close
+      db.query("query", 1, "string", FooValue.new(5)).close
+      db.query("query", [1, "string", FooValue.new(5)]).close
     end
 
     DB.open("bar://host") do |db|
@@ -177,6 +184,13 @@ describe DB do
       db.query("query", Slice(UInt8).new(4)) { }
       db.query("query", 1, "string", BarValue.new(5)) { }
       db.query "query", [1, "string", FooValue.new(5)] { }
+
+      db.query("query").close
+      db.query("query", 1).close
+      db.query("query", 1, "string").close
+      db.query("query", Slice(UInt8).new(4)).close
+      db.query("query", 1, "string", BarValue.new(5)).close
+      db.query("query", [1, "string", BarValue.new(5)]).close
     end
   end
 end
