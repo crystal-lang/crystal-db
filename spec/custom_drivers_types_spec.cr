@@ -26,16 +26,30 @@ class GenericResultSet(T) < DB::ResultSet
   {% for t in DB::TYPES %}
     # Reads the next column as a nillable {{t}}.
     def read?(t : {{t}}.class) : {{t}}?
-      @index += 1
-      @row[@index - 1] as {{t}}?
+      read_object as {{t}}?
     end
   {% end %}
+
+  def read_object
+    @index += 1
+    @row[@index - 1]
+  end
+end
+
+class FooValue
+  def initialize(@value : Int32)
+  end
+
+  def value
+    @value
+  end
 end
 
 class FooDriver < DB::Driver
-  @@row = [] of DB::Any
+  alias Any = DB::Any | FooValue
+  @@row = [] of Any
 
-  def self.fake_row=(row : Array(DB::Any))
+  def self.fake_row=(row : Array(Any))
     @@row = row
   end
 
@@ -55,7 +69,7 @@ class FooDriver < DB::Driver
 
   class FooStatement < DB::Statement
     protected def perform_query(args : Slice(DB::Any)) : DB::ResultSet
-      GenericResultSet(DB::Any).new(self, FooDriver.fake_row)
+      GenericResultSet(Any).new(self, FooDriver.fake_row)
     end
 
     protected def perform_exec(args : Slice(DB::Any)) : DB::ExecResult
@@ -66,10 +80,18 @@ end
 
 DB.register_driver "foo", FooDriver
 
-class BarDriver < DB::Driver
-  @@row = [] of DB::Any
+class BarValue
+  getter value
 
-  def self.fake_row=(row : Array(DB::Any))
+  def initialize(@value : Int32)
+  end
+end
+
+class BarDriver < DB::Driver
+  alias Any = DB::Any | BarValue
+  @@row = [] of Any
+
+  def self.fake_row=(row : Array(Any))
     @@row = row
   end
 
@@ -89,7 +111,7 @@ class BarDriver < DB::Driver
 
   class BarStatement < DB::Statement
     protected def perform_query(args : Slice(DB::Any)) : DB::ResultSet
-      GenericResultSet(DB::Any).new(self, BarDriver.fake_row)
+      GenericResultSet(Any).new(self, BarDriver.fake_row)
     end
 
     protected def perform_exec(args : Slice(DB::Any)) : DB::ExecResult
@@ -109,22 +131,26 @@ describe DB do
   it "Foo and Bar drivers should return fake_row" do
     with_witness do |w|
       DB.open("foo://host") do |db|
-        FooDriver.fake_row = [1, "string"] of DB::Any
+        # TODO somehow FooValue.new(99) is needed otherwise the read_object assertion fail
+        FooDriver.fake_row = [1, "string", FooValue.new(3), FooValue.new(99)] of FooDriver::Any
         db.query "query" do |rs|
           w.check
           rs.move_next
           rs.read?(Int32).should eq(1)
           rs.read?(String).should eq("string")
+          (rs.read_object.as(FooValue)).value.should eq(3)
         end
       end
     end
 
     with_witness do |w|
       DB.open("bar://host") do |db|
-        BarDriver.fake_row = ["lorem", 1.0] of DB::Any
+        # TODO somehow BarValue.new(99) is needed otherwise the read_object assertion fail
+        BarDriver.fake_row = [BarValue.new(4), "lorem", 1.0, BarValue.new(99)] of BarDriver::Any
         db.query "query" do |rs|
           w.check
           rs.move_next
+          (rs.read_object.as(BarValue)).value.should eq(4)
           rs.read?(String).should eq("lorem")
           rs.read?(Float64).should eq(1.0)
         end

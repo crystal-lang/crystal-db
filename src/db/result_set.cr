@@ -20,6 +20,10 @@ module DB
   # 3. (Optional) Override `#read(t)` for all `t` in `DB::TYPES`.
   # 4. Override `#column_count`, `#column_name`.
   # 5. Override `#column_type`. It must return a type in `DB::TYPES`.
+  # 6. Override `#read_object` to return other data types not included in `DB::TYPES`. This
+  #    will create a union type, so user will be forced to cast result type. Usually `#read`
+  #    should be used to avoid unnecesary intermediate union type values. Calling `#read_object`
+  #    should also move to the next column.
   abstract class ResultSet
     include Disposable
 
@@ -75,6 +79,10 @@ module DB
     # Reads the next column as a Nil.
     def read(t : Nil.class) : Nil
       read?(Nil)
+    end
+
+    def read_object
+      raise "Not implemented"
     end
 
     # def read_blob
