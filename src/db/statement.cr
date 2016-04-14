@@ -71,13 +71,13 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*args)
-      perform_query *args
+    def query
+      perform_query Slice(Any).new(0)
     end
 
     # See `QueryMethods#query`
-    def query(*args)
-      perform_query(*args).tap do |rs|
+    def query
+      perform_query(Slice(Any).new(0)).tap do |rs|
         begin
           yield rs
         ensure
@@ -86,18 +86,36 @@ module DB
       end
     end
 
-    private def perform_query : ResultSet
-      perform_query(Slice(Any).new(0)) # no overload matches ... with types Slice(NoReturn)
+    # See `QueryMethods#query`
+    def query(args : Array)
+      perform_query args
     end
 
-    private def perform_query(args : Enumerable(Any)) : ResultSet
-      # TODO better way to do it
-      perform_query(args.to_a.to_unsafe.to_slice(args.size))
+    # See `QueryMethods#query`
+    def query(args : Array)
+      perform_query(args).tap do |rs|
+        begin
+          yield rs
+        ensure
+          rs.close
+        end
+      end
     end
 
-    private def perform_query(*args) : ResultSet
-      # TODO better way to do it
-      perform_query(args.to_a.to_unsafe.to_slice(args.size))
+    # See `QueryMethods#query`
+    def query(*args)
+      perform_query args
+    end
+
+    # See `QueryMethods#query`
+    def query(*args)
+      perform_query(args).tap do |rs|
+        begin
+          yield rs
+        ensure
+          rs.close
+        end
+      end
     end
 
     private def perform_exec_and_release(args : Slice(Any)) : ExecResult
@@ -106,7 +124,7 @@ module DB
       end
     end
 
-    protected abstract def perform_query(args : Slice(Any)) : ResultSet
+    protected abstract def perform_query(args : Enumerable) : ResultSet
     protected abstract def perform_exec(args : Slice(Any)) : ExecResult
   end
 end

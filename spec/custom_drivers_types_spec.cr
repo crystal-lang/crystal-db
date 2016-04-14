@@ -68,7 +68,7 @@ class FooDriver < DB::Driver
   end
 
   class FooStatement < DB::Statement
-    protected def perform_query(args : Slice(DB::Any)) : DB::ResultSet
+    protected def perform_query(args : Enumerable) : DB::ResultSet
       GenericResultSet(Any).new(self, FooDriver.fake_row)
     end
 
@@ -110,7 +110,7 @@ class BarDriver < DB::Driver
   end
 
   class BarStatement < DB::Statement
-    protected def perform_query(args : Slice(DB::Any)) : DB::ResultSet
+    protected def perform_query(args : Enumerable) : DB::ResultSet
       GenericResultSet(Any).new(self, BarDriver.fake_row)
     end
 
@@ -155,6 +155,28 @@ describe DB do
           rs.read?(Float64).should eq(1.0)
         end
       end
+    end
+  end
+
+  it "allow custom types to be used as arguments for query" do
+    DB.open("foo://host") do |db|
+      FooDriver.fake_row = [1, "string"] of FooDriver::Any
+      db.query "query" { }
+      db.query "query", 1 { }
+      db.query "query", 1, "string" { }
+      db.query("query", Slice(UInt8).new(4)) { }
+      db.query("query", 1, "string", FooValue.new(5)) { }
+      db.query "query", [1, "string", FooValue.new(5)] { }
+    end
+
+    DB.open("bar://host") do |db|
+      BarDriver.fake_row = [1, "string"] of BarDriver::Any
+      db.query "query" { }
+      db.query "query", 1 { }
+      db.query "query", 1, "string" { }
+      db.query("query", Slice(UInt8).new(4)) { }
+      db.query("query", 1, "string", BarValue.new(5)) { }
+      db.query "query", [1, "string", FooValue.new(5)] { }
     end
   end
 end

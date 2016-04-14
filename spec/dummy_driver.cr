@@ -42,7 +42,7 @@ class DummyDriver < DB::Driver
       super(connection)
     end
 
-    protected def perform_query(args : Slice(DB::Any))
+    protected def perform_query(args : Enumerable)
       set_params args
       DummyResultSet.new self, @query
     end
