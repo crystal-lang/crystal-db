@@ -40,7 +40,7 @@ module DB
       end
     end
 
-    # Performs the `query` discarding any response
+    # Performs the `query` and returns an `ExecResult`
     def exec(query, *args)
       prepare(query).exec(*args)
     end

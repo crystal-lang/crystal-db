@@ -72,8 +72,8 @@ class FooDriver < DB::Driver
       GenericResultSet(Any).new(self, FooDriver.fake_row)
     end
 
-    protected def perform_exec(args : Slice(DB::Any)) : DB::ExecResult
-      raise "Not implemented"
+    protected def perform_exec(args : Enumerable) : DB::ExecResult
+      DB::ExecResult.new 0, 0i64
     end
   end
 end
@@ -114,8 +114,8 @@ class BarDriver < DB::Driver
       GenericResultSet(Any).new(self, BarDriver.fake_row)
     end
 
-    protected def perform_exec(args : Slice(DB::Any)) : DB::ExecResult
-      raise "Not implemented"
+    protected def perform_exec(args : Enumerable) : DB::ExecResult
+      DB::ExecResult.new 0, 0i64
     end
   end
 end
@@ -191,6 +191,28 @@ describe DB do
       db.query("query", Slice(UInt8).new(4)).close
       db.query("query", 1, "string", BarValue.new(5)).close
       db.query("query", [1, "string", BarValue.new(5)]).close
+    end
+  end
+
+  it "allow custom types to be used as arguments for exec" do
+    DB.open("foo://host") do |db|
+      FooDriver.fake_row = [1, "string"] of FooDriver::Any
+      db.exec("query")
+      db.exec("query", 1)
+      db.exec("query", 1, "string")
+      db.exec("query", Slice(UInt8).new(4))
+      db.exec("query", 1, "string", FooValue.new(5))
+      db.exec("query", [1, "string", FooValue.new(5)])
+    end
+
+    DB.open("bar://host") do |db|
+      BarDriver.fake_row = [1, "string"] of BarDriver::Any
+      db.exec("query")
+      db.exec("query", 1)
+      db.exec("query", 1, "string")
+      db.exec("query", Slice(UInt8).new(4))
+      db.exec("query", 1, "string", BarValue.new(5))
+      db.exec("query", [1, "string", BarValue.new(5)])
     end
   end
 end

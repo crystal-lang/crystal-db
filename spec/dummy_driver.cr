@@ -47,7 +47,7 @@ class DummyDriver < DB::Driver
       DummyResultSet.new self, @query
     end
 
-    protected def perform_exec(args : Slice(DB::Any))
+    protected def perform_exec(args : Enumerable)
       set_params args
       DB::ExecResult.new 0, 0_i64
     end

@@ -27,18 +27,18 @@ module DB
 
     # See `QueryMethods#exec`
     def exec
-      perform_exec_and_release(Slice(Any).new(0)) # no overload matches ... with types Slice(NoReturn)
+      perform_exec_and_release(Slice(Any).new(0))
     end
 
     # See `QueryMethods#exec`
-    def exec(args : Enumerable(Any))
-      perform_exec_and_release(args.to_a.to_unsafe.to_slice(args.size))
+    def exec(args : Array)
+      perform_exec_and_release(args)
     end
 
     # See `QueryMethods#exec`
     def exec(*args)
       # TODO better way to do it
-      perform_exec_and_release(args.to_a.to_unsafe.to_slice(args.size))
+      perform_exec_and_release(args)
     end
 
     # See `QueryMethods#scalar`
@@ -96,13 +96,13 @@ module DB
       end
     end
 
-    private def perform_exec_and_release(args : Slice(Any)) : ExecResult
+    private def perform_exec_and_release(args : Enumerable) : ExecResult
       perform_exec(args).tap do
         release_connection
       end
     end
 
     protected abstract def perform_query(args : Enumerable) : ResultSet
-    protected abstract def perform_exec(args : Slice(Any)) : ExecResult
+    protected abstract def perform_exec(args : Enumerable) : ExecResult
   end
 end
