@@ -76,7 +76,7 @@ module DB
   alias Any = Nil | String | Int32 | Int64 | Float32 | Float64 | Slice(UInt8)
 
   # Result of a `#exec` statement.
-  record ExecResult, rows_affected, last_insert_id
+  record ExecResult, rows_affected : Int32, last_insert_id : Int64
 
   # :nodoc:
   def self.driver_class(driver_name) : Driver.class

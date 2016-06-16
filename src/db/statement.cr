@@ -15,7 +15,7 @@ module DB
     # :nodoc:
     getter connection
 
-    def initialize(@connection)
+    def initialize(@connection : Connection)
     end
 
     protected def do_close

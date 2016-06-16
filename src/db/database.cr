@@ -13,8 +13,10 @@ module DB
     # Returns the uri with the connection settings to the database
     getter uri
 
+    @connection : Connection?
+
     # :nodoc:
-    def initialize(@driver, @uri)
+    def initialize(@driver : Driver, @uri : URI)
       @in_pool = true
       @connection = @driver.build_connection(self)
     end

@@ -37,7 +37,7 @@ class DummyDriver < DB::Driver
   class DummyStatement < DB::Statement
     property params
 
-    def initialize(connection, @query)
+    def initialize(connection, @query : String)
       @params = Hash(Int32 | String, DB::Any).new
       super(connection)
     end
@@ -49,7 +49,7 @@ class DummyDriver < DB::Driver
 
     protected def perform_exec(args : Slice(DB::Any))
       set_params args
-      DB::ExecResult.new 0, 0
+      DB::ExecResult.new 0, 0_i64
     end
 
     private def set_params(args)
@@ -66,10 +66,15 @@ class DummyDriver < DB::Driver
 
   class DummyResultSet < DB::ResultSet
     @@next_column_type = String
+    @top_values : Array(Array(String))
+    @values : Array(String)?
+
+    @@last_result_set : self?
+    @@next_column_type : Nil.class | String.class | Int32.class | Int64.class | Float32.class | Float64.class | Slice(UInt8).class
 
     def initialize(statement, query)
       super(statement)
-      @iterator = query.split.map { |r| r.split(',') }.to_a.each
+      @top_values = query.split.map { |r| r.split(',') }.to_a
 
       @@last_result_set = self
     end
@@ -83,11 +88,8 @@ class DummyDriver < DB::Driver
     end
 
     def move_next
-      @iterator.next.tap do |n|
-        return false if n.is_a?(Iterator::Stop)
-        @values = n.each
-        return true
-      end
+      @values = @top_values.shift?
+      !!@values
     end
 
     def column_count
@@ -107,8 +109,8 @@ class DummyDriver < DB::Driver
     end
 
     private def read? : DB::Any?
-      n = @values.not_nil!.next
-      raise "end of row" if n.is_a?(Iterator::Stop)
+      n = @values.not_nil!.shift?
+      raise "end of row" if n.is_a?(Nil)
       return nil if n == "NULL"
 
       if n == "?"
@@ -159,7 +161,7 @@ DB.register_driver "dummy", DummyDriver
 class Witness
   getter count
 
-  def initialize(@count)
+  def initialize(@count = 1)
   end
 
   def check
