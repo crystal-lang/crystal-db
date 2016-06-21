@@ -70,7 +70,7 @@ class FooDriver < DB::Driver
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
-      DB::ExecResult.new 0, 0i64
+      DB::ExecResult.new 0i64, 0i64
     end
   end
 
@@ -124,7 +124,7 @@ class BarDriver < DB::Driver
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
-      DB::ExecResult.new 0, 0i64
+      DB::ExecResult.new 0i64, 0i64
     end
   end
 

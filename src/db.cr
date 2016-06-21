@@ -78,7 +78,7 @@ module DB
   {% end %}
 
   # Result of a `#exec` statement.
-  record ExecResult, rows_affected : Int32, last_insert_id : Int64
+  record ExecResult, rows_affected : Int64, last_insert_id : Int64
 
   # :nodoc:
   def self.driver_class(driver_name) : Driver.class

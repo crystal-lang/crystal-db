@@ -49,7 +49,7 @@ class DummyDriver < DB::Driver
 
     protected def perform_exec(args : Enumerable)
       set_params args
-      DB::ExecResult.new 0, 0_i64
+      DB::ExecResult.new 0i64, 0_i64
     end
 
     private def set_params(args)
