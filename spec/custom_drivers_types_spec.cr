@@ -1,10 +1,7 @@
 require "./spec_helper"
 
-class GenericResultSet(T) < DB::ResultSet
-  def initialize(statement, @row : Array(T))
-    super(statement)
-    @index = 0
-  end
+module GenericResultSet
+  @index = 0
 
   def move_next
     @index = 0
@@ -26,11 +23,11 @@ class GenericResultSet(T) < DB::ResultSet
   {% for t in DB::TYPES %}
     # Reads the next column as a nillable {{t}}.
     def read?(t : {{t}}.class) : {{t}}?
-      read_object as {{t}}?
+      read_and_move_next_column as {{t}}?
     end
   {% end %}
 
-  def read_object
+  def read_and_move_next_column
     @index += 1
     @row[@index - 1]
   end
@@ -69,11 +66,23 @@ class FooDriver < DB::Driver
 
   class FooStatement < DB::Statement
     protected def perform_query(args : Enumerable) : DB::ResultSet
-      GenericResultSet(Any).new(self, FooDriver.fake_row)
+      FooResultSet.new(self, FooDriver.fake_row)
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
       DB::ExecResult.new 0, 0i64
+    end
+  end
+
+  class FooResultSet < DB::ResultSet
+    include GenericResultSet
+
+    def initialize(statement, @row : Array(FooDriver::Any))
+      super(statement)
+    end
+
+    def read?(t : FooValue.class) : FooValue?
+      read_and_move_next_column.as(FooValue?)
     end
   end
 end
@@ -111,11 +120,23 @@ class BarDriver < DB::Driver
 
   class BarStatement < DB::Statement
     protected def perform_query(args : Enumerable) : DB::ResultSet
-      GenericResultSet(Any).new(self, BarDriver.fake_row)
+      BarResultSet.new(self, BarDriver.fake_row)
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
       DB::ExecResult.new 0, 0i64
+    end
+  end
+
+  class BarResultSet < DB::ResultSet
+    include GenericResultSet
+
+    def initialize(statement, @row : Array(BarDriver::Any))
+      super(statement)
+    end
+
+    def read?(t : BarValue.class) : BarValue?
+      read_and_move_next_column.as(BarValue?)
     end
   end
 end
@@ -138,7 +159,7 @@ describe DB do
           rs.move_next
           rs.read?(Int32).should eq(1)
           rs.read?(String).should eq("string")
-          (rs.read_object.as(FooValue)).value.should eq(3)
+          rs.read(FooValue).value.should eq(3)
         end
       end
     end
@@ -150,9 +171,37 @@ describe DB do
         db.query "query" do |rs|
           w.check
           rs.move_next
-          (rs.read_object.as(BarValue)).value.should eq(4)
+          rs.read(BarValue).value.should eq(4)
           rs.read?(String).should eq("lorem")
           rs.read?(Float64).should eq(1.0)
+        end
+      end
+    end
+  end
+
+  it "Foo and Bar drivers should not implement each other read" do
+    with_witness do |w|
+      DB.open("foo://host") do |db|
+        FooDriver.fake_row = [1] of FooDriver::Any
+        db.query "query" do |rs|
+          rs.move_next
+          expect_raises Exception, "read?(t : BarValue) is not implemented in FooDriver::FooResultSet" do
+            w.check
+            rs.read(BarValue)
+          end
+        end
+      end
+    end
+
+    with_witness do |w|
+      DB.open("bar://host") do |db|
+        BarDriver.fake_row = [1] of BarDriver::Any
+        db.query "query" do |rs|
+          rs.move_next
+          expect_raises Exception, "read?(t : FooValue) is not implemented in BarDriver::BarResultSet" do
+            w.check
+            rs.read(FooValue)
+          end
         end
       end
     end
