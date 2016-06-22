@@ -55,8 +55,16 @@ class DummyDriver < DB::Driver
     private def set_params(args)
       @params.clear
       args.each_with_index do |arg, index|
-        @params[index] = arg.as(DB::Any)
+        set_param(index, arg)
       end
+    end
+
+    private def set_param(index, value : DB::Any)
+      @params[index] = value
+    end
+
+    private def set_param(index, value)
+      raise "not implemented for #{value.class}"
     end
 
     protected def do_close

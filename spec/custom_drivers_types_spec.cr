@@ -66,11 +66,20 @@ class FooDriver < DB::Driver
 
   class FooStatement < DB::Statement
     protected def perform_query(args : Enumerable) : DB::ResultSet
+      args.each { |arg| process_arg arg }
       FooResultSet.new(self, FooDriver.fake_row)
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
+      args.each { |arg| process_arg arg }
       DB::ExecResult.new 0i64, 0i64
+    end
+
+    private def process_arg(value : FooDriver::Any)
+    end
+
+    private def process_arg(value)
+      raise "#{self.class} does not support #{value.class} params"
     end
   end
 
@@ -120,11 +129,20 @@ class BarDriver < DB::Driver
 
   class BarStatement < DB::Statement
     protected def perform_query(args : Enumerable) : DB::ResultSet
+      args.each { |arg| process_arg arg }
       BarResultSet.new(self, BarDriver.fake_row)
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
+      args.each { |arg| process_arg arg }
       DB::ExecResult.new 0i64, 0i64
+    end
+
+    private def process_arg(value : BarDriver::Any)
+    end
+
+    private def process_arg(value)
+      raise "#{self.class} does not support #{value.class} params"
     end
   end
 
@@ -232,7 +250,7 @@ describe DB do
       db.query "query", 1, "string" { }
       db.query("query", Slice(UInt8).new(4)) { }
       db.query("query", 1, "string", BarValue.new(5)) { }
-      db.query "query", [1, "string", FooValue.new(5)] { }
+      db.query "query", [1, "string", BarValue.new(5)] { }
 
       db.query("query").close
       db.query("query", 1).close
@@ -262,6 +280,20 @@ describe DB do
       db.exec("query", Slice(UInt8).new(4))
       db.exec("query", 1, "string", BarValue.new(5))
       db.exec("query", [1, "string", BarValue.new(5)])
+    end
+  end
+
+  it "Foo and Bar drivers should not implement each other params" do
+    DB.open("foo://host") do |db|
+      expect_raises Exception, "FooDriver::FooStatement does not support BarValue params" do
+        db.exec("query", [BarValue.new(5)])
+      end
+    end
+
+    DB.open("bar://host") do |db|
+      expect_raises Exception, "BarDriver::BarStatement does not support FooValue params" do
+        db.exec("query", [FooValue.new(5)])
+      end
     end
   end
 end
