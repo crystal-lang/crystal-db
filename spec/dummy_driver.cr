@@ -78,7 +78,7 @@ class DummyDriver < DB::Driver
     @values : Array(String)?
 
     @@last_result_set : self?
-    @@next_column_type : Nil.class | String.class | Int32.class | Int64.class | Float32.class | Float64.class | Slice(UInt8).class
+    @@next_column_type : Nil.class | String.class | Int32.class | Int64.class | Float32.class | Float64.class | Bytes.class
 
     def initialize(statement, query)
       super(statement)
@@ -152,17 +152,17 @@ class DummyDriver < DB::Driver
       read?(String).try &.to_f64
     end
 
-    def read?(t : Slice(UInt8).class)
+    def read?(t : Bytes.class)
       value = read?
       if value.is_a?(Nil)
         value
       elsif value.is_a?(String)
         ary = value.bytes
         Slice.new(ary.to_unsafe, ary.size)
-      elsif value.is_a?(Slice(UInt8))
+      elsif value.is_a?(Bytes)
         value
       else
-        raise "#{value} is not convertible to Slice(UInt8)"
+        raise "#{value} is not convertible to Bytes"
       end
     end
   end

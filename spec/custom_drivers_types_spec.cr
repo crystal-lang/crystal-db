@@ -231,14 +231,14 @@ describe DB do
       db.query "query" { }
       db.query "query", 1 { }
       db.query "query", 1, "string" { }
-      db.query("query", Slice(UInt8).new(4)) { }
+      db.query("query", Bytes.new(4)) { }
       db.query("query", 1, "string", FooValue.new(5)) { }
       db.query "query", [1, "string", FooValue.new(5)] { }
 
       db.query("query").close
       db.query("query", 1).close
       db.query("query", 1, "string").close
-      db.query("query", Slice(UInt8).new(4)).close
+      db.query("query", Bytes.new(4)).close
       db.query("query", 1, "string", FooValue.new(5)).close
       db.query("query", [1, "string", FooValue.new(5)]).close
     end
@@ -248,14 +248,14 @@ describe DB do
       db.query "query" { }
       db.query "query", 1 { }
       db.query "query", 1, "string" { }
-      db.query("query", Slice(UInt8).new(4)) { }
+      db.query("query", Bytes.new(4)) { }
       db.query("query", 1, "string", BarValue.new(5)) { }
       db.query "query", [1, "string", BarValue.new(5)] { }
 
       db.query("query").close
       db.query("query", 1).close
       db.query("query", 1, "string").close
-      db.query("query", Slice(UInt8).new(4)).close
+      db.query("query", Bytes.new(4)).close
       db.query("query", 1, "string", BarValue.new(5)).close
       db.query("query", [1, "string", BarValue.new(5)]).close
     end
@@ -267,7 +267,7 @@ describe DB do
       db.exec("query")
       db.exec("query", 1)
       db.exec("query", 1, "string")
-      db.exec("query", Slice(UInt8).new(4))
+      db.exec("query", Bytes.new(4))
       db.exec("query", 1, "string", FooValue.new(5))
       db.exec("query", [1, "string", FooValue.new(5)])
     end
@@ -277,7 +277,7 @@ describe DB do
       db.exec("query")
       db.exec("query", 1)
       db.exec("query", 1, "string")
-      db.exec("query", Slice(UInt8).new(4))
+      db.exec("query", Bytes.new(4))
       db.exec("query", 1, "string", BarValue.new(5))
       db.exec("query", [1, "string", BarValue.new(5)])
     end

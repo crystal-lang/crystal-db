@@ -57,8 +57,8 @@ module DB
             return rs.read?(Float32)
           when Float64.class
             return rs.read?(Float64)
-          when Slice(UInt8).class
-            return rs.read?(Slice(UInt8))
+          when Bytes.class
+            return rs.read?(Bytes)
           when Nil.class
             return rs.read?(Int32)
           else
