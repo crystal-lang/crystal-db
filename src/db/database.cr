@@ -45,6 +45,16 @@ module DB
       @in_pool = true
     end
 
+    # yields a connection from the pool
+    # the connection is returned to the pool after
+    # when the block ends
+    def using_connection
+      connection = get_from_pool
+      yield connection
+    ensure
+      return_to_pool connection
+    end
+
     include QueryMethods
   end
 end
