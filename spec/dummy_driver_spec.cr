@@ -101,9 +101,9 @@ describe DummyDriver do
         db.query("az,AZ") do |rs|
           rs.move_next
           ary = [97u8, 122u8]
-          rs.read(Slice(UInt8)).should eq(Slice.new(ary.to_unsafe, ary.size))
+          rs.read(Bytes).should eq(Bytes.new(ary.to_unsafe, ary.size))
           ary = [65u8, 90u8]
-          rs.read(Slice(UInt8)).should eq(Slice.new(ary.to_unsafe, ary.size))
+          rs.read(Bytes).should eq(Bytes.new(ary.to_unsafe, ary.size))
         end
       end
     end
@@ -134,9 +134,9 @@ describe DummyDriver do
     it "executes and selects blob" do
       with_dummy do |db|
         ary = UInt8[0x53, 0x51, 0x4C]
-        slice = Slice.new(ary.to_unsafe, ary.size)
+        slice = Bytes.new(ary.to_unsafe, ary.size)
         DummyDriver::DummyResultSet.next_column_type = typeof(slice)
-        (db.scalar("?", slice) as Slice(UInt8)).to_a.should eq(ary)
+        (db.scalar("?", slice).as(Bytes)).to_a.should eq(ary)
       end
     end
   end

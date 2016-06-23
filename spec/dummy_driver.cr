@@ -42,21 +42,29 @@ class DummyDriver < DB::Driver
       super(connection)
     end
 
-    protected def perform_query(args : Slice(DB::Any))
+    protected def perform_query(args : Enumerable)
       set_params args
       DummyResultSet.new self, @query
     end
 
-    protected def perform_exec(args : Slice(DB::Any))
+    protected def perform_exec(args : Enumerable)
       set_params args
-      DB::ExecResult.new 0, 0_i64
+      DB::ExecResult.new 0i64, 0_i64
     end
 
     private def set_params(args)
       @params.clear
       args.each_with_index do |arg, index|
-        @params[index] = arg
+        set_param(index, arg)
       end
+    end
+
+    private def set_param(index, value : DB::Any)
+      @params[index] = value
+    end
+
+    private def set_param(index, value)
+      raise "not implemented for #{value.class}"
     end
 
     protected def do_close
@@ -70,7 +78,7 @@ class DummyDriver < DB::Driver
     @values : Array(String)?
 
     @@last_result_set : self?
-    @@next_column_type : Nil.class | String.class | Int32.class | Int64.class | Float32.class | Float64.class | Slice(UInt8).class
+    @@next_column_type : Nil.class | String.class | Int32.class | Int64.class | Float32.class | Float64.class | Bytes.class
 
     def initialize(statement, query)
       super(statement)
@@ -114,10 +122,14 @@ class DummyDriver < DB::Driver
       return nil if n == "NULL"
 
       if n == "?"
-        return @statement.params[0]
+        return (@statement.as(DummyStatement)).params[0]
       end
 
       return n
+    end
+
+    def read?(t : Nil.class)
+      read?.as(Nil)
     end
 
     def read?(t : String.class)
@@ -140,17 +152,17 @@ class DummyDriver < DB::Driver
       read?(String).try &.to_f64
     end
 
-    def read?(t : Slice(UInt8).class)
+    def read?(t : Bytes.class)
       value = read?
       if value.is_a?(Nil)
         value
       elsif value.is_a?(String)
         ary = value.bytes
         Slice.new(ary.to_unsafe, ary.size)
-      elsif value.is_a?(Slice(UInt8))
+      elsif value.is_a?(Bytes)
         value
       else
-        raise "#{value} is not convertible to Slice(UInt8)"
+        raise "#{value} is not convertible to Bytes"
       end
     end
   end

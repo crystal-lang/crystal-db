@@ -27,18 +27,18 @@ module DB
 
     # See `QueryMethods#exec`
     def exec
-      perform_exec_and_release(Slice(Any).new(0)) # no overload matches ... with types Slice(NoReturn)
+      perform_exec_and_release(Slice(Any).new(0))
     end
 
     # See `QueryMethods#exec`
-    def exec(args : Enumerable(Any))
-      perform_exec_and_release(args.to_a.to_unsafe.to_slice(args.size))
+    def exec(args : Array)
+      perform_exec_and_release(args)
     end
 
     # See `QueryMethods#exec`
     def exec(*args)
       # TODO better way to do it
-      perform_exec_and_release(args.to_a.to_unsafe.to_slice(args.size))
+      perform_exec_and_release(args)
     end
 
     # See `QueryMethods#scalar`
@@ -57,8 +57,8 @@ module DB
             return rs.read?(Float32)
           when Float64.class
             return rs.read?(Float64)
-          when Slice(UInt8).class
-            return rs.read?(Slice(UInt8))
+          when Bytes.class
+            return rs.read?(Bytes)
           when Nil.class
             return rs.read?(Int32)
           else
@@ -71,13 +71,23 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*args)
-      perform_query *args
+    def query
+      perform_query Slice(Any).new(0)
+    end
+
+    # See `QueryMethods#query`
+    def query(args : Array)
+      perform_query args
     end
 
     # See `QueryMethods#query`
     def query(*args)
-      perform_query(*args).tap do |rs|
+      perform_query args
+    end
+
+    # See `QueryMethods#query`
+    def query(*args)
+      query(*args).tap do |rs|
         begin
           yield rs
         ensure
@@ -86,27 +96,13 @@ module DB
       end
     end
 
-    private def perform_query : ResultSet
-      perform_query(Slice(Any).new(0)) # no overload matches ... with types Slice(NoReturn)
-    end
-
-    private def perform_query(args : Enumerable(Any)) : ResultSet
-      # TODO better way to do it
-      perform_query(args.to_a.to_unsafe.to_slice(args.size))
-    end
-
-    private def perform_query(*args) : ResultSet
-      # TODO better way to do it
-      perform_query(args.to_a.to_unsafe.to_slice(args.size))
-    end
-
-    private def perform_exec_and_release(args : Slice(Any)) : ExecResult
+    private def perform_exec_and_release(args : Enumerable) : ExecResult
       perform_exec(args).tap do
         release_connection
       end
     end
 
-    protected abstract def perform_query(args : Slice(Any)) : ResultSet
-    protected abstract def perform_exec(args : Slice(Any)) : ExecResult
+    protected abstract def perform_query(args : Enumerable) : ResultSet
+    protected abstract def perform_exec(args : Enumerable) : ExecResult
   end
 end

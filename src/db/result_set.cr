@@ -16,8 +16,8 @@ module DB
   # ### Note to implementors
   #
   # 1. Override `#move_next` to move to the next row.
-  # 2. Override `#read?(t)` for all `t` in `DB::TYPES`.
-  # 3. (Optional) Override `#read(t)` for all `t` in `DB::TYPES`.
+  # 2. Override `#read?(t)` for all `t` in `DB::TYPES` and any other types the driver should handle.
+  # 3. (Optional) Override `#read(t)` for all `t` in `DB::TYPES` and any other.
   # 4. Override `#column_count`, `#column_name`.
   # 5. Override `#column_type`. It must return a type in `DB::TYPES`.
   abstract class ResultSet
@@ -59,17 +59,24 @@ module DB
     # The result is one of `DB::TYPES`.
     abstract def column_type(index : Int32)
 
+    def read(t)
+      read?(t).not_nil!
+    end
+
+    # Reads the next column as a Nil.
+    def read(t : Nil.class) : Nil
+      read?(Nil)
+    end
+
+    def read?(t)
+      raise "read?(t : #{t}) is not implemented in #{self.class}"
+    end
+
     # list datatypes that must be supported form the driver
     # users will call read(String) or read?(String) for nillables
-
     {% for t in DB::TYPES %}
       # Reads the next column as a nillable {{t}}.
       abstract def read?(t : {{t}}.class) : {{t}}?
-
-      # Reads the next column as a {{t}}.
-      def read(t : {{t}}.class) : {{t}}
-        read?({{t}}).not_nil!
-      end
     {% end %}
 
     # def read_blob

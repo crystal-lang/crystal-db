@@ -70,13 +70,15 @@ module DB
   # Types supported to interface with database driver.
   # These can be used in any `ResultSet#read` or any `Database#query` related
   # method to be used as query parameters
-  TYPES = [String, Int32, Int64, Float32, Float64, Slice(UInt8)]
+  TYPES = [Nil, String, Int32, Int64, Float32, Float64, Bytes]
 
-  # See `DB::TYPES` in `DB`. `Any` is a nillable version of the union of all types in `DB::TYPES`
-  alias Any = Nil | String | Int32 | Int64 | Float32 | Float64 | Slice(UInt8)
+  # See `DB::TYPES` in `DB`. `Any` is a union of all types in `DB::TYPES`
+  {% begin %}
+    alias Any = Union({{*TYPES}})
+  {% end %}
 
   # Result of a `#exec` statement.
-  record ExecResult, rows_affected : Int32, last_insert_id : Int64
+  record ExecResult, rows_affected : Int64, last_insert_id : Int64
 
   # :nodoc:
   def self.driver_class(driver_name) : Driver.class
