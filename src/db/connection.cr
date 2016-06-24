@@ -40,6 +40,9 @@ module DB
     abstract def build_statement(query) : Statement
 
     protected def do_close
+      @statements_cache.each do |_, stmt|
+        stmt.close
+      end
       @statements_cache.clear
     end
   end

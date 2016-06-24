@@ -65,6 +65,15 @@ describe DB::Statement do
     end
   end
 
+  it "closing connection should close statement" do
+    stmt = uninitialized DB::Statement
+    with_dummy do |db|
+      stmt = db.prepare "3,4 1,2"
+      stmt.query
+    end
+    stmt.closed?.should be_true
+  end
+
   it "query with block should not close statement" do
     with_dummy do |db|
       stmt = db.prepare "3,4 1,2"

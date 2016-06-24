@@ -17,11 +17,6 @@ module DB
       @closed
     end
 
-    # :nodoc:
-    def finalize
-      close
-    end
-
     # Implementors overrides this method to perform resource cleanup
     protected abstract def do_close
   end
