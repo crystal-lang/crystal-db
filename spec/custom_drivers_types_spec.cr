@@ -197,6 +197,13 @@ describe DB do
     end
   end
 
+  it "drivers should return custom values as scalar" do
+    DB.open("foo://host") do |db|
+      FooDriver.fake_row = [FooValue.new(3), FooValue.new(99)] of FooDriver::Any
+      db.scalar("query").as(FooValue).value.should eq(3)
+    end
+  end
+
   it "Foo and Bar drivers should not implement each other read" do
     with_witness do |w|
       DB.open("foo://host") do |db|

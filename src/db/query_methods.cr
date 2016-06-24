@@ -4,7 +4,7 @@ module DB
   #
   # Three kind of statements can be performed:
   #  1. `#exec` waits no record response from the database. An `ExecResult` is returned.
-  #  2. `#scalar` reads a single value of the response. A `DB::Any` is returned.
+  #  2. `#scalar` reads a single value of the response. A union of possible values is returned.
   #  3. `#query` returns a `ResultSet` that allows iteration over the rows in the response and column information.
   #
   # Arguments can be passed by position
