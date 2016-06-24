@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/bcardiff/crystal-db.svg?branch=master)](https://travis-ci.org/bcardiff/crystal-db)
+[![Build Status](https://travis-ci.org/crystal-lang/crystal-db.svg?branch=master)](https://travis-ci.org/crystal-lang/crystal-db)
 
 # crystal-db
 
@@ -13,7 +13,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   db:
-    github: bcardiff/crystal-db
+    github: crystal-lang/crystal-db
 ```
 
 ## Usage
@@ -62,7 +62,7 @@ Issues not yet addressed
 
 ## Contributing
 
-1. Fork it ( https://github.com/bcardiff/crystal-db/fork )
+1. Fork it ( https://github.com/crystal-lang/crystal-db/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
