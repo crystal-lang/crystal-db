@@ -54,7 +54,7 @@ module DB
 
     # See `QueryMethods#query`
     def query
-      perform_query Slice(Any).new(0)
+      perform_query Tuple.new
     end
 
     # See `QueryMethods#query`

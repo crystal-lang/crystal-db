@@ -170,8 +170,7 @@ describe DB do
   it "Foo and Bar drivers should return fake_row" do
     with_witness do |w|
       DB.open("foo://host") do |db|
-        # TODO somehow FooValue.new(99) is needed otherwise the read_object assertion fail
-        FooDriver.fake_row = [1, "string", FooValue.new(3), FooValue.new(99)] of FooDriver::Any
+        FooDriver.fake_row = [1, "string", FooValue.new(3)] of FooDriver::Any
         db.query "query" do |rs|
           w.check
           rs.move_next
@@ -184,8 +183,7 @@ describe DB do
 
     with_witness do |w|
       DB.open("bar://host") do |db|
-        # TODO somehow BarValue.new(99) is needed otherwise the read_object assertion fail
-        BarDriver.fake_row = [BarValue.new(4), "lorem", 1.0, BarValue.new(99)] of BarDriver::Any
+        BarDriver.fake_row = [BarValue.new(4), "lorem", 1.0] of BarDriver::Any
         db.query "query" do |rs|
           w.check
           rs.move_next
@@ -199,7 +197,7 @@ describe DB do
 
   it "drivers should return custom values as scalar" do
     DB.open("foo://host") do |db|
-      FooDriver.fake_row = [FooValue.new(3), FooValue.new(99)] of FooDriver::Any
+      FooDriver.fake_row = [FooValue.new(3)] of FooDriver::Any
       db.scalar("query").as(FooValue).value.should eq(3)
     end
   end
