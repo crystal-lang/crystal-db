@@ -53,12 +53,12 @@ end
 
 Issues not yet addressed
 
-* Support non prepared statements.
-* Time data type.
-* Data type extensibility. Allow each driver to extend the data types allowed.
-* Transactions.
-* Connection pool.
-* Direct access to `IO` to avoid memory allocation for blobs.
+- [ ] Support non prepared statements.
+- [ ] Time data type.
+- [x] Data type extensibility. Allow each driver to extend the data types allowed.
+- [ ] Transactions.
+- [ ] Connection pool.
+- [ ] Direct access to `IO` to avoid memory allocation for blobs.
 
 ## Contributing
 
