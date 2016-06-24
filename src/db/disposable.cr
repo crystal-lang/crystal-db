@@ -8,8 +8,8 @@ module DB
     # Closes this object.
     def close
       return if @closed
-      @closed = true
       do_close
+      @closed = true
     end
 
     # Returns `true` if this object is closed. See `#close`.
@@ -18,6 +18,7 @@ module DB
     end
 
     # Implementors overrides this method to perform resource cleanup
+    # If an exception is raised, the resource will not be marked as closed.
     protected abstract def do_close
   end
 end
