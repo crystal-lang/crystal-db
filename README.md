@@ -2,9 +2,10 @@
 
 # crystal-db
 
-Common db api for crystal
+Common db api for crystal. You will need to a specific driver to access a database.
 
-There is already a forked implementation for [sqlite](https://github.com/bcardiff/crystal-sqlite3/tree/db) and [mysql](https://github.com/bcardiff/crystal-mysql/tree/db) that (partially) implements mysql's binary protocol (no dependency!)
+* [sqlite](https://github.com/crystal-lang/crystal-sqlite3)
+* [mysql](https://github.com/crystal-lang/crystal-mysql)
 
 ## Installation
 
