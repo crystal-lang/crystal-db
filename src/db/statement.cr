@@ -45,7 +45,7 @@ module DB
     def scalar(*args)
       query(*args) do |rs|
         rs.each do
-          return rs.read?(rs.column_type(0))
+          return rs.read
         end
       end
 

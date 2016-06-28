@@ -16,18 +16,7 @@ module GenericResultSet
     index.to_s
   end
 
-  def column_type(index : Int32)
-    @row[index].class
-  end
-
-  {% for t in DB::TYPES %}
-    # Reads the next column as a nillable {{t}}.
-    def read?(t : {{t}}.class) : {{t}}?
-      read_and_move_next_column as {{t}}?
-    end
-  {% end %}
-
-  def read_and_move_next_column
+  def read
     @index += 1
     @row[@index - 1]
   end
@@ -89,10 +78,6 @@ class FooDriver < DB::Driver
     def initialize(statement, @row : Array(FooDriver::Any))
       super(statement)
     end
-
-    def read?(t : FooValue.class) : FooValue?
-      read_and_move_next_column.as(FooValue?)
-    end
   end
 end
 
@@ -152,10 +137,6 @@ class BarDriver < DB::Driver
     def initialize(statement, @row : Array(BarDriver::Any))
       super(statement)
     end
-
-    def read?(t : BarValue.class) : BarValue?
-      read_and_move_next_column.as(BarValue?)
-    end
   end
 end
 
@@ -174,8 +155,8 @@ describe DB do
         db.query "query" do |rs|
           w.check
           rs.move_next
-          rs.read?(Int32).should eq(1)
-          rs.read?(String).should eq("string")
+          rs.read(Int32).should eq(1)
+          rs.read(String).should eq("string")
           rs.read(FooValue).value.should eq(3)
         end
       end
@@ -188,8 +169,8 @@ describe DB do
           w.check
           rs.move_next
           rs.read(BarValue).value.should eq(4)
-          rs.read?(String).should eq("lorem")
-          rs.read?(Float64).should eq(1.0)
+          rs.read(String).should eq("lorem")
+          rs.read(Float64).should eq(1.0)
         end
       end
     end
@@ -208,7 +189,7 @@ describe DB do
         FooDriver.fake_row = [1] of FooDriver::Any
         db.query "query" do |rs|
           rs.move_next
-          expect_raises Exception, "read?(t : BarValue) is not implemented in FooDriver::FooResultSet" do
+          expect_raises(TypeCastError) do
             w.check
             rs.read(BarValue)
           end
@@ -221,7 +202,7 @@ describe DB do
         BarDriver.fake_row = [1] of BarDriver::Any
         db.query "query" do |rs|
           rs.move_next
-          expect_raises Exception, "read?(t : FooValue) is not implemented in BarDriver::BarResultSet" do
+          expect_raises(TypeCastError) do
             w.check
             rs.read(FooValue)
           end
