@@ -30,7 +30,13 @@ module DB
 
     # :nodoc:
     def prepare(query)
-      get_from_pool.prepare(query)
+      conn = get_from_pool
+      begin
+        conn.prepare(query)
+      rescue ex
+        return_to_pool(conn)
+        raise ex
+      end
     end
 
     # :nodoc:
