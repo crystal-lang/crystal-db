@@ -24,7 +24,7 @@ module DB
     # Returns a `ResultSet` for the `query`.
     # The `ResultSet` must be closed manually.
     def query(query, *args)
-      prepare(query).query(*args)
+      prepare query, &.query(*args)
     end
 
     # Yields a `ResultSet` for the `query`.
@@ -42,13 +42,23 @@ module DB
 
     # Performs the `query` and returns an `ExecResult`
     def exec(query, *args)
-      prepare(query).exec(*args)
+      prepare query, &.exec(*args)
     end
 
     # Performs the `query` and returns a single scalar `DB::Any` value
     # puts db.scalar("SELECT MAX(name)") as String # => (a String)
     def scalar(query, *args)
-      prepare(query).scalar(*args)
+      prepare query, &.scalar(*args)
+    end
+
+    private def prepare(query)
+      stm = prepare(query)
+      begin
+        yield stm
+      rescue ex
+        stm.release_connection
+        raise ex
+      end
     end
 
     # TODO add query_row
