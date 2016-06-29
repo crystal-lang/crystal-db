@@ -69,19 +69,14 @@ module DB
 
     # See `QueryMethods#query`
     def query(*args)
-      query(*args).tap do |rs|
-        begin
-          yield rs
-        ensure
-          rs.close
-        end
-      end
+      rs = query(*args)
+      yield rs ensure rs.close
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult
-      perform_exec(args).tap do
-        release_connection
-      end
+      res = perform_exec(args)
+      release_connection
+      res
     end
 
     protected abstract def perform_query(args : Enumerable) : ResultSet

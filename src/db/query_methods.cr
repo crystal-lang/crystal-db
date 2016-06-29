@@ -31,13 +31,8 @@ module DB
     # The `ResultSet` is closed automatically.
     def query(query, *args)
       # CHECK prepare(query).query(*args, &block)
-      query(query, *args).tap do |rs|
-        begin
-          yield rs
-        ensure
-          rs.close
-        end
-      end
+      rs = query(query, *args)
+      yield rs ensure rs.close
     end
 
     # Performs the `query` and returns an `ExecResult`
