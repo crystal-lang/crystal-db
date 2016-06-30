@@ -73,12 +73,10 @@ class DummyDriver < DB::Driver
   end
 
   class DummyResultSet < DB::ResultSet
-    @@next_column_type = String
     @top_values : Array(Array(String))
     @values : Array(String)?
 
     @@last_result_set : self?
-    @@next_column_type : Nil.class | String.class | Int32.class | Int64.class | Float32.class | Float64.class | Bytes.class
 
     def initialize(statement, query)
       super(statement)
@@ -108,15 +106,7 @@ class DummyDriver < DB::Driver
       "c#{index}"
     end
 
-    def column_type(index : Int32)
-      @@next_column_type
-    end
-
-    def self.next_column_type=(value)
-      @@next_column_type = value
-    end
-
-    private def read? : DB::Any?
+    def read
       n = @values.not_nil!.shift?
       raise "end of row" if n.is_a?(Nil)
       return nil if n == "NULL"
@@ -128,38 +118,36 @@ class DummyDriver < DB::Driver
       return n
     end
 
-    def read?(t : Nil.class)
-      read?.as(Nil)
+    def read(t : String.class)
+      read.to_s
     end
 
-    def read?(t : String.class)
-      read?.try &.to_s
+    def read(t : String?.class)
+      read.try &.to_s
     end
 
-    def read?(t : Int32.class)
-      read?(String).try &.to_i32
+    def read(t : Int32.class)
+      read(String).to_i32
     end
 
-    def read?(t : Int64.class)
-      read?(String).try &.to_i64
+    def read(t : Int64.class)
+      read(String).to_i64
     end
 
-    def read?(t : Float32.class)
-      read?(String).try &.to_f32
+    def read(t : Float32.class)
+      read(String).to_f32
     end
 
-    def read?(t : Float64.class)
-      read?(String).try &.to_f64
+    def read(t : Float64.class)
+      read(String).to_f64
     end
 
-    def read?(t : Bytes.class)
-      value = read?
-      if value.is_a?(Nil)
-        value
-      elsif value.is_a?(String)
+    def read(t : Bytes.class)
+      case value = read
+      when String
         ary = value.bytes
         Slice.new(ary.to_unsafe, ary.size)
-      elsif value.is_a?(Bytes)
+      when Bytes
         value
       else
         raise "#{value} is not convertible to Bytes"

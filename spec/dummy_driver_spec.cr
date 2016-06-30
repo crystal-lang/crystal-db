@@ -74,11 +74,11 @@ describe DummyDriver do
       with_dummy do |db|
         db.query "a,NULL 1,NULL" do |rs|
           rs.move_next
-          rs.read?(String).should eq("a")
-          rs.read?(String).should be_nil
+          rs.read(String).should eq("a")
+          rs.read(String | Nil).should be_nil
           rs.move_next
-          rs.read?(Int64).should eq(1)
-          rs.read?(Int64).should be_nil
+          rs.read(Int64).should eq(1)
+          rs.read(Int64 | Nil).should be_nil
         end
       end
     end
@@ -92,6 +92,116 @@ describe DummyDriver do
           rs.move_next
           rs.read(Int64).should eq(1i64)
           rs.read(Int64).should eq(2i64)
+        end
+      end
+    end
+
+    describe "query one" do
+      it "queries" do
+        with_dummy do |db|
+          db.query_one("3,4", &.read(Int64, Int64)).should eq({3i64, 4i64})
+        end
+      end
+
+      it "raises if more than one row" do
+        with_dummy do |db|
+          expect_raises(DB::Error, "more than one row") do
+            db.query_one("3,4 5,6") { }
+          end
+        end
+      end
+
+      it "raises if no rows" do
+        with_dummy do |db|
+          expect_raises(DB::Error, "no rows") do
+            db.query_one("") { }
+          end
+        end
+      end
+
+      it "with as" do
+        with_dummy do |db|
+          db.query_one("3,4", as: {Int64, Int64}).should eq({3i64, 4i64})
+        end
+      end
+
+      it "with as, just one" do
+        with_dummy do |db|
+          db.query_one("3", as: Int64).should eq(3i64)
+        end
+      end
+    end
+
+    describe "query one?" do
+      it "queries" do
+        with_dummy do |db|
+          value = db.query_one?("3,4", &.read(Int64, Int64))
+          value.should eq({3i64, 4i64})
+          value.should be_a(Tuple(Int64, Int64)?)
+        end
+      end
+
+      it "raises if more than one row" do
+        with_dummy do |db|
+          expect_raises(DB::Error, "more than one row") do
+            db.query_one?("3,4 5,6") { }
+          end
+        end
+      end
+
+      it "returns nil if no rows" do
+        with_dummy do |db|
+          db.query_one?("") { fail("block shouldn't be invoked") }.should be_nil
+        end
+      end
+
+      it "with as" do
+        with_dummy do |db|
+          value = db.query_one?("3,4", as: {Int64, Int64})
+          value.should be_a(Tuple(Int64, Int64)?)
+          value.should eq({3i64, 4i64})
+        end
+      end
+
+      it "with as, just one" do
+        with_dummy do |db|
+          value = db.query_one?("3", as: Int64)
+          value.should be_a(Int64?)
+          value.should eq(3i64)
+        end
+      end
+    end
+
+    describe "query all" do
+      it "queries" do
+        with_dummy do |db|
+          ary = db.query_all "3,4 1,2", &.read(Int64, Int64)
+          ary.should eq([{3, 4}, {1, 2}])
+        end
+      end
+
+      it "queries with as" do
+        with_dummy do |db|
+          ary = db.query_all "3,4 1,2", as: {Int64, Int64}
+          ary.should eq([{3, 4}, {1, 2}])
+        end
+      end
+
+      it "queries with as, just one" do
+        with_dummy do |db|
+          ary = db.query_all "3 1", as: Int64
+          ary.should eq([3, 1])
+        end
+      end
+    end
+
+    it "reads multiple values" do
+      with_dummy do |db|
+        db.query "3,4 1,2" do |rs|
+          rs.move_next
+          rs.read(Int64, Int64).should eq({3i64, 4i64})
+          rs.move_next
+          rs.read(Int64, Int64).should eq({1i64, 2i64})
         end
       end
     end
@@ -110,22 +220,13 @@ describe DummyDriver do
 
     it "should get Nil scalars" do
       with_dummy do |db|
-        DummyDriver::DummyResultSet.next_column_type = Nil
         db.scalar("NULL").should be_nil
       end
     end
 
     {% for value in [1, 1_i64, "hello", 1.5, 1.5_f32] %}
-      it "numeric scalars of type of {{value.id}} should return value or nil" do
-        with_dummy do |db|
-          DummyDriver::DummyResultSet.next_column_type = typeof({{value}})
-          db.scalar("#{{{value}}}").should eq({{value}})
-        end
-      end
-
       it "should set positional arguments for {{value.id}}" do
         with_dummy do |db|
-          DummyDriver::DummyResultSet.next_column_type = typeof({{value}})
           db.scalar("?", {{value}}).should eq({{value}})
         end
       end
@@ -135,7 +236,6 @@ describe DummyDriver do
       with_dummy do |db|
         ary = UInt8[0x53, 0x51, 0x4C]
         slice = Bytes.new(ary.to_unsafe, ary.size)
-        DummyDriver::DummyResultSet.next_column_type = typeof(slice)
         (db.scalar("?", slice).as(Bytes)).to_a.should eq(ary)
       end
     end

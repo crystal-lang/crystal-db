@@ -16,10 +16,9 @@ module DB
   # ### Note to implementors
   #
   # 1. Override `#move_next` to move to the next row.
-  # 2. Override `#read?(t)` for all `t` in `DB::TYPES` and any other types the driver should handle.
-  # 3. (Optional) Override `#read(t)` for all `t` in `DB::TYPES` and any other.
+  # 2. Override `#read` returning the next value in the row.
+  # 3. (Optional) Override `#read(t)` for some types `t` for which custom logic other than a simple cast is needed.
   # 4. Override `#column_count`, `#column_name`.
-  # 5. Override `#column_type`. It must return a type in `DB::TYPES`.
   abstract class ResultSet
     include Disposable
 
@@ -55,29 +54,28 @@ module DB
     # Returns the name of the column in `index` 0-based position.
     abstract def column_name(index : Int32) : String
 
-    # Returns the type of the column in `index` 0-based position.
-    # The result is one of `DB::TYPES`.
-    abstract def column_type(index : Int32)
+    # Reads the next column value
+    abstract def read
 
-    def read(t)
-      read?(t).not_nil!
+    # Reads the next column value as a **type**
+    def read(type : T.class) : T
+      read.as(T)
     end
 
-    # Reads the next column as a Nil.
-    def read(t : Nil.class) : Nil
-      read?(Nil)
+    # Reads the next columns and returns a tuple of the values.
+    def read(*types : Class)
+      internal_read(*types)
     end
 
-    def read?(t)
-      raise "read?(t : #{t}) is not implemented in #{self.class}"
+    private def internal_read(*types : *T)
+      {% begin %}
+        Tuple.new(
+          {% for type in T %}
+            read({{type.instance}}),
+          {% end %}
+        )
+      {% end %}
     end
-
-    # list datatypes that must be supported form the driver
-    # users will call read(String) or read?(String) for nillables
-    {% for t in DB::TYPES %}
-      # Reads the next column as a nillable {{t}}.
-      abstract def read?(t : {{t}}.class) : {{t}}?
-    {% end %}
 
     # def read_blob
     #   yield ... io ....
