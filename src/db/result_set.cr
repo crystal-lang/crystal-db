@@ -44,7 +44,7 @@ module DB
     # Iterates over all the columns
     def each_column
       column_count.times do |x|
-        yield column_name(x), column_type(x)
+        yield column_name(x)
       end
     end
 

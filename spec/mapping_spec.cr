@@ -8,6 +8,13 @@ class SimpleMapping
   })
 end
 
+class NonStrictMapping
+  DB.mapping({
+    c1: Int32,
+    c2: String
+  }, strict: false)
+end
+
 class MappingWithDefaults
   DB.mapping({
     c0: { type: Int32, default: 10 },
@@ -17,7 +24,7 @@ end
 
 class MappingWithNilables
   DB.mapping({
-    c0: { type: Int32, nilable: true },
+    c0: { type: Int32, nilable: true, default: 10 },
     c1: { type: String, nilable: true },
   })
 end
@@ -79,6 +86,10 @@ describe "DB.mapping" do
     expect_raises { from_dummy("1,a,b", SimpleMapping) }
   end
 
+  it "should initialize a non-strict mapping if there is an unexpected column" do
+    expect_mapping("1,2,a,b", NonStrictMapping, {c1: 2, c2: "a"})
+  end
+
   it "should initialize a mapping with default values" do
     expect_mapping("1,a", MappingWithDefaults, {c0: 1, c1: "a"})
   end
@@ -87,8 +98,16 @@ describe "DB.mapping" do
     expect_mapping("1", MappingWithDefaults, {c0: 1, c1: "c"})
   end
 
+  it "should initialize a mapping using default values if values are nil and types are non nilable" do
+    expect_mapping("1,NULL", MappingWithDefaults, {c0: 1, c1: "c"})
+  end
+
   it "should initialize a mapping with nils if columns are missing" do
     expect_mapping("1", MappingWithNilables, {c0: 1, c1: nil})
+  end
+
+  it "should initialize a mapping with nils ignoring default value is type is nilable" do
+    expect_mapping("NULL,a", MappingWithNilables, {c0: nil, c1: "a"})
   end
 
   it "should initialize a mapping with different keys" do

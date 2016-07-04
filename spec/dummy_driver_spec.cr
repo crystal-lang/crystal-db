@@ -96,6 +96,19 @@ describe DummyDriver do
       end
     end
 
+    it "should enumerate nillable int64 fields" do
+      with_dummy do |db|
+        db.query "3,4 1,NULL" do |rs|
+          rs.move_next
+          rs.read(Int64 | Nil).should eq(3i64)
+          rs.read(Int64 | Nil).should eq(4i64)
+          rs.move_next
+          rs.read(Int64 | Nil).should eq(1i64)
+          rs.read(Int64 | Nil).should be_nil
+        end
+      end
+    end
+
     describe "query one" do
       it "queries" do
         with_dummy do |db|

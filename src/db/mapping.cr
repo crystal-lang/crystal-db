@@ -57,7 +57,7 @@ module DB
   # This macro also declares instance variables of the types given in the mapping.
   macro mapping(properties, strict = true)
     {% for key, value in properties %}
-      {% properties[key] = {type: value} unless value.is_a?(HashLiteral) %}
+      {% properties[key] = {type: value} unless value.is_a?(HashLiteral) || value.is_a?(NamedTupleLiteral) %}
     {% end %}
 
     {% for key, value in properties %}
@@ -86,7 +86,7 @@ module DB
         %found{key.id} = false
       {% end %}
 
-      %rs.each_column do |col_name, col_type|
+      %rs.each_column do |col_name|
         case col_name
           {% for key, value in properties %}
             when {{value[:key] || key.id.stringify}}
@@ -95,7 +95,7 @@ module DB
                 {% if value[:converter] %}
                   {{value[:converter]}}.from_rs(%rs)
                 {% elsif value[:nilable] || value[:default] != nil %}
-                  %rs.read?({{value[:type]}})
+                  %rs.read(Union({{value[:type]}} | Nil))
                 {% else %}
                   %rs.read({{value[:type]}})
                 {% end %}
@@ -104,8 +104,7 @@ module DB
             {% if strict %}
               raise DB::MappingException.new("unknown result set attribute: #{col_name}")
             {% else %}
-              # TODO: col_type can be Nil, and read?(Nil) is undefined; how to skip a column?
-              #%rs.read?(col_type)
+              %rs.read(Nil)
             {% end %}
         end
       end

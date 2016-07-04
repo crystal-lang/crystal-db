@@ -131,8 +131,16 @@ class DummyDriver < DB::Driver
       read(String).to_i32
     end
 
+    def read(t : Int32?.class)
+      read(String?).try &.to_i32
+    end
+
     def read(t : Int64.class)
       read(String).to_i64
+    end
+
+    def read(t : Int64?.class)
+      read(String?).try &.to_i64
     end
 
     def read(t : Float32.class)

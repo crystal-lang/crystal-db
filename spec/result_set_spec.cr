@@ -41,15 +41,15 @@ describe DB::ResultSet do
       end
       the_rs.closed?.should be_true
     end
+  end
 
   it "should enumerate columns" do
     cols = [] of String
 
     with_dummy do |db|
       db.query "3,4 1,2" do |rs|
-        rs.each_column do |col, col_type|
+        rs.each_column do |col|
           cols << col
-          col_type.should eq(Slice(UInt8))
         end
       end
     end
