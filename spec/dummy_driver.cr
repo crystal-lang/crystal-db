@@ -81,6 +81,7 @@ class DummyDriver < DB::Driver
     def initialize(statement, query)
       super(statement)
       @top_values = query.split.map { |r| r.split(',') }.to_a
+      @column_count = @top_values.size > 0 ? @top_values[0].size : 2
 
       @@last_result_set = self
     end
@@ -99,7 +100,7 @@ class DummyDriver < DB::Driver
     end
 
     def column_count
-      2
+      @column_count
     end
 
     def column_name(index)
@@ -130,8 +131,16 @@ class DummyDriver < DB::Driver
       read(String).to_i32
     end
 
+    def read(t : Int32?.class)
+      read(String?).try &.to_i32
+    end
+
     def read(t : Int64.class)
       read(String).to_i64
+    end
+
+    def read(t : Int64?.class)
+      read(String?).try &.to_i64
     end
 
     def read(t : Float32.class)

@@ -41,6 +41,13 @@ module DB
       end
     end
 
+    # Iterates over all the columns
+    def each_column
+      column_count.times do |x|
+        yield column_name(x)
+      end
+    end
+
     # Move the next row in the result.
     # Return `false` if no more rows are available.
     # See `#each`
@@ -56,6 +63,11 @@ module DB
 
     # Reads the next column value
     abstract def read
+
+    # Reads the next columns and maps them to a class
+    def read(type : DB::Mappable.class)
+      type.new(self)
+    end
 
     # Reads the next column value as a **type**
     def read(type : T.class) : T

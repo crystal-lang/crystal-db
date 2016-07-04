@@ -42,4 +42,18 @@ describe DB::ResultSet do
       the_rs.closed?.should be_true
     end
   end
+
+  it "should enumerate columns" do
+    cols = [] of String
+
+    with_dummy do |db|
+      db.query "3,4 1,2" do |rs|
+        rs.each_column do |col|
+          cols << col
+        end
+      end
+    end
+
+    cols.should eq(["c0", "c1"])
+  end
 end
