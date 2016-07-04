@@ -104,7 +104,7 @@ module DB
             {% if strict %}
               raise DB::MappingException.new("unknown result set attribute: #{col_name}")
             {% else %}
-              %rs.read(Nil)
+              %rs.read
             {% end %}
         end
       end
