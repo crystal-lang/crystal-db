@@ -131,4 +131,23 @@ describe "DB.mapping" do
     end
   end
 
+  it "should initialize from a query_one" do
+    with_dummy do |db|
+      obj = db.query_one "1,a", as: SimpleMapping
+      obj.c0.should eq(1)
+      obj.c1.should eq("a")
+    end
+  end
+
+  it "should initialize from a query_all" do
+    with_dummy do |db|
+      objs = db.query_all "1,a 2,b", as: SimpleMapping
+      objs.size.should eq(2)
+      objs[0].c0.should eq(1)
+      objs[0].c1.should eq("a")
+      objs[1].c0.should eq(2)
+      objs[1].c1.should eq("b")
+    end
+  end
+
 end

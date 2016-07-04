@@ -1,5 +1,8 @@
 module DB
 
+  # Empty module used for marking a class as supporting DB:Mapping
+  module Mappable; end
+
   # The `DB.mapping` macro defines how an object is built from a DB::ResultSet.
   #
   # It takes hash literal as argument, in which attributes and types are defined.
@@ -56,6 +59,8 @@ module DB
   #
   # This macro also declares instance variables of the types given in the mapping.
   macro mapping(properties, strict = true)
+    include DB::Mappable
+
     {% for key, value in properties %}
       {% properties[key] = {type: value} unless value.is_a?(HashLiteral) || value.is_a?(NamedTupleLiteral) %}
     {% end %}
