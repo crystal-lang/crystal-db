@@ -131,6 +131,13 @@ describe DB::Pool do
     end
   end
 
+  it "should be able to release after a timeout" do
+    pool = DB::Pool.new(->{ Closable.new }, max_pool_size: 1, checkout_timeout: 0.1)
+    a = pool.checkout
+    pool.checkout rescue nil
+    pool.release a
+  end
+
   it "should close if max idle amount is reached" do
     all = [] of Closable
     pool = DB::Pool.new(->{ Closable.new.tap { |c| all << c } }, max_pool_size: 3, max_idle_pool_size: 1)

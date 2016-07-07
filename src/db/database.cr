@@ -1,7 +1,14 @@
+require "http/params"
+
 module DB
   # Acts as an entry point for database access.
-  # Currently it creates a single connection to the database.
-  # Eventually a connection pool will be handled.
+  # Connections are managed by a pool.
+  # The connection pool can be configured from URI parameters:
+  #
+  #   - initial_pool_size (default 1)
+  #   - max_pool_size (default 1)
+  #   - max_idle_pool_size (default 1)
+  #   - checkout_timeout (default 5.0)
   #
   # It should be created from DB module. See `DB#open`.
   #
@@ -13,19 +20,21 @@ module DB
     # Returns the uri with the connection settings to the database
     getter uri
 
-    @connection : Connection?
+    @pool : Pool(Connection)
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
-      @in_pool = true
-      @connection = @driver.build_connection(self)
+      # TODO: PR HTTP::Params.new -> HTTP::Params.new(Hash(String, Array(String)).new)
+      params = (query = uri.query) ? HTTP::Params.parse(query) : HTTP::Params.new(Hash(String, Array(String)).new)
+      pool_options = @driver.connection_pool_options(params)
+
+      @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
+      @pool = Pool.new(->{ @driver.build_connection(self).as(Connection) }, **pool_options)
     end
 
     # Closes all connection to the database.
     def close
-      @connection.try &.close
-      # prevent GC Warning: Finalization cycle involving discovered by mysql implementation
-      @connection = nil
+      @pool.close
     end
 
     # :nodoc:
@@ -41,14 +50,12 @@ module DB
 
     # :nodoc:
     def get_from_pool
-      raise "DB Pool Exhausted" unless @in_pool
-      @in_pool = false
-      @connection.not_nil!
+      @pool.checkout
     end
 
     # :nodoc:
     def return_to_pool(connection)
-      @in_pool = true
+      @pool.release connection
     end
 
     # yields a connection from the pool

@@ -187,7 +187,7 @@ end
 def with_dummy
   DummyDriver::DummyConnection.clear_connections
 
-  DB.open "dummy://host" do |db|
+  DB.open "dummy://host?checkout_timeout=0.5" do |db|
     yield db
   end
 end

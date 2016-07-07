@@ -72,12 +72,18 @@ module DB
       timeout.start
       # if there are no available resources, sleep until one is available
       @availability_channel.receive
-      timeout.raise_if_reached
+      if timeout.timeout_reached?
+        dec_waiting_resource
+        raise DB::PoolTimeout.new
+      end
 
       # double check there is something available to be checkedout
       while @available.empty?
         @availability_channel.receive
-        timeout.raise_if_reached
+        if timeout.timeout_reached?
+          dec_waiting_resource
+          raise DB::PoolTimeout.new
+        end
       end
 
       timeout.cancel
@@ -124,10 +130,6 @@ module DB
 
       def timeout_reached?
         @should_timeout
-      end
-
-      def raise_if_reached
-        raise DB::PoolTimeout.new if timeout_reached?
       end
     end
   end

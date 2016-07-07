@@ -6,8 +6,7 @@ require "uri"
 #
 # Drivers implementors check `Driver` class.
 #
-# Currently a *single connection* to the database is stablished.
-# In the future a connection pool and transaction support will be available.
+# DB manage a connection pool. The connection pool can be configured by `URI` query. See `Database`.
 #
 # ### Usage
 #

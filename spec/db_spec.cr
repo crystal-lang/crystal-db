@@ -61,7 +61,7 @@ describe DB do
   it "should raise if the sole connection is been used" do
     with_dummy do |db|
       db.query "1" do |rs|
-        expect_raises Exception, /DB Pool Exhausted/ do
+        expect_raises DB::PoolTimeout do
           db.scalar "2"
         end
       end
