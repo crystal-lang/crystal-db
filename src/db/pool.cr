@@ -12,6 +12,7 @@ module DB
 
       @availability_channel = Channel(Nil).new
       @waiting_resource = 0
+      @mutex = Mutex.new
     end
 
     # close all resources in the pool
@@ -38,7 +39,7 @@ module DB
     def release(resource : T) : Nil
       if can_increase_idle_pool
         @available << resource
-        @availability_channel.send nil if @waiting_resource > 0
+        @availability_channel.send nil if are_waiting_for_resource?
       else
         resource.close
         @total.delete(resource)
@@ -66,7 +67,7 @@ module DB
 
     private def wait_for_available
       timeout = TimeoutHelper.new(@checkout_timeout.to_f64, ->{ @availability_channel.send nil })
-      @waiting_resource += 1
+      inc_waiting_resource
 
       timeout.start
       # if there are no available resources, sleep until one is available
@@ -80,7 +81,25 @@ module DB
       end
 
       timeout.cancel
-      @waiting_resource -= 1
+      dec_waiting_resource
+    end
+
+    private def inc_waiting_resource
+      @mutex.synchronize do
+        @waiting_resource += 1
+      end
+    end
+
+    private def dec_waiting_resource
+      @mutex.synchronize do
+        @waiting_resource -= 1
+      end
+    end
+
+    private def are_waiting_for_resource?
+      @mutex.synchronize do
+        @waiting_resource > 0
+      end
     end
 
     class TimeoutHelper
