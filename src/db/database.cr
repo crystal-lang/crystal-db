@@ -29,7 +29,7 @@ module DB
       pool_options = @driver.connection_pool_options(params)
 
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
-      @pool = Pool.new(->{ @driver.build_connection(self).as(Connection) }, **pool_options)
+      @pool = Pool.new(**pool_options) { @driver.build_connection(self).as(Connection) }
     end
 
     # Closes all connection to the database.

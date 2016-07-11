@@ -50,17 +50,17 @@ end
 describe DB::Pool do
   it "should use proc to create objects" do
     block_called = 0
-    pool = DB::Pool.new(->{ block_called += 1; Closable.new }, initial_pool_size: 3)
+    pool = DB::Pool.new(initial_pool_size: 3) { block_called += 1; Closable.new }
     block_called.should eq(3)
   end
 
   it "should get resource" do
-    pool = DB::Pool.new(->{ Closable.new })
+    pool = DB::Pool.new { Closable.new }
     pool.checkout.should be_a Closable
   end
 
   it "should wait for available resource" do
-    pool = DB::Pool.new(->{ Closable.new }, max_pool_size: 1, initial_pool_size: 1)
+    pool = DB::Pool.new(max_pool_size: 1, initial_pool_size: 1) { Closable.new }
 
     b_cnn_request = ShouldSleepingOp.new
     wait_a = WaitFor.new
@@ -88,7 +88,7 @@ describe DB::Pool do
 
   it "should create new if max was not reached" do
     block_called = 0
-    pool = DB::Pool.new(->{ block_called += 1; Closable.new }, max_pool_size: 2, initial_pool_size: 1)
+    pool = DB::Pool.new(max_pool_size: 2, initial_pool_size: 1) { block_called += 1; Closable.new }
     block_called.should eq 1
     pool.checkout
     block_called.should eq 1
@@ -98,7 +98,7 @@ describe DB::Pool do
 
   it "should reuse returned resources" do
     all = [] of Closable
-    pool = DB::Pool.new(->{ Closable.new.tap { |c| all << c } }, max_pool_size: 2, initial_pool_size: 1)
+    pool = DB::Pool.new(max_pool_size: 2, initial_pool_size: 1) { Closable.new.tap { |c| all << c } }
     pool.checkout
     b1 = pool.checkout
     pool.release b1
@@ -110,7 +110,7 @@ describe DB::Pool do
 
   it "should close available and total" do
     all = [] of Closable
-    pool = DB::Pool.new(->{ Closable.new.tap { |c| all << c } }, max_pool_size: 2, initial_pool_size: 1)
+    pool = DB::Pool.new(max_pool_size: 2, initial_pool_size: 1) { Closable.new.tap { |c| all << c } }
     a = pool.checkout
     b = pool.checkout
     pool.release b
@@ -124,7 +124,7 @@ describe DB::Pool do
   end
 
   it "should timeout" do
-    pool = DB::Pool.new(->{ Closable.new }, max_pool_size: 1, checkout_timeout: 0.1)
+    pool = DB::Pool.new(max_pool_size: 1, checkout_timeout: 0.1) { Closable.new }
     pool.checkout
     expect_raises DB::PoolTimeout do
       pool.checkout
@@ -132,7 +132,7 @@ describe DB::Pool do
   end
 
   it "should be able to release after a timeout" do
-    pool = DB::Pool.new(->{ Closable.new }, max_pool_size: 1, checkout_timeout: 0.1)
+    pool = DB::Pool.new(max_pool_size: 1, checkout_timeout: 0.1) { Closable.new }
     a = pool.checkout
     pool.checkout rescue nil
     pool.release a
@@ -140,7 +140,7 @@ describe DB::Pool do
 
   it "should close if max idle amount is reached" do
     all = [] of Closable
-    pool = DB::Pool.new(->{ Closable.new.tap { |c| all << c } }, max_pool_size: 3, max_idle_pool_size: 1)
+    pool = DB::Pool.new(max_pool_size: 3, max_idle_pool_size: 1) { Closable.new.tap { |c| all << c } }
     pool.checkout
     pool.checkout
     pool.checkout
@@ -159,7 +159,7 @@ describe DB::Pool do
 
   it "should create resource after max_pool was reached if idle forced some close up" do
     all = [] of Closable
-    pool = DB::Pool.new(->{ Closable.new.tap { |c| all << c } }, max_pool_size: 3, max_idle_pool_size: 1)
+    pool = DB::Pool.new(max_pool_size: 3, max_idle_pool_size: 1) { Closable.new.tap { |c| all << c } }
     pool.checkout
     pool.checkout
     pool.checkout

@@ -7,7 +7,7 @@ module DB
     @total = [] of T
     @checkout_timeout : Float64
 
-    def initialize(@factory : Proc(T), @initial_pool_size = 1, @max_pool_size = 1, @max_idle_pool_size = 1, @checkout_timeout = 5.0)
+    def initialize(@initial_pool_size = 1, @max_pool_size = 1, @max_idle_pool_size = 1, @checkout_timeout = 5.0, &@factory : -> T)
       @initial_pool_size.times { build_resource }
 
       @availability_channel = Channel(Nil).new
