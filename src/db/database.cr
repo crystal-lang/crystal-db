@@ -63,9 +63,11 @@ module DB
     # when the block ends
     def using_connection
       connection = get_from_pool
-      yield connection
-    ensure
-      return_to_pool connection
+      begin
+        yield connection
+      ensure
+        return_to_pool connection
+      end
     end
 
     include QueryMethods
