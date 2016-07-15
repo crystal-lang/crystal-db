@@ -138,4 +138,7 @@ module DB
     end
   end
 
+  macro mapping(**properties)
+    ::DB.mapping({{properties}})
+  end
 end
