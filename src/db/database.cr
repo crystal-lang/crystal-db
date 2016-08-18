@@ -21,6 +21,7 @@ module DB
     getter uri
 
     @pool : Pool(Connection)
+    @setup_connection : Connection -> Nil
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
@@ -28,8 +29,20 @@ module DB
       params = (query = uri.query) ? HTTP::Params.parse(query) : HTTP::Params.new(Hash(String, Array(String)).new)
       pool_options = @driver.connection_pool_options(params)
 
+      @setup_connection = ->(conn : Connection) {}
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
-      @pool = Pool.new(**pool_options) { @driver.build_connection(self).as(Connection) }
+      @pool = Pool.new(**pool_options) {
+        conn = @driver.build_connection(self).as(Connection)
+        @setup_connection.call conn
+        conn
+      }
+    end
+
+    def setup_connection(&proc : Connection -> Nil)
+      @setup_connection = proc
+      @pool.each_resource do |conn|
+        @setup_connection.call conn
+      end
     end
 
     # Closes all connection to the database.

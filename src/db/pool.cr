@@ -46,6 +46,13 @@ module DB
       end
     end
 
+    # :nodoc:
+    def each_resource
+      @available.each do |resource|
+        yield resource
+      end
+    end
+
     private def build_resource : T
       resource = @factory.call
       @total << resource
