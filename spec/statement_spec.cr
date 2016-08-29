@@ -118,4 +118,13 @@ describe DB::Statement do
       rs.statement.should be(stmt)
     end
   end
+
+  it "connection should be released if error occurs during exec" do
+    with_dummy do |db|
+      expect_raises do
+        db.exec "raise"
+      end
+      db.@in_pool.should be_true
+    end
+  end
 end

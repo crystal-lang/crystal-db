@@ -237,6 +237,14 @@ describe DummyDriver do
       end
     end
 
+    it "should raise executing raise query" do
+      with_dummy do |db|
+        expect_raises do
+          db.exec "raise"
+        end
+      end
+    end
+
     {% for value in [1, 1_i64, "hello", 1.5, 1.5_f32] %}
       it "should set positional arguments for {{value.id}}" do
         with_dummy do |db|

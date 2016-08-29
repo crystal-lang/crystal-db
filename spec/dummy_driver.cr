@@ -49,6 +49,7 @@ class DummyDriver < DB::Driver
 
     protected def perform_exec(args : Enumerable)
       set_params args
+      raise "forced exception due to query" if @query == "raise"
       DB::ExecResult.new 0i64, 0_i64
     end
 
