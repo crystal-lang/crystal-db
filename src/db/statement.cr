@@ -74,9 +74,9 @@ module DB
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult
-      res = perform_exec(args)
+      return perform_exec(args)
+    ensure
       release_connection
-      res
     end
 
     protected abstract def perform_query(args : Enumerable) : ResultSet

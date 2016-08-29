@@ -61,6 +61,11 @@ module DB
     # Returns the name of the column in `index` 0-based position.
     abstract def column_name(index : Int32) : String
 
+    # Returns the name of the columns.
+    def column_names
+      Array(String).new(column_count) { |i| column_name(i) }
+    end
+
     # Reads the next column value
     abstract def read
 

@@ -35,7 +35,7 @@ module DB
     # end
     # ```
     def query(query, *args)
-      prepare query, &.query(*args)
+      prepare(query).query(*args)
     end
 
     # Executes a *query* and yields a `ResultSet` with the results.
@@ -200,23 +200,13 @@ module DB
 
     # Performs the `query` and returns an `ExecResult`
     def exec(query, *args)
-      prepare query, &.exec(*args)
+      prepare(query).exec(*args)
     end
 
     # Performs the `query` and returns a single scalar value
     # puts db.scalar("SELECT MAX(name)").as(String) # => (a String)
     def scalar(query, *args)
-      prepare query, &.scalar(*args)
-    end
-
-    private def prepare(query)
-      stm = prepare(query)
-      begin
-        yield stm
-      rescue ex
-        stm.release_connection
-        raise ex
-      end
+      prepare(query).scalar(*args)
     end
   end
 end

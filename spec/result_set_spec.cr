@@ -56,4 +56,12 @@ describe DB::ResultSet do
 
     cols.should eq(["c0", "c1"])
   end
+
+  it "gets all column names" do
+    with_dummy do |db|
+      db.query "1,2" do |rs|
+        rs.column_names.should eq(%w(c0 c1))
+      end
+    end
+  end
 end
