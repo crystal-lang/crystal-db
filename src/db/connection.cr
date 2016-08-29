@@ -1,8 +1,4 @@
 module DB
-  class Database; end
-
-  abstract class Statement; end
-
   # Database driver implementors must subclass `Connection`.
   #
   # Represents one active connection to a database.
