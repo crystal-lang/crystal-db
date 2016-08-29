@@ -39,4 +39,12 @@ describe DB::Database do
       end
     end
   end
+
+  it "should allow creation of more statements than pool connections" do
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=2" do |db|
+      db.prepare("query1").should be_a(DB::PoolStatement)
+      db.prepare("query2").should be_a(DB::PoolStatement)
+      db.prepare("query3").should be_a(DB::PoolStatement)
+    end
+  end
 end

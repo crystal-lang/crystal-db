@@ -54,18 +54,14 @@ module DB
 
     # :nodoc:
     def prepare(query)
-      conn = get_from_pool
-      begin
-        conn.prepare(query)
-      rescue ex
-        return_to_pool(conn)
-        raise ex
-      end
+      # TODO query based cache for pool statement
+      # TODO clear PoolStatements when closing the DB
+      PoolStatement.new self, query
     end
 
     # :nodoc:
-    def get_from_pool
-      @pool.checkout
+    def checkout_some(candidates : Enumerable(Connection)) : {Connection, Bool}
+      @pool.checkout_some candidates
     end
 
     # :nodoc:
@@ -77,7 +73,7 @@ module DB
     # the connection is returned to the pool after
     # when the block ends
     def using_connection
-      connection = get_from_pool
+      connection = @pool.checkout
       begin
         yield connection
       ensure
