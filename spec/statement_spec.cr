@@ -124,7 +124,8 @@ describe DB::Statement do
       expect_raises do
         db.exec "raise"
       end
-      db.@in_pool.should be_true
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+      db.pool.is_available?(DummyDriver::DummyConnection.connections.first)
     end
   end
 end

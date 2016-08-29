@@ -53,6 +53,11 @@ module DB
       end
     end
 
+    # :nodon:
+    def is_available?(resource : T)
+      @available.includes?(resource)
+    end
+
     private def build_resource : T
       resource = @factory.call
       @total << resource

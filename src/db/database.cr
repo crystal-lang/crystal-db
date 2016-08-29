@@ -16,6 +16,8 @@ module DB
   class Database
     # :nodoc:
     getter driver
+    # :nodoc:
+    getter pool
 
     # Returns the uri with the connection settings to the database
     getter uri

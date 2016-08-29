@@ -59,6 +59,25 @@ describe DB::Pool do
     pool.checkout.should be_a Closable
   end
 
+  it "should be available if not checkedout" do
+    resource = uninitialized Closable
+    pool = DB::Pool.new(initial_pool_size: 1) { resource = Closable.new }
+    pool.is_available?(resource).should be_true
+  end
+
+  it "should not be available if checkedout" do
+    pool = DB::Pool.new { Closable.new }
+    resource = pool.checkout
+    pool.is_available?(resource).should be_false
+  end
+
+  it "should be available if returned" do
+    pool = DB::Pool.new { Closable.new }
+    resource = pool.checkout
+    pool.release resource
+    pool.is_available?(resource).should be_true
+  end
+
   it "should wait for available resource" do
     pool = DB::Pool.new(max_pool_size: 1, initial_pool_size: 1) { Closable.new }
 
