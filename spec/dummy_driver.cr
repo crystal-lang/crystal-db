@@ -192,3 +192,11 @@ def with_dummy
     yield db
   end
 end
+
+def with_dummy_connection
+  with_dummy do |db|
+    db.using_connection do |cnn|
+      yield cnn.as(DummyDriver::DummyConnection)
+    end
+  end
+end

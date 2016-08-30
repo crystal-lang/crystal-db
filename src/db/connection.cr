@@ -1,8 +1,4 @@
 module DB
-  class Database; end
-
-  abstract class Statement; end
-
   # Database driver implementors must subclass `Connection`.
   #
   # Represents one active connection to a database.
@@ -24,25 +20,20 @@ module DB
 
     # :nodoc:
     getter database
-    @statements_cache = {} of String => Statement
+    @statements_cache = StringKeyCache(Statement).new
 
     def initialize(@database : Database)
     end
 
     # :nodoc:
     def prepare(query) : Statement
-      stmt = @statements_cache.fetch(query, nil)
-      stmt = @statements_cache[query] = build_statement(query) unless stmt
-
-      stmt
+      @statements_cache.fetch(query) { build_statement(query) }
     end
 
     abstract def build_statement(query) : Statement
 
     protected def do_close
-      @statements_cache.each do |_, stmt|
-        stmt.close
-      end
+      @statements_cache.each_value &.close
       @statements_cache.clear
     end
   end

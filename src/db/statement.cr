@@ -1,4 +1,44 @@
 module DB
+  # Common interface for connection based statements
+  # and for connection pool statements.
+  module StatementMethods
+    include Disposable
+
+    protected def do_close
+    end
+
+    # See `QueryMethods#scalar`
+    def scalar(*args)
+      query(*args) do |rs|
+        rs.each do
+          return rs.read
+        end
+      end
+
+      raise "no results"
+    end
+
+    # See `QueryMethods#query`
+    def query(*args)
+      rs = query(*args)
+      yield rs ensure rs.close
+    end
+
+    # See `QueryMethods#exec`
+    abstract def exec : ExecResult
+    # See `QueryMethods#exec`
+    abstract def exec(*args) : ExecResult
+    # See `QueryMethods#exec`
+    abstract def exec(args : Array) : ExecResult
+
+    # See `QueryMethods#query`
+    abstract def query : ResultSet
+    # See `QueryMethods#query`
+    abstract def query(*args) : ResultSet
+    # See `QueryMethods#query`
+    abstract def query(args : Array) : ResultSet
+  end
+
   # Represents a prepared query in a `Connection`.
   # It should be created by `QueryMethods`.
   #
@@ -10,15 +50,12 @@ module DB
   # 4. `#perform_exec` executes a query that is expected to return an `ExecResult`
   # 6. `#do_close` is called to release the statement resources.
   abstract class Statement
-    include Disposable
+    include StatementMethods
 
     # :nodoc:
     getter connection
 
     def initialize(@connection : Connection)
-    end
-
-    protected def do_close
     end
 
     def release_connection
@@ -41,17 +78,6 @@ module DB
       perform_exec_and_release(args)
     end
 
-    # See `QueryMethods#scalar`
-    def scalar(*args)
-      query(*args) do |rs|
-        rs.each do
-          return rs.read
-        end
-      end
-
-      raise "no results"
-    end
-
     # See `QueryMethods#query`
     def query
       perform_query Tuple.new
@@ -65,12 +91,6 @@ module DB
     # See `QueryMethods#query`
     def query(*args)
       perform_query args
-    end
-
-    # See `QueryMethods#query`
-    def query(*args)
-      rs = query(*args)
-      yield rs ensure rs.close
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult

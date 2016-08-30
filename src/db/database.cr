@@ -24,11 +24,11 @@ module DB
 
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
+    @statements_cache = StringKeyCache(PoolStatement).new
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
-      # TODO: PR HTTP::Params.new -> HTTP::Params.new(Hash(String, Array(String)).new)
-      params = (query = uri.query) ? HTTP::Params.parse(query) : HTTP::Params.new(Hash(String, Array(String)).new)
+      params = HTTP::Params.parse(uri.query || "")
       pool_options = @driver.connection_pool_options(params)
 
       @setup_connection = ->(conn : Connection) {}
@@ -49,23 +49,20 @@ module DB
 
     # Closes all connection to the database.
     def close
+      @statements_cache.each_value &.close
+      @statements_cache.clear
+
       @pool.close
     end
 
     # :nodoc:
     def prepare(query)
-      conn = get_from_pool
-      begin
-        conn.prepare(query)
-      rescue ex
-        return_to_pool(conn)
-        raise ex
-      end
+      @statements_cache.fetch(query) { PoolStatement.new(self, query) }
     end
 
     # :nodoc:
-    def get_from_pool
-      @pool.checkout
+    def checkout_some(candidates : Enumerable(Connection)) : {Connection, Bool}
+      @pool.checkout_some candidates
     end
 
     # :nodoc:
@@ -77,7 +74,7 @@ module DB
     # the connection is returned to the pool after
     # when the block ends
     def using_connection
-      connection = get_from_pool
+      connection = @pool.checkout
       begin
         yield connection
       ensure

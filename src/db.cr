@@ -119,12 +119,14 @@ module DB
 end
 
 require "./db/pool"
+require "./db/string_key_cache"
 require "./db/query_methods"
 require "./db/disposable"
 require "./db/database"
 require "./db/driver"
 require "./db/connection"
 require "./db/statement"
+require "./db/pool_statement"
 require "./db/result_set"
 require "./db/error"
 require "./db/mapping"

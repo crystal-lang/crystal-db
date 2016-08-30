@@ -36,6 +36,25 @@ module DB
       resource
     end
 
+    # ```
+    # selected, is_candidate = pool.checkout_some(candidates)
+    # ```
+    # `selected` be a resource from the `candidates` list and `is_candidate` == `true`
+    # or `selected` will be a new resource adn `is_candidate` == `false`
+    def checkout_some(candidates : Enumerable(T)) : {T, Bool}
+      # TODO honor candidates while waiting for availables
+      # this will allow us to remove `candidates.includes?(resource)`
+      candidates.each do |resource|
+        if is_available?(resource)
+          @available.delete resource
+          return {resource, true}
+        end
+      end
+
+      resource = checkout
+      {resource, candidates.includes?(resource)}
+    end
+
     def release(resource : T) : Nil
       if can_increase_idle_pool
         @available << resource
