@@ -119,6 +119,7 @@ module DB
 end
 
 require "./db/pool"
+require "./db/string_key_cache"
 require "./db/query_methods"
 require "./db/disposable"
 require "./db/database"

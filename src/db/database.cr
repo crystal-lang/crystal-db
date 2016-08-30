@@ -24,6 +24,7 @@ module DB
 
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
+    @statements_cache = StringKeyCache(PoolStatement).new
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
@@ -48,14 +49,15 @@ module DB
 
     # Closes all connection to the database.
     def close
+      @statements_cache.each_value &.close
+      @statements_cache.clear
+
       @pool.close
     end
 
     # :nodoc:
     def prepare(query)
-      # TODO query based cache for pool statement
-      # TODO clear PoolStatements when closing the DB
-      PoolStatement.new self, query
+      @statements_cache.fetch(query) { PoolStatement.new(self, query) }
     end
 
     # :nodoc:

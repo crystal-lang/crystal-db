@@ -47,4 +47,20 @@ describe DB::Database do
       db.prepare("query3").should be_a(DB::PoolStatement)
     end
   end
+
+  it "should return same statement in pool per query" do
+    with_dummy do |db|
+      stmt = db.prepare("query1")
+      db.prepare("query2").should_not eq(stmt)
+      db.prepare("query1").should eq(stmt)
+    end
+  end
+
+  it "should close pool statements when closing db" do
+    stmt = uninitialized DB::PoolStatement
+    with_dummy do |db|
+      stmt = db.prepare("query1")
+    end
+    stmt.closed?.should be_true
+  end
 end
