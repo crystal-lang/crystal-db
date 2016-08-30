@@ -27,8 +27,7 @@ module DB
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
-      # TODO: PR HTTP::Params.new -> HTTP::Params.new(Hash(String, Array(String)).new)
-      params = (query = uri.query) ? HTTP::Params.parse(query) : HTTP::Params.new(Hash(String, Array(String)).new)
+      params = HTTP::Params.parse(uri.query || "")
       pool_options = @driver.connection_pool_options(params)
 
       @setup_connection = ->(conn : Connection) {}
