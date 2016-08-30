@@ -6,7 +6,8 @@ module DB
   class PoolStatement
     include StatementMethods
 
-    @statements = {} of Connection => Statement
+    # connections where the statement was prepared
+    @connections = Set(Connection).new
 
     def initialize(@db : Database, @query : String)
       # Prepares a statement on some connection
@@ -24,7 +25,7 @@ module DB
 
       # WHAT-IF the connection is busy? Should each statement be able to
       # deallocate itself when the connection is free.
-      @statements.clear
+      @connections.clear
     end
 
     # See `QueryMethods#exec`
@@ -58,16 +59,11 @@ module DB
     end
 
     # builds a statement over a real connection
-    # the conneciton and the stament is registered in `@statements`
+    # the conneciton is registered in `@connections`
     private def get_statement : Statement
-      conn, existing = @db.checkout_some(@statements.keys)
-      if existing
-        @statements[conn]
-      else
-        stmt = conn.prepare @query
-        @statements[conn] = stmt
-        stmt
-      end
+      conn, existing = @db.checkout_some(@connections)
+      @connections << conn unless existing
+      conn.prepare(@query)
     end
   end
 end
