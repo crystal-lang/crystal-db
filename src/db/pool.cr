@@ -18,6 +18,8 @@ module DB
     # close all resources in the pool
     def close : Nil
       @total.each &.close
+      @total.clear
+      @available.clear
     end
 
     def checkout : T
