@@ -9,6 +9,8 @@ module DB
   #   - max_pool_size (default 1)
   #   - max_idle_pool_size (default 1)
   #   - checkout_timeout (default 5.0)
+  #   - retry_attempts (default 1)
+  #   - retry_delay (in seconds, default 1.0)
   #
   # It should be created from DB module. See `DB#open`.
   #
@@ -79,6 +81,13 @@ module DB
         yield connection
       ensure
         return_to_pool connection
+      end
+    end
+
+    # :nodoc:
+    def retry
+      @pool.retry do
+        yield
       end
     end
 

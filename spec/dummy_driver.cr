@@ -9,6 +9,7 @@ class DummyDriver < DB::Driver
   class DummyConnection < DB::Connection
     def initialize(db)
       super(db)
+      @connected = true
       @@connections ||= [] of DummyConnection
       @@connections.not_nil! << self
     end
@@ -29,6 +30,14 @@ class DummyDriver < DB::Driver
       0
     end
 
+    def check
+      raise DB::ConnectionLost.new(self) unless @connected
+    end
+
+    def disconnect!
+      @connected = false
+    end
+
     protected def do_close
       super
     end
@@ -43,11 +52,13 @@ class DummyDriver < DB::Driver
     end
 
     protected def perform_query(args : Enumerable)
+      @connection.as(DummyConnection).check
       set_params args
       DummyResultSet.new self, @query
     end
 
     protected def perform_exec(args : Enumerable)
+      @connection.as(DummyConnection).check
       set_params args
       raise "forced exception due to query" if @query == "raise"
       DB::ExecResult.new 0i64, 0_i64

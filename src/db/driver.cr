@@ -34,6 +34,8 @@ module DB
         max_pool_size:      params.fetch("max_pool_size", 1).to_i,
         max_idle_pool_size: params.fetch("max_idle_pool_size", 1).to_i,
         checkout_timeout:   params.fetch("checkout_timeout", 5.0).to_f,
+        retry_attempts:     params.fetch("retry_attempts", 1).to_i,
+        retry_delay:        params.fetch("retry_delay", 1.0).to_f,
       }
     end
   end

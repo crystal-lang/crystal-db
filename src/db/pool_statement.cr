@@ -14,7 +14,7 @@ module DB
       # otherwise the preparation is delayed until the first execution.
       # After the first initialization the connection must be released
       # it will be checked out when executing it.
-      get_statement.release_connection
+      statement_with_retry &.release_connection
       # TODO use a round-robin selection in the pool so multiple sequentially
       #      initialized statements are assigned to different connections.
     end
@@ -30,40 +30,48 @@ module DB
 
     # See `QueryMethods#exec`
     def exec : ExecResult
-      get_statement.exec
+      statement_with_retry &.exec
     end
 
     # See `QueryMethods#exec`
     def exec(*args) : ExecResult
-      get_statement.exec(*args)
+      statement_with_retry &.exec(*args)
     end
 
     # See `QueryMethods#exec`
     def exec(args : Array) : ExecResult
-      get_statement.exec(args)
+      statement_with_retry &.exec(args)
     end
 
     # See `QueryMethods#query`
     def query : ResultSet
-      get_statement.query
+      statement_with_retry &.query
     end
 
     # See `QueryMethods#query`
     def query(*args) : ResultSet
-      get_statement.query(*args)
+      statement_with_retry &.query(*args)
     end
 
     # See `QueryMethods#query`
     def query(args : Array) : ResultSet
-      get_statement.query(args)
+      statement_with_retry &.query(args)
     end
 
     # builds a statement over a real connection
     # the conneciton is registered in `@connections`
-    private def get_statement : Statement
+    private def build_statement
+      # TODO closed connections should be removed from @connections
+      # either by callbacks or by week references.
       conn, existing = @db.checkout_some(@connections)
       @connections << conn unless existing
       conn.prepare(@query)
+    end
+
+    private def statement_with_retry
+      @db.retry do
+        return yield build_statement
+      end
     end
   end
 end

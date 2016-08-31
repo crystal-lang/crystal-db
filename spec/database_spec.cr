@@ -63,4 +63,28 @@ describe DB::Database do
     end
     stmt.closed?.should be_true
   end
+
+  it "should not reconnect if connection is lost and retry_attempts=0" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&retry_attempts=0" do |db|
+      db.exec("stmt1")
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+      DummyDriver::DummyConnection.connections.first.disconnect!
+      expect_raises DB::PoolRetryAttemptsExceeded do
+        db.exec("stmt1")
+      end
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+    end
+  end
+
+  it "should reconnect if connection is lost and executing same statement" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&retry_attempts=1" do |db|
+      db.exec("stmt1")
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+      DummyDriver::DummyConnection.connections.first.disconnect!
+      db.exec("stmt1")
+      DummyDriver::DummyConnection.connections.size.should eq(2)
+    end
+  end
 end

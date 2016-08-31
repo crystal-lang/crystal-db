@@ -14,6 +14,9 @@ module DB
   # Override `#build_statement` method in order to return a prepared `Statement` to allow querying.
   # See also `Statement` to define how the statements are executed.
   #
+  # If at any give moment the connection is lost a DB::ConnectionLost should be raised. This will
+  # allow the connection pool to try to reconnect or use another connection if available.
+  #
   abstract class Connection
     include Disposable
     include QueryMethods

@@ -6,8 +6,12 @@ module DB
     @available = Set(T).new
     @total = [] of T
     @checkout_timeout : Float64
+    # maximum amount of retry attempts to reconnect to the db. See `Pool#retry`.
+    @retry_attempts : Int32
+    @retry_delay : Float64
 
-    def initialize(@initial_pool_size = 1, @max_pool_size = 1, @max_idle_pool_size = 1, @checkout_timeout = 5.0, &@factory : -> T)
+    def initialize(@initial_pool_size = 1, @max_pool_size = 1, @max_idle_pool_size = 1, @checkout_timeout = 5.0,
+                   @retry_attempts = 1, @retry_delay = 0.2, &@factory : -> T)
       @initial_pool_size.times { build_resource }
 
       @availability_channel = Channel(Nil).new
@@ -65,6 +69,28 @@ module DB
         resource.close
         @total.delete(resource)
       end
+    end
+
+    # :nodoc:
+    # Will retry the block if a `ConnectionLost` exception is thrown.
+    # It will try to reuse all of the available connection right away,
+    # but if a new connection is needed there is a `retry_delay` seconds delay.
+    def retry
+      current_available = @available.size
+
+      (current_available + @retry_attempts).times do |i|
+        begin
+          sleep @retry_delay if i >= current_available
+          return yield
+        rescue e : ConnectionLost
+          # if the connection is lost close it to release resources
+          # and remove it from the known pool.
+          @total.delete(e.connection)
+          @available.delete(e.connection)
+          e.connection.close
+        end
+      end
+      raise PoolRetryAttemptsExceeded.new
     end
 
     # :nodoc:
