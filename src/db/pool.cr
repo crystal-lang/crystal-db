@@ -125,28 +125,23 @@ module DB
     end
 
     private def wait_for_available
-      timeout = TimeoutHelper.new(@checkout_timeout.to_f64, ->{ @availability_channel.send nil })
+      timeout = TimeoutHelper.new(@checkout_timeout.to_f64)
       inc_waiting_resource
 
       timeout.start
-      # if there are no available resources, sleep until one is available
-      @availability_channel.receive
-      if timeout.timeout_reached?
+
+      # TODO update to select keyword for crystal 0.19
+      index, _ = Channel.select(@availability_channel.receive_op, timeout.select_action)
+      case index
+      when 0
+        timeout.cancel
+        dec_waiting_resource
+      when 1
         dec_waiting_resource
         raise DB::PoolTimeout.new
+      else
+        raise DB::Error.new
       end
-
-      # double check there is something available to be checkedout
-      while @available.empty?
-        @availability_channel.receive
-        if timeout.timeout_reached?
-          dec_waiting_resource
-          raise DB::PoolTimeout.new
-        end
-      end
-
-      timeout.cancel
-      dec_waiting_resource
     end
 
     private def inc_waiting_resource
@@ -168,27 +163,26 @@ module DB
     end
 
     class TimeoutHelper
-      def initialize(@timeout : Float64, @tick : Proc(Nil))
+      def initialize(@timeout : Float64)
         @abort_timeout = false
-        @should_timeout = false
+        @timeout_channel = Channel(Nil).new
+      end
+
+      def select_action
+        @timeout_channel.receive_op
       end
 
       def start
         spawn do
           sleep @timeout
           unless @abort_timeout
-            @should_timeout = true
-            @tick.call
+            @timeout_channel.send nil
           end
         end
       end
 
       def cancel
         @abort_timeout = true
-      end
-
-      def timeout_reached?
-        @should_timeout
       end
     end
   end
