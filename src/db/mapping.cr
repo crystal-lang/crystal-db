@@ -1,5 +1,4 @@
 module DB
-
   # Empty module used for marking a class as supporting DB:Mapping
   module Mappable; end
 
