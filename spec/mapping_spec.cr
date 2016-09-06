@@ -4,40 +4,39 @@ require "base64"
 class SimpleMapping
   DB.mapping({
     c0: Int32,
-    c1: String
+    c1: String,
   })
 end
 
 class NonStrictMapping
   DB.mapping({
     c1: Int32,
-    c2: String
+    c2: String,
   }, strict: false)
 end
 
 class MappingWithDefaults
   DB.mapping({
-    c0: { type: Int32, default: 10 },
-    c1: { type: String, default: "c" },
+    c0: {type: Int32, default: 10},
+    c1: {type: String, default: "c"},
   })
 end
 
 class MappingWithNilables
   DB.mapping({
-    c0: { type: Int32, nilable: true, default: 10 },
-    c1: { type: String, nilable: true },
+    c0: {type: Int32, nilable: true, default: 10},
+    c1: {type: String, nilable: true},
   })
 end
 
 class MappingWithKeys
   DB.mapping({
-    foo: { type: Int32, key: "c0" },
-    bar: { type: String, key: "c1" },
+    foo: {type: Int32, key: "c0"},
+    bar: {type: String, key: "c1"},
   })
 end
 
 class MappingWithConverter
-
   module Base64Converter
     def self.from_rs(rs)
       Base64.decode(rs.read(String))
@@ -45,8 +44,8 @@ class MappingWithConverter
   end
 
   DB.mapping({
-    c0: { type: Slice(UInt8), converter: MappingWithConverter::Base64Converter },
-    c1: { type: String },
+    c0: {type: Slice(UInt8), converter: MappingWithConverter::Base64Converter},
+    c1: {type: String},
   })
 end
 
@@ -69,7 +68,6 @@ macro expect_mapping(query, t, values)
 end
 
 describe "DB.mapping" do
-
   it "should initialize a simple mapping" do
     expect_mapping("1,a", SimpleMapping, {c0: 1, c1: "a"})
   end
@@ -149,5 +147,4 @@ describe "DB.mapping" do
       objs[1].c1.should eq("b")
     end
   end
-
 end
