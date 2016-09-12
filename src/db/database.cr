@@ -1,4 +1,5 @@
 require "http/params"
+require "weak_ref"
 
 module DB
   # Acts as an entry point for database access.
@@ -63,7 +64,7 @@ module DB
     end
 
     # :nodoc:
-    def checkout_some(candidates : Enumerable(Connection)) : {Connection, Bool}
+    def checkout_some(candidates : Enumerable(WeakRef(Connection))) : {Connection, Bool}
       @pool.checkout_some candidates
     end
 

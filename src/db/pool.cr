@@ -1,3 +1,5 @@
+require "weak_ref"
+
 module DB
   class Pool(T)
     @initial_pool_size : Int32
@@ -47,18 +49,19 @@ module DB
     # ```
     # `selected` be a resource from the `candidates` list and `is_candidate` == `true`
     # or `selected` will be a new resource adn `is_candidate` == `false`
-    def checkout_some(candidates : Enumerable(T)) : {T, Bool}
+    def checkout_some(candidates : Enumerable(WeakRef(T))) : {T, Bool}
       # TODO honor candidates while waiting for availables
       # this will allow us to remove `candidates.includes?(resource)`
-      candidates.each do |resource|
-        if is_available?(resource)
+      candidates.each do |ref|
+        resource = ref.target
+        if resource && is_available?(resource)
           @available.delete resource
           return {resource, true}
         end
       end
 
       resource = checkout
-      {resource, candidates.includes?(resource)}
+      {resource, candidates.any? { |ref| ref.target == resource }}
     end
 
     def release(resource : T) : Nil

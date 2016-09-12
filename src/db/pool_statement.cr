@@ -7,7 +7,7 @@ module DB
     include StatementMethods
 
     # connections where the statement was prepared
-    @connections = Set(Connection).new
+    @connections = Set(WeakRef(Connection)).new
 
     def initialize(@db : Database, @query : String)
       # Prepares a statement on some connection
@@ -61,11 +61,20 @@ module DB
     # builds a statement over a real connection
     # the conneciton is registered in `@connections`
     private def build_statement
-      # TODO closed connections should be removed from @connections
-      # either by callbacks or by week references.
+      clean_connections
       conn, existing = @db.checkout_some(@connections)
-      @connections << conn unless existing
+      @connections << WeakRef.new(conn) unless existing
       conn.prepare(@query)
+    end
+
+    private def clean_connections
+      # remove disposed or closed connections
+      @connections.each do |ref|
+        conn = ref.target
+        if !conn || conn.closed?
+          @connections.delete ref
+        end
+      end
     end
 
     private def statement_with_retry
