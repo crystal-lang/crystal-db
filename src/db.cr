@@ -6,8 +6,7 @@ require "uri"
 #
 # Drivers implementors check `Driver` class.
 #
-# Currently a *single connection* to the database is stablished.
-# In the future a connection pool and transaction support will be available.
+# DB manage a connection pool. The connection pool can be configured by `URI` query. See `Database`.
 #
 # ### Usage
 #
@@ -119,12 +118,15 @@ module DB
   end
 end
 
+require "./db/pool"
+require "./db/string_key_cache"
 require "./db/query_methods"
 require "./db/disposable"
 require "./db/database"
 require "./db/driver"
 require "./db/connection"
 require "./db/statement"
+require "./db/pool_statement"
 require "./db/result_set"
 require "./db/error"
 require "./db/mapping"

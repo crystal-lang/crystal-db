@@ -1,7 +1,17 @@
+require "http/params"
+require "weak_ref"
+
 module DB
   # Acts as an entry point for database access.
-  # Currently it creates a single connection to the database.
-  # Eventually a connection pool will be handled.
+  # Connections are managed by a pool.
+  # The connection pool can be configured from URI parameters:
+  #
+  #   - initial_pool_size (default 1)
+  #   - max_pool_size (default 1)
+  #   - max_idle_pool_size (default 1)
+  #   - checkout_timeout (default 5.0)
+  #   - retry_attempts (default 1)
+  #   - retry_delay (in seconds, default 1.0)
   #
   # It should be created from DB module. See `DB#open`.
   #
@@ -9,56 +19,77 @@ module DB
   class Database
     # :nodoc:
     getter driver
+    # :nodoc:
+    getter pool
 
     # Returns the uri with the connection settings to the database
     getter uri
 
-    @connection : Connection?
+    @pool : Pool(Connection)
+    @setup_connection : Connection -> Nil
+    @statements_cache = StringKeyCache(PoolStatement).new
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
-      @in_pool = true
-      @connection = @driver.build_connection(self)
+      params = HTTP::Params.parse(uri.query || "")
+      pool_options = @driver.connection_pool_options(params)
+
+      @setup_connection = ->(conn : Connection) {}
+      @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
+      @pool = Pool.new(**pool_options) {
+        conn = @driver.build_connection(self).as(Connection)
+        @setup_connection.call conn
+        conn
+      }
+    end
+
+    def setup_connection(&proc : Connection -> Nil)
+      @setup_connection = proc
+      @pool.each_resource do |conn|
+        @setup_connection.call conn
+      end
     end
 
     # Closes all connection to the database.
     def close
-      @connection.try &.close
-      # prevent GC Warning: Finalization cycle involving discovered by mysql implementation
-      @connection = nil
+      @statements_cache.each_value &.close
+      @statements_cache.clear
+
+      @pool.close
     end
 
     # :nodoc:
     def prepare(query)
-      conn = get_from_pool
-      begin
-        conn.prepare(query)
-      rescue ex
-        return_to_pool(conn)
-        raise ex
-      end
+      @statements_cache.fetch(query) { PoolStatement.new(self, query) }
     end
 
     # :nodoc:
-    def get_from_pool
-      raise "DB Pool Exhausted" unless @in_pool
-      @in_pool = false
-      @connection.not_nil!
+    def checkout_some(candidates : Enumerable(WeakRef(Connection))) : {Connection, Bool}
+      @pool.checkout_some candidates
     end
 
     # :nodoc:
     def return_to_pool(connection)
-      @in_pool = true
+      @pool.release connection
     end
 
     # yields a connection from the pool
     # the connection is returned to the pool after
     # when the block ends
     def using_connection
-      connection = get_from_pool
-      yield connection
-    ensure
-      return_to_pool connection
+      connection = @pool.checkout
+      begin
+        yield connection
+      ensure
+        return_to_pool connection
+      end
+    end
+
+    # :nodoc:
+    def retry
+      @pool.retry do
+        yield
+      end
     end
 
     include QueryMethods

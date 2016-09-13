@@ -1,8 +1,4 @@
 module DB
-  class Database; end
-
-  abstract class Statement; end
-
   # Database driver implementors must subclass `Connection`.
   #
   # Represents one active connection to a database.
@@ -18,32 +14,31 @@ module DB
   # Override `#build_statement` method in order to return a prepared `Statement` to allow querying.
   # See also `Statement` to define how the statements are executed.
   #
+  # If at any give moment the connection is lost a DB::ConnectionLost should be raised. This will
+  # allow the connection pool to try to reconnect or use another connection if available.
+  #
   abstract class Connection
     include Disposable
     include QueryMethods
 
     # :nodoc:
     getter database
-    @statements_cache = {} of String => Statement
+    @statements_cache = StringKeyCache(Statement).new
 
     def initialize(@database : Database)
     end
 
     # :nodoc:
     def prepare(query) : Statement
-      stmt = @statements_cache.fetch(query, nil)
-      stmt = @statements_cache[query] = build_statement(query) unless stmt
-
-      stmt
+      @statements_cache.fetch(query) { build_statement(query) }
     end
 
     abstract def build_statement(query) : Statement
 
     protected def do_close
-      @statements_cache.each do |_, stmt|
-        stmt.close
-      end
+      @statements_cache.each_value &.close
       @statements_cache.clear
+      @database.pool.delete self
     end
   end
 end

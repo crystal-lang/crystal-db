@@ -2,14 +2,14 @@ require "./spec_helper"
 
 describe DB::Statement do
   it "should prepare statements" do
-    with_dummy do |db|
-      db.prepare("the query").should be_a(DB::Statement)
+    with_dummy_connection do |cnn|
+      cnn.prepare("the query").should be_a(DB::Statement)
     end
   end
 
   it "should initialize positional params in query" do
-    with_dummy do |db|
-      stmt = db.prepare("the query").as(DummyDriver::DummyStatement)
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare("the query").as(DummyDriver::DummyStatement)
       stmt.query "a", 1, nil
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
@@ -18,8 +18,8 @@ describe DB::Statement do
   end
 
   it "should initialize positional params in query with array" do
-    with_dummy do |db|
-      stmt = db.prepare("the query").as(DummyDriver::DummyStatement)
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare("the query").as(DummyDriver::DummyStatement)
       stmt.query ["a", 1, nil]
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
@@ -28,8 +28,8 @@ describe DB::Statement do
   end
 
   it "should initialize positional params in exec" do
-    with_dummy do |db|
-      stmt = db.prepare("the query").as(DummyDriver::DummyStatement)
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare("the query").as(DummyDriver::DummyStatement)
       stmt.exec "a", 1, nil
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
@@ -38,8 +38,8 @@ describe DB::Statement do
   end
 
   it "should initialize positional params in exec with array" do
-    with_dummy do |db|
-      stmt = db.prepare("the query").as(DummyDriver::DummyStatement)
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare("the query").as(DummyDriver::DummyStatement)
       stmt.exec ["a", 1, nil]
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
@@ -48,8 +48,8 @@ describe DB::Statement do
   end
 
   it "should initialize positional params in scalar" do
-    with_dummy do |db|
-      stmt = db.prepare("the query").as(DummyDriver::DummyStatement)
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare("the query").as(DummyDriver::DummyStatement)
       stmt.scalar "a", 1, nil
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
@@ -58,8 +58,8 @@ describe DB::Statement do
   end
 
   it "query with block should not close statement" do
-    with_dummy do |db|
-      stmt = db.prepare "3,4 1,2"
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare "3,4 1,2"
       stmt.query
       stmt.closed?.should be_false
     end
@@ -67,16 +67,16 @@ describe DB::Statement do
 
   it "closing connection should close statement" do
     stmt = uninitialized DB::Statement
-    with_dummy do |db|
-      stmt = db.prepare "3,4 1,2"
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare "3,4 1,2"
       stmt.query
     end
     stmt.closed?.should be_true
   end
 
   it "query with block should not close statement" do
-    with_dummy do |db|
-      stmt = db.prepare "3,4 1,2"
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare "3,4 1,2"
       stmt.query do |rs|
       end
       stmt.closed?.should be_false
@@ -84,8 +84,8 @@ describe DB::Statement do
   end
 
   it "query should not close statement" do
-    with_dummy do |db|
-      stmt = db.prepare "3,4 1,2"
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare "3,4 1,2"
       stmt.query do |rs|
       end
       stmt.closed?.should be_false
@@ -93,28 +93,28 @@ describe DB::Statement do
   end
 
   it "scalar should not close statement" do
-    with_dummy do |db|
-      stmt = db.prepare "3,4 1,2"
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare "3,4 1,2"
       stmt.scalar
       stmt.closed?.should be_false
     end
   end
 
   it "exec should not close statement" do
-    with_dummy do |db|
-      stmt = db.prepare "3,4 1,2"
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepare "3,4 1,2"
       stmt.exec
       stmt.closed?.should be_false
     end
   end
 
   it "connection should cache statements by query" do
-    with_dummy do |db|
-      rs = db.query "1, ?", 2
+    with_dummy_connection do |cnn|
+      rs = cnn.query "1, ?", 2
       stmt = rs.statement
       rs.close
 
-      rs = db.query "1, ?", 4
+      rs = cnn.query "1, ?", 4
       rs.statement.should be(stmt)
     end
   end
@@ -124,7 +124,8 @@ describe DB::Statement do
       expect_raises do
         db.exec "raise"
       end
-      db.@in_pool.should be_true
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+      db.pool.is_available?(DummyDriver::DummyConnection.connections.first)
     end
   end
 end
