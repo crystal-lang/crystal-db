@@ -38,6 +38,7 @@ module DB
     protected def do_close
       @statements_cache.each_value &.close
       @statements_cache.clear
+      @database.pool.delete self
     end
   end
 end

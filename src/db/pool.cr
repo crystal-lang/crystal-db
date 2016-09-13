@@ -88,8 +88,7 @@ module DB
         rescue e : ConnectionLost
           # if the connection is lost close it to release resources
           # and remove it from the known pool.
-          @total.delete(e.connection)
-          @available.delete(e.connection)
+          delete(e.connection)
           e.connection.close
         end
       end
@@ -103,9 +102,15 @@ module DB
       end
     end
 
-    # :nodon:
+    # :nodoc:
     def is_available?(resource : T)
       @available.includes?(resource)
+    end
+
+    # :nodoc:
+    def delete(resource : T)
+      @total.delete(resource)
+      @available.delete(resource)
     end
 
     private def build_resource : T
