@@ -75,7 +75,7 @@ module DB
     end
 
     # Reads the next column value as a **type**
-    def read(type : T.class) : T
+    def read(type : T.class) : T forall T
       read.as(T)
     end
 
@@ -84,7 +84,7 @@ module DB
       internal_read(*types)
     end
 
-    private def internal_read(*types : *T)
+    private def internal_read(*types : *T) forall T
       {% begin %}
         Tuple.new(
           {% for type in T %}
