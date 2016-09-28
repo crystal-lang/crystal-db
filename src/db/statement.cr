@@ -80,23 +80,32 @@ module DB
 
     # See `QueryMethods#query`
     def query
-      perform_query Tuple.new
+      perform_query_with_rescue Tuple.new
     end
 
     # See `QueryMethods#query`
     def query(args : Array)
-      perform_query args
+      perform_query_with_rescue args
     end
 
     # See `QueryMethods#query`
     def query(*args)
-      perform_query args
+      perform_query_with_rescue args
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult
       return perform_exec(args)
     ensure
       release_connection
+    end
+
+    private def perform_query_with_rescue(args : Enumerable) : ResultSet
+      return perform_query(args)
+    rescue e : Exception
+      # Release connection only when an exception occurs during the query
+      # execution since we need the connection open while the ResultSet is open
+      release_connection
+      raise e
     end
 
     protected abstract def perform_query(args : Enumerable) : ResultSet
