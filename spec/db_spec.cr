@@ -81,4 +81,10 @@ describe DB do
       db.scalar "bar"
     end
   end
+
+  it "gives nice error message when no driver is registered for schema (#21)" do
+    expect_raises(ArgumentError, %(no driver was registered for the schema "foobar", did you maybe forget to require the database driver?)) do
+      DB.open "foobar://baz"
+    end
+  end
 end

@@ -81,14 +81,18 @@ module DB
 
   # :nodoc:
   def self.driver_class(driver_name) : Driver.class
-    @@drivers.not_nil![driver_name]
+    drivers[driver_name]? ||
+      raise(ArgumentError.new(%(no driver was registered for the schema "#{driver_name}", did you maybe forget to require the database driver?)))
   end
 
   # Registers a driver class for a given *driver_name*.
   # Should be called by drivers implementors only.
   def self.register_driver(driver_name, driver_class : Driver.class)
+    drivers[driver_name] = driver_class
+  end
+
+  private def self.drivers
     @@drivers ||= {} of String => Driver.class
-    @@drivers.not_nil![driver_name] = driver_class
   end
 
   # Opens a database using the specified *uri*.
