@@ -80,6 +80,9 @@ module DB
     # but if a new connection is needed there is a `retry_delay` seconds delay.
     def retry
       current_available = @available.size
+      # if the pool hasn't reach the max size, allow 1 attempt
+      # to make a new connection if needed without sleeping
+      current_available += 1 if can_increase_pool
 
       (current_available + @retry_attempts).times do |i|
         begin

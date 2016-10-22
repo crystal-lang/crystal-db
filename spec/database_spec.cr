@@ -87,4 +87,14 @@ describe DB::Database do
       DummyDriver::DummyConnection.connections.size.should eq(2)
     end
   end
+
+  it "should allow new connections if pool can increased and retry is not allowed" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=2&retry_attempts=0" do |db|
+      db.query("stmt1")
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+      db.query("stmt1")
+      DummyDriver::DummyConnection.connections.size.should eq(2)
+    end
+  end
 end
