@@ -1,5 +1,7 @@
 ## (unreleased)
 
+* Changed default connection pool size limit is now 0 (unlimited).
+
 * Fixed allow new connections right away if pool can be increased
 
 ## v0.2.0 (2016-10-20)

@@ -12,7 +12,7 @@ module DB
     @retry_attempts : Int32
     @retry_delay : Float64
 
-    def initialize(@initial_pool_size = 1, @max_pool_size = 1, @max_idle_pool_size = 1, @checkout_timeout = 5.0,
+    def initialize(@initial_pool_size = 1, @max_pool_size = 0, @max_idle_pool_size = 1, @checkout_timeout = 5.0,
                    @retry_attempts = 1, @retry_delay = 0.2, &@factory : -> T)
       @initial_pool_size.times { build_resource }
 
@@ -124,7 +124,7 @@ module DB
     end
 
     private def can_increase_pool
-      @total.size < @max_pool_size
+      @max_pool_size == 0 || @total.size < @max_pool_size
     end
 
     private def can_increase_idle_pool

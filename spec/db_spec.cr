@@ -59,12 +59,22 @@ describe DB do
   end
 
   it "should raise if the sole connection is been used" do
-    with_dummy do |db|
+    with_dummy "dummy://host?max_pool_size=1&checkout_timeout=0.5" do |db|
       db.query "1" do |rs|
         expect_raises DB::PoolTimeout do
           db.scalar "2"
         end
       end
+    end
+  end
+
+  it "should use 'unlimited' connections by default" do
+    with_dummy "dummy://host?checkout_timeout=0.5" do |db|
+      rs = [] of DB::ResultSet
+      500.times do
+        rs << db.query "1"
+      end
+      DummyDriver::DummyConnection.connections.size.should eq(500)
     end
   end
 

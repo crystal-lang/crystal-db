@@ -196,10 +196,10 @@ def with_witness(count = 1)
   w.count.should eq(0), "The expected coverage was unmet"
 end
 
-def with_dummy
+def with_dummy(uri : String = "dummy://host?checkout_timeout=0.5")
   DummyDriver::DummyConnection.clear_connections
 
-  DB.open "dummy://host?checkout_timeout=0.5" do |db|
+  DB.open uri do |db|
     yield db
   end
 end

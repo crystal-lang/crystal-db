@@ -7,7 +7,7 @@ module DB
   # The connection pool can be configured from URI parameters:
   #
   #   - initial_pool_size (default 1)
-  #   - max_pool_size (default 1)
+  #   - max_pool_size (default 0 = unlimited)
   #   - max_idle_pool_size (default 1)
   #   - checkout_timeout (default 5.0)
   #   - retry_attempts (default 1)
