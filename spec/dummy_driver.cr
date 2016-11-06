@@ -163,6 +163,29 @@ class DummyDriver < DB::Driver
       read(String).to_f64
     end
 
+    def read(t : Time.class)
+      case value = read
+      when String
+        formatter = Time::Format.new("%F %X")
+        formatter.parse(value)
+      when Time
+        value
+      else
+        raise "#{value} is not convertible to Time"
+      end
+    end
+
+    def read(t : Bool.class)
+      case value = read
+      when String
+        "true" ? true : false
+      when Bool
+        value
+      else
+        raise "#{value} is not convertible to Bool"
+      end
+    end
+
     def read(t : Bytes.class)
       case value = read
       when String
