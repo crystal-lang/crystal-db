@@ -105,6 +105,14 @@ module DB
       end
     end
 
+    def transaction
+      using_connection do |cnn|
+        cnn.transaction do |tx|
+          yield tx
+        end
+      end
+    end
+
     # :nodoc:
     def retry
       @pool.retry do
