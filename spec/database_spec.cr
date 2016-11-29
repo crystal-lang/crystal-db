@@ -42,24 +42,24 @@ describe DB::Database do
 
   it "should allow creation of more statements than pool connections" do
     DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=2" do |db|
-      db.prepare("query1").should be_a(DB::PoolStatement)
-      db.prepare("query2").should be_a(DB::PoolStatement)
-      db.prepare("query3").should be_a(DB::PoolStatement)
+      db.build("query1").should be_a(DB::PoolStatement)
+      db.build("query2").should be_a(DB::PoolStatement)
+      db.build("query3").should be_a(DB::PoolStatement)
     end
   end
 
   it "should return same statement in pool per query" do
     with_dummy do |db|
-      stmt = db.prepare("query1")
-      db.prepare("query2").should_not eq(stmt)
-      db.prepare("query1").should eq(stmt)
+      stmt = db.build("query1")
+      db.build("query2").should_not eq(stmt)
+      db.build("query1").should eq(stmt)
     end
   end
 
   it "should close pool statements when closing db" do
     stmt = uninitialized DB::PoolStatement
     with_dummy do |db|
-      stmt = db.prepare("query1")
+      stmt = db.build("query1")
     end
     stmt.closed?.should be_true
   end

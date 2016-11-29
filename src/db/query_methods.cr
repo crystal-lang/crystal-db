@@ -15,11 +15,11 @@ module DB
   #
   # Convention of mapping how arguments are mapped to the query depends on each driver.
   #
-  # Including `QueryMethods` requires a `prepare(query) : Statement` method that is not expected
+  # Including `QueryMethods` requires a `build(query) : Statement` method that is not expected
   # to be called directly.
   module QueryMethods
     # :nodoc:
-    abstract def prepare(query) : Statement
+    abstract def build(query) : Statement
 
     # Executes a *query* and returns a `ResultSet` with the results.
     # The `ResultSet` must be closed manually.
@@ -35,7 +35,7 @@ module DB
     # end
     # ```
     def query(query, *args)
-      prepare(query).query(*args)
+      build(query).query(*args)
     end
 
     # Executes a *query* and yields a `ResultSet` with the results.
@@ -49,7 +49,7 @@ module DB
     # end
     # ```
     def query(query, *args)
-      # CHECK prepare(query).query(*args, &block)
+      # CHECK build(query).query(*args, &block)
       rs = query(query, *args)
       yield rs ensure rs.close
     end
@@ -200,13 +200,13 @@ module DB
 
     # Performs the `query` and returns an `ExecResult`
     def exec(query, *args)
-      prepare(query).exec(*args)
+      build(query).exec(*args)
     end
 
     # Performs the `query` and returns a single scalar value
     # puts db.scalar("SELECT MAX(name)").as(String) # => (a String)
     def scalar(query, *args)
-      prepare(query).scalar(*args)
+      build(query).scalar(*args)
     end
   end
 end

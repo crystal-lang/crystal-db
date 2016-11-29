@@ -59,7 +59,7 @@ module DB
     end
 
     # :nodoc:
-    def prepare(query)
+    def build(query)
       @statements_cache.fetch(query) { PoolStatement.new(self, query) }
     end
 
