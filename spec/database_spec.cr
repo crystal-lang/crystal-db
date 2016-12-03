@@ -140,6 +140,18 @@ describe DB::Database do
         db.build("the query").should be_a(DB::PoolUnpreparedStatement)
       end
     end
+
+    it "should be overrided by dsl" do
+      with_dummy "dummy://localhost:1027?prepared_statements=true" do |db|
+        stmt = db.unprepared.query("the query").statement.as(DummyDriver::DummyStatement)
+        stmt.prepared?.should be_false
+      end
+
+      with_dummy "dummy://localhost:1027?prepared_statements=false" do |db|
+        stmt = db.prepared.query("the query").statement.as(DummyDriver::DummyStatement)
+        stmt.prepared?.should be_true
+      end
+    end
   end
 
   describe "unprepared statements in pool" do
