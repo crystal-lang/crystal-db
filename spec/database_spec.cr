@@ -59,7 +59,8 @@ describe DB::Database do
   it "should close pool statements when closing db" do
     stmt = uninitialized DB::PoolStatement
     with_dummy do |db|
-      stmt = db.build("query1")
+      # TODO remove cast
+      stmt = db.build("query1").as(DB::PoolStatement)
     end
     stmt.closed?.should be_true
   end
@@ -126,6 +127,48 @@ describe DB::Database do
         connection.prepared_statements?.should be_true
         connection.prepared_statements = false
         connection.prepared_statements?.should be_false
+      end
+    end
+
+    it "should build prepared statements if true" do
+      with_dummy "dummy://localhost:1027?prepared_statements=true" do |db|
+        db.build("the query").should be_a(DB::PoolStatement)
+      end
+    end
+
+    it "should build unprepared statements if false" do
+      with_dummy "dummy://localhost:1027?prepared_statements=false" do |db|
+        db.build("the query").should be_a(DB::PoolUnpreparedStatement)
+      end
+    end
+  end
+
+  describe "unprepared statements in pool" do
+    it "creating statements should not create new connections" do
+      with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
+        stmt1 = db.unprepared.build("query1")
+        stmt2 = db.unprepared.build("query2")
+        DummyDriver::DummyConnection.connections.size.should eq(1)
+      end
+    end
+
+    it "simultaneous statements should go to different connections" do
+      with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
+        rs1 = db.unprepared.query("query1")
+        rs2 = db.unprepared.query("query2")
+        rs1.statement.connection.should_not eq(rs2.statement.connection)
+        DummyDriver::DummyConnection.connections.size.should eq(2)
+      end
+    end
+
+    it "sequential statements should go to different connections" do
+      with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
+        rs1 = db.unprepared.query("query1")
+        rs1.close
+        rs2 = db.unprepared.query("query2")
+        rs2.close
+        rs1.statement.connection.should eq(rs2.statement.connection)
+        DummyDriver::DummyConnection.connections.size.should eq(1)
       end
     end
   end
