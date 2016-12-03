@@ -24,15 +24,19 @@ module DB
     # :nodoc:
     getter database
     @statements_cache = StringKeyCache(Statement).new
+    property? prepared_statements : Bool
 
     def initialize(@database : Database)
+      @prepared_statements = @database.prepared_statements?
     end
 
     # :nodoc:
     def build(query) : Statement
-      # TODO add flag for default statements kind.
-      # configured in database overridable by connection
-      fetch_or_build_prepared_statement(query)
+      if prepared_statements?
+        fetch_or_build_prepared_statement(query)
+      else
+        build_unprepared_statement(query)
+      end
     end
 
     # :nodoc:

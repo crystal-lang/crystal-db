@@ -120,6 +120,15 @@ module DB
   private def self.build_database(uri : URI)
     Database.new(driver_class(uri.scheme).new, uri)
   end
+
+  # :nodoc:
+  def self.fetch_bool(params : HTTP::Params, name, default : Bool)
+    if value = params[name]?
+      value.underscore == "true"
+    else
+      default
+    end
+  end
 end
 
 require "./db/pool"

@@ -17,6 +17,24 @@ describe DB::Statement do
     end
   end
 
+  describe "prepared_statements flag" do
+    it "should build prepared statements if true" do
+      with_dummy_connection do |cnn|
+        cnn.prepared_statements = true
+        stmt = cnn.query("the query").statement
+        stmt.as(DummyDriver::DummyStatement).prepared?.should be_true
+      end
+    end
+
+    it "should build unprepared statements if false" do
+      with_dummy_connection do |cnn|
+        cnn.prepared_statements = false
+        stmt = cnn.query("the query").statement
+        stmt.as(DummyDriver::DummyStatement).prepared?.should be_false
+      end
+    end
+  end
+
   it "should initialize positional params in query" do
     with_dummy_connection do |cnn|
       stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
