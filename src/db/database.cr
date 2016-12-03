@@ -31,7 +31,7 @@ module DB
 
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
-    @statements_cache = StringKeyCache(PoolStatement).new
+    @statements_cache = StringKeyCache(PoolPreparedStatement).new
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
@@ -64,7 +64,7 @@ module DB
     end
 
     # :nodoc:
-    def build(query)
+    def build(query) : PoolStatement
       if prepared_statements?
         fetch_or_build_prepared_statement(query)
       else
@@ -79,7 +79,7 @@ module DB
 
     # :nodoc:
     def build_prepared_statement(query)
-      PoolStatement.new(self, query)
+      PoolPreparedStatement.new(self, query)
     end
 
     # :nodoc:

@@ -42,9 +42,9 @@ describe DB::Database do
 
   it "should allow creation of more statements than pool connections" do
     DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=2" do |db|
-      db.build("query1").should be_a(DB::PoolStatement)
-      db.build("query2").should be_a(DB::PoolStatement)
-      db.build("query3").should be_a(DB::PoolStatement)
+      db.build("query1").should be_a(DB::PoolPreparedStatement)
+      db.build("query2").should be_a(DB::PoolPreparedStatement)
+      db.build("query3").should be_a(DB::PoolPreparedStatement)
     end
   end
 
@@ -59,8 +59,7 @@ describe DB::Database do
   it "should close pool statements when closing db" do
     stmt = uninitialized DB::PoolStatement
     with_dummy do |db|
-      # TODO remove cast
-      stmt = db.build("query1").as(DB::PoolStatement)
+      stmt = db.build("query1")
     end
     stmt.closed?.should be_true
   end
@@ -132,7 +131,7 @@ describe DB::Database do
 
     it "should build prepared statements if true" do
       with_dummy "dummy://localhost:1027?prepared_statements=true" do |db|
-        db.build("the query").should be_a(DB::PoolStatement)
+        db.build("the query").should be_a(DB::PoolPreparedStatement)
       end
     end
 
