@@ -13,11 +13,16 @@ module DB
   #   - retry_attempts (default 1)
   #   - retry_delay (in seconds, default 1.0)
   #
+  # When querying a database prepared statements are used by default.
+  # This can be changed from the `prepared_statements` URI parameter:
+  #
+  #   - prepared_statements = `true`|`false` (default `true`)
+  #
   # It should be created from DB module. See `DB#open`.
   #
-  # Refer to `QueryMethods` for documentation about querying the database.
+  # Refer to `QueryMethods` and `SessionMethods` for documentation about querying the database.
   class Database
-    include QueryMethods
+    include SessionMethods(Database, PoolStatement)
 
     # :nodoc:
     getter driver
@@ -64,15 +69,6 @@ module DB
     end
 
     # :nodoc:
-    def build(query) : PoolStatement
-      if prepared_statements?
-        fetch_or_build_prepared_statement(query)
-      else
-        build_unprepared_statement(query)
-      end
-    end
-
-    # :nodoc:
     def fetch_or_build_prepared_statement(query)
       @statements_cache.fetch(query) { build_prepared_statement(query) }
     end
@@ -113,50 +109,6 @@ module DB
     def retry
       @pool.retry do
         yield
-      end
-    end
-
-    # dsl helper to build prepared statements
-    # returns a value that includes `QueryMethods`
-    def prepared
-      PreparedQuery.new(self)
-    end
-
-    # Returns a prepared `Statement` that has not been executed yet.
-    def prepared(query)
-      prepared.build(query)
-    end
-
-    # dsl helper to build unprepared statements
-    # returns a value that includes `QueryMethods`
-    def unprepared
-      UnpreparedQuery.new(self)
-    end
-
-    # Returns an unprepared `Statement` that has not been executed yet.
-    def unprepared(query)
-      unprepared.build(query)
-    end
-
-    struct PreparedQuery
-      include QueryMethods
-
-      def initialize(@db : Database)
-      end
-
-      def build(query)
-        @db.fetch_or_build_prepared_statement(query)
-      end
-    end
-
-    struct UnpreparedQuery
-      include QueryMethods
-
-      def initialize(@db : Database)
-      end
-
-      def build(query)
-        @db.build_unprepared_statement(query)
       end
     end
   end
