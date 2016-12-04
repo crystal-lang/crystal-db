@@ -10,7 +10,7 @@ describe DB::Statement do
   end
 
   it "should build unprepared statements" do
-    with_dummy_connection do |cnn|
+    with_dummy_connection("prepared_statements=false") do |cnn|
       prepared = cnn.unprepared("the query")
       prepared.should be_a(DB::Statement)
       prepared.as(DummyDriver::DummyStatement).prepared?.should be_false
@@ -19,16 +19,14 @@ describe DB::Statement do
 
   describe "prepared_statements flag" do
     it "should build prepared statements if true" do
-      with_dummy_connection do |cnn|
-        cnn.prepared_statements = true
+      with_dummy_connection("prepared_statements=true") do |cnn|
         stmt = cnn.query("the query").statement
         stmt.as(DummyDriver::DummyStatement).prepared?.should be_true
       end
     end
 
     it "should build unprepared statements if false" do
-      with_dummy_connection do |cnn|
-        cnn.prepared_statements = false
+      with_dummy_connection("prepared_statements=false") do |cnn|
         stmt = cnn.query("the query").statement
         stmt.as(DummyDriver::DummyStatement).prepared?.should be_false
       end

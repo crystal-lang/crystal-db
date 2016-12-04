@@ -25,7 +25,7 @@ module DB
     # :nodoc:
     getter database
     @statements_cache = StringKeyCache(Statement).new
-    property? prepared_statements : Bool
+    getter? prepared_statements : Bool
 
     def initialize(@database : Database)
       @prepared_statements = @database.prepared_statements?

@@ -111,21 +111,17 @@ describe DB::Database do
       end
     end
 
-    it "is copied to connections and can be changed (false)" do
+    it "is copied to connections (false)" do
       with_dummy "dummy://localhost:1027?prepared_statements=false&initial_pool_size=1" do |db|
         connection = DummyDriver::DummyConnection.connections.first
         connection.prepared_statements?.should be_false
-        connection.prepared_statements = true
-        connection.prepared_statements?.should be_true
       end
     end
 
-    it "is copied to connections and can be changed (true)" do
+    it "is copied to connections (true)" do
       with_dummy "dummy://localhost:1027?prepared_statements=true&initial_pool_size=1" do |db|
         connection = DummyDriver::DummyConnection.connections.first
         connection.prepared_statements?.should be_true
-        connection.prepared_statements = false
-        connection.prepared_statements?.should be_false
       end
     end
 
