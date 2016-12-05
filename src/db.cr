@@ -123,10 +123,15 @@ module DB
 
   # :nodoc:
   def self.fetch_bool(params : HTTP::Params, name, default : Bool)
-    if value = params[name]?
-      value.underscore == "true"
-    else
+    case (value = params[name]?).try &.downcase
+    when nil
       default
+    when "true"
+      true
+    when "false"
+      false
+    else
+      raise ArgumentError.new(%(invalid "#{value}" value for option "#{name}"))
     end
   end
 end
