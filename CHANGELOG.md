@@ -1,8 +1,12 @@
-## (unreleased)
+## v0.2.2 (2016-12-06)
+
+This release requires crystal 0.20.1
 
 * Changed default connection pool size limit is now 0 (unlimited).
 
-* Fixed allow new connections right away if pool can be increased
+* Fixed allow new connections right away if pool can be increased.
+
+## ~~v0.2.1 (2016-12-06)~~ [YANKED]
 
 ## v0.2.0 (2016-10-20)
 
