@@ -64,7 +64,7 @@ module DB
 
     # See `QueryMethods#exec`
     def exec
-      perform_exec_and_release(Slice(Any).new(0))
+      perform_exec_and_release(Slice(Any).empty)
     end
 
     # See `QueryMethods#exec`
