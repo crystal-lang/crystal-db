@@ -13,10 +13,17 @@ module DB
   #   - retry_attempts (default 1)
   #   - retry_delay (in seconds, default 1.0)
   #
+  # When querying a database prepared statements are used by default.
+  # This can be changed from the `prepared_statements` URI parameter:
+  #
+  #   - prepared_statements = `true`|`false` (default `true`)
+  #
   # It should be created from DB module. See `DB#open`.
   #
-  # Refer to `QueryMethods` for documentation about querying the database.
+  # Refer to `QueryMethods` and `SessionMethods` for documentation about querying the database.
   class Database
+    include SessionMethods(Database, PoolStatement)
+
     # :nodoc:
     getter driver
     # :nodoc:
@@ -25,13 +32,16 @@ module DB
     # Returns the uri with the connection settings to the database
     getter uri
 
+    getter? prepared_statements : Bool
+
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
-    @statements_cache = StringKeyCache(PoolStatement).new
+    @statements_cache = StringKeyCache(PoolPreparedStatement).new
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
       params = HTTP::Params.parse(uri.query || "")
+      @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
       pool_options = @driver.connection_pool_options(params)
 
       @setup_connection = ->(conn : Connection) {}
@@ -59,8 +69,18 @@ module DB
     end
 
     # :nodoc:
-    def prepare(query)
-      @statements_cache.fetch(query) { PoolStatement.new(self, query) }
+    def fetch_or_build_prepared_statement(query)
+      @statements_cache.fetch(query) { build_prepared_statement(query) }
+    end
+
+    # :nodoc:
+    def build_prepared_statement(query)
+      PoolPreparedStatement.new(self, query)
+    end
+
+    # :nodoc:
+    def build_unprepared_statement(query)
+      PoolUnpreparedStatement.new(self, query)
     end
 
     # :nodoc:
@@ -91,7 +111,5 @@ module DB
         yield
       end
     end
-
-    include QueryMethods
   end
 end

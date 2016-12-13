@@ -22,8 +22,12 @@ class DummyDriver < DB::Driver
       @@connections.try &.clear
     end
 
-    def build_statement(query)
-      DummyStatement.new(self, query)
+    def build_prepared_statement(query)
+      DummyStatement.new(self, query, true)
+    end
+
+    def build_unprepared_statement(query)
+      DummyStatement.new(self, query, false)
     end
 
     def last_insert_id : Int64
@@ -46,7 +50,7 @@ class DummyDriver < DB::Driver
   class DummyStatement < DB::Statement
     property params
 
-    def initialize(connection, @query : String)
+    def initialize(connection, @query : String, @prepared : Bool)
       @params = Hash(Int32 | String, DB::Any).new
       super(connection)
     end
@@ -77,6 +81,10 @@ class DummyDriver < DB::Driver
 
     private def set_param(index, value)
       raise "not implemented for #{value.class}"
+    end
+
+    def prepared?
+      @prepared
     end
 
     protected def do_close
@@ -204,8 +212,8 @@ def with_dummy(uri : String = "dummy://host?checkout_timeout=0.5")
   end
 end
 
-def with_dummy_connection
-  with_dummy do |db|
+def with_dummy_connection(options = "")
+  with_dummy("dummy://host?checkout_timeout=0.5&#{options}") do |db|
     db.using_connection do |cnn|
       yield cnn.as(DummyDriver::DummyConnection)
     end

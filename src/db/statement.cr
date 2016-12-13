@@ -39,7 +39,7 @@ module DB
     abstract def query(args : Array) : ResultSet
   end
 
-  # Represents a prepared query in a `Connection`.
+  # Represents a query in a `Connection`.
   # It should be created by `QueryMethods`.
   #
   # ### Note to implementors

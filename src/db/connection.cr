@@ -11,7 +11,8 @@ module DB
   #
   # The connection must be initialized in `#initialize` and closed in `#do_close`.
   #
-  # Override `#build_statement` method in order to return a prepared `Statement` to allow querying.
+  # Override `#build_prepared_statement` method in order to return a prepared `Statement` to allow querying.
+  # Override `#build_unprepared_statement` method in order to return a unprepared `Statement` to allow querying.
   # See also `Statement` to define how the statements are executed.
   #
   # If at any give moment the connection is lost a DB::ConnectionLost should be raised. This will
@@ -19,21 +20,27 @@ module DB
   #
   abstract class Connection
     include Disposable
-    include QueryMethods
+    include SessionMethods(Connection, Statement)
 
     # :nodoc:
     getter database
     @statements_cache = StringKeyCache(Statement).new
+    getter? prepared_statements : Bool
 
     def initialize(@database : Database)
+      @prepared_statements = @database.prepared_statements?
     end
 
     # :nodoc:
-    def prepare(query) : Statement
-      @statements_cache.fetch(query) { build_statement(query) }
+    def fetch_or_build_prepared_statement(query)
+      @statements_cache.fetch(query) { build_prepared_statement(query) }
     end
 
-    abstract def build_statement(query) : Statement
+    # :nodoc:
+    abstract def build_prepared_statement(query) : Statement
+
+    # :nodoc:
+    abstract def build_unprepared_statement(query) : Statement
 
     protected def do_close
       @statements_cache.each_value &.close

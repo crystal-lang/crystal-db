@@ -97,4 +97,19 @@ describe DB do
       DB.open "foobar://baz"
     end
   end
+
+  it "should parse boolean query string params" do
+    DB.fetch_bool(HTTP::Params.parse("foo=true"), "foo", false).should be_true
+    DB.fetch_bool(HTTP::Params.parse("foo=True"), "foo", false).should be_true
+
+    DB.fetch_bool(HTTP::Params.parse("foo=false"), "foo", true).should be_false
+    DB.fetch_bool(HTTP::Params.parse("foo=False"), "foo", true).should be_false
+
+    DB.fetch_bool(HTTP::Params.parse("bar=true"), "foo", false).should be_false
+    DB.fetch_bool(HTTP::Params.parse("bar=true"), "foo", true).should be_true
+
+    expect_raises(ArgumentError, %(invalid "other" value for option "foo")) do
+      DB.fetch_bool(HTTP::Params.parse("foo=other"), "foo", true)
+    end
+  end
 end

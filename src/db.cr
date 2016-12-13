@@ -120,17 +120,34 @@ module DB
   private def self.build_database(uri : URI)
     Database.new(driver_class(uri.scheme).new, uri)
   end
+
+  # :nodoc:
+  def self.fetch_bool(params : HTTP::Params, name, default : Bool)
+    case (value = params[name]?).try &.downcase
+    when nil
+      default
+    when "true"
+      true
+    when "false"
+      false
+    else
+      raise ArgumentError.new(%(invalid "#{value}" value for option "#{name}"))
+    end
+  end
 end
 
 require "./db/pool"
 require "./db/string_key_cache"
 require "./db/query_methods"
+require "./db/session_methods"
 require "./db/disposable"
-require "./db/database"
 require "./db/driver"
-require "./db/connection"
 require "./db/statement"
+require "./db/connection"
 require "./db/pool_statement"
+require "./db/database"
+require "./db/pool_prepared_statement"
+require "./db/pool_unprepared_statement"
 require "./db/result_set"
 require "./db/error"
 require "./db/mapping"
