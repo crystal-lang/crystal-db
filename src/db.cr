@@ -2,7 +2,7 @@ require "uri"
 
 # The DB module is a unified interface to database access.
 # Database dialects is supported by custom database driver shards.
-# Check [manastech/crystal-sqlite3](https://github.com/manastech/crystal-sqlite3) for example.
+# Check [crystal-lang/crystal-sqlite3](https://github.com/crystal-lang/crystal-sqlite3) for example.
 #
 # Drivers implementors check `Driver` class.
 #
