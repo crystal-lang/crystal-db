@@ -84,5 +84,20 @@ module DB
     def perform_rollback_transaction
       self.unprepared.exec "ROLLBACK"
     end
+
+    # :nodoc:
+    def perform_create_savepoint(name)
+      self.unprepared.exec "SAVEPOINT #{name}"
+    end
+
+    # :nodoc:
+    def perform_release_savepoint(name)
+      self.unprepared.exec "RELEASE SAVEPOINT #{name}"
+    end
+
+    # :nodoc:
+    def perform_rollback_savepoint(name)
+      self.unprepared.exec "ROLLBACK TO #{name}"
+    end
   end
 end

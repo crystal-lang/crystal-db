@@ -68,6 +68,29 @@ class DummyDriver < DB::Driver
       super
       @rolledback = true
     end
+
+    protected def create_save_point_transaction(parent, savepoint_name : String)
+      DummySavePointTransaction.new(parent, savepoint_name)
+    end
+  end
+
+  class DummySavePointTransaction < DB::SavePointTransaction
+    getter committed = false
+    getter rolledback = false
+
+    def initialize(parent, savepoint_name)
+      super(parent, savepoint_name)
+    end
+
+    def commit
+      super
+      @committed = true
+    end
+
+    def rollback
+      super
+      @rolledback = true
+    end
   end
 
   class DummyStatement < DB::Statement
