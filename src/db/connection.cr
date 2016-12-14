@@ -21,10 +21,12 @@ module DB
   abstract class Connection
     include Disposable
     include SessionMethods(Connection, Statement)
+    include BeginTransaction
 
     # :nodoc:
     getter database
     @statements_cache = StringKeyCache(Statement).new
+    @transaction = false
     getter? prepared_statements : Bool
 
     def initialize(@database : Database)
@@ -42,10 +44,60 @@ module DB
     # :nodoc:
     abstract def build_unprepared_statement(query) : Statement
 
+    def begin_transaction
+      raise DB::Error.new("There is an existing transaction in this connection") if @transaction
+      @transaction = true
+      create_transaction
+    end
+
+    protected def create_transaction : Transaction
+      TopLevelTransaction.new(self)
+    end
+
     protected def do_close
       @statements_cache.each_value &.close
       @statements_cache.clear
       @database.pool.delete self
+    end
+
+    # :nodoc:
+    def release_from_statement
+      @database.return_to_pool(self) unless @transaction
+    end
+
+    # :nodoc:
+    def release_from_transaction
+      @transaction = false
+    end
+
+    # :nodoc:
+    def perform_begin_transaction
+      self.unprepared.exec "BEGIN"
+    end
+
+    # :nodoc:
+    def perform_commit_transaction
+      self.unprepared.exec "COMMIT"
+    end
+
+    # :nodoc:
+    def perform_rollback_transaction
+      self.unprepared.exec "ROLLBACK"
+    end
+
+    # :nodoc:
+    def perform_create_savepoint(name)
+      self.unprepared.exec "SAVEPOINT #{name}"
+    end
+
+    # :nodoc:
+    def perform_release_savepoint(name)
+      self.unprepared.exec "RELEASE SAVEPOINT #{name}"
+    end
+
+    # :nodoc:
+    def perform_rollback_savepoint(name)
+      self.unprepared.exec "ROLLBACK TO #{name}"
     end
   end
 end

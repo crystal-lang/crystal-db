@@ -59,7 +59,7 @@ module DB
     end
 
     def release_connection
-      @connection.database.return_to_pool(@connection)
+      @connection.release_from_statement
     end
 
     # See `QueryMethods#exec`

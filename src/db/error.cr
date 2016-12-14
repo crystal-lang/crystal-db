@@ -17,4 +17,7 @@ module DB
     def initialize(@connection)
     end
   end
+
+  class Rollback < Exception
+  end
 end

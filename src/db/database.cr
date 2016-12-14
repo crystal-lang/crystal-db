@@ -105,6 +105,16 @@ module DB
       end
     end
 
+    # yields a `Transaction` from a connection of the pool
+    # Refer to `BeginTransaction#transaction` for documentation.
+    def transaction
+      using_connection do |cnn|
+        cnn.transaction do |tx|
+          yield tx
+        end
+      end
+    end
+
     # :nodoc:
     def retry
       @pool.retry do

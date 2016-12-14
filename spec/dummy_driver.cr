@@ -42,8 +42,54 @@ class DummyDriver < DB::Driver
       @connected = false
     end
 
+    def create_transaction
+      DummyTransaction.new(self)
+    end
+
     protected def do_close
       super
+    end
+  end
+
+  class DummyTransaction < DB::TopLevelTransaction
+    getter committed = false
+    getter rolledback = false
+
+    def initialize(connection)
+      super(connection)
+    end
+
+    def commit
+      super
+      @committed = true
+    end
+
+    def rollback
+      super
+      @rolledback = true
+    end
+
+    protected def create_save_point_transaction(parent, savepoint_name : String)
+      DummySavePointTransaction.new(parent, savepoint_name)
+    end
+  end
+
+  class DummySavePointTransaction < DB::SavePointTransaction
+    getter committed = false
+    getter rolledback = false
+
+    def initialize(parent, savepoint_name)
+      super(parent, savepoint_name)
+    end
+
+    def commit
+      super
+      @committed = true
+    end
+
+    def rollback
+      super
+      @rolledback = true
     end
   end
 
