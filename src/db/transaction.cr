@@ -80,8 +80,7 @@ module DB
   class SavePointTransaction < Transaction
     getter connection : Connection
 
-    def initialize(@parent : Transaction,
-                   @savepoint_name : String)
+    def initialize(@parent : Transaction, @savepoint_name : String)
       @nested_transaction = false
       @connection = @parent.connection
       @connection.perform_create_savepoint(@savepoint_name)
