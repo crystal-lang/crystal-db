@@ -1,3 +1,9 @@
+## Not released
+
+* Add support for non prepared statements. [#25](https://github.com/crystal-lang/crystal-db/pull/25)
+
+* Add support for transactions & nested transactions. [#27](https://github.com/crystal-lang/crystal-db/pull/27)
+
 ## v0.2.2 (2016-12-06)
 
 This release requires crystal 0.20.1

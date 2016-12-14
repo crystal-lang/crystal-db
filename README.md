@@ -55,10 +55,10 @@ end
 
 Issues not yet addressed
 
-- [ ] Support non prepared statements. [#25](https://github.com/crystal-lang/crystal-db/pull/25)
+- [x] Support non prepared statements. [#25](https://github.com/crystal-lang/crystal-db/pull/25)
 - [ ] Time data type. crystal-mysql & crystal-sqlite3 support Time already.
 - [x] Data type extensibility. Allow each driver to extend the data types allowed.
-- [ ] Transactions.
+- [x] Transactions & nested transactions. [#27](https://github.com/crystal-lang/crystal-db/pull/27)
 - [x] Connection pool.
 - [ ] Direct access to `IO` to avoid memory allocation for blobs.
 
