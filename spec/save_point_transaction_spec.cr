@@ -124,4 +124,37 @@ describe DB::SavePointTransaction do
     top.rolledback.should be_false
     top.committed.should be_true
   end
+
+  it "releasing result_set from within inner transaction should not return connection to pool" do
+    cnn = uninitialized DB::Connection
+    with_dummy do |db|
+      db.transaction do |tx|
+        tx.transaction do |inner|
+          cnn = inner.connection
+          cnn.scalar "1"
+          db.pool.is_available?(cnn).should be_false
+        end
+        db.pool.is_available?(cnn).should be_false
+      end
+      db.pool.is_available?(cnn).should be_true
+    end
+  end
+
+  it "releasing result_set from within inner inner transaction should not return connection to pool" do
+    cnn = uninitialized DB::Connection
+    with_dummy do |db|
+      db.transaction do |tx|
+        tx.transaction do |inner|
+          inner.transaction do |inner_inner|
+            cnn = inner_inner.connection
+            cnn.scalar "1"
+            db.pool.is_available?(cnn).should be_false
+          end
+          db.pool.is_available?(cnn).should be_false
+        end
+        db.pool.is_available?(cnn).should be_false
+      end
+      db.pool.is_available?(cnn).should be_true
+    end
+  end
 end
