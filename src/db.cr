@@ -69,7 +69,7 @@ module DB
   # Types supported to interface with database driver.
   # These can be used in any `ResultSet#read` or any `Database#query` related
   # method to be used as query parameters
-  TYPES = [Nil, String, Int32, Int64, Float32, Float64, Bytes]
+  TYPES = [Nil, String, Int32, Int64, Float32, Float64, Bytes, Time, Bool]
 
   # See `DB::TYPES` in `DB`. `Any` is a union of all types in `DB::TYPES`
   {% begin %}
