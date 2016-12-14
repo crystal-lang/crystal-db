@@ -1,8 +1,10 @@
-## Not released
+## v0.3.0 (2016-12-14)
 
 * Add support for non prepared statements. [#25](https://github.com/crystal-lang/crystal-db/pull/25)
 
 * Add support for transactions & nested transactions. [#27](https://github.com/crystal-lang/crystal-db/pull/27)
+
+* Add `Bool` and `Time` to `DB::Any`.
 
 ## v0.2.2 (2016-12-06)
 
