@@ -59,7 +59,7 @@ module DB
                          previous_savepoint.succ
                        else
                          # random prefix to avoid determinism
-                         "crystal_#{Random.rand(10_000)}_00001"
+                         "cr_#{@connection.object_id}_#{Random.rand(10_000)}_00001"
                        end
 
       @savepoint_name = savepoint_name
