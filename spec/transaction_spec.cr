@@ -111,6 +111,26 @@ describe DB::Transaction do
     end
   end
 
+  it "transaction can be rolledback within block and later raise" do
+    with_dummy_connection do |cnn|
+      expect_raises(FooException) do
+        cnn.transaction do |tx|
+          tx.rollback
+          raise FooException.new
+        end
+      end
+    end
+  end
+
+  it "transaction can be rolledback within block and later raise DB::Rollback without forwarding it" do
+    with_dummy_connection do |cnn|
+      cnn.transaction do |tx|
+        tx.rollback
+        raise DB::Rollback.new
+      end
+    end
+  end
+
   it "transaction can't be committed twice" do
     with_dummy_connection do |cnn|
       cnn.transaction do |tx|
