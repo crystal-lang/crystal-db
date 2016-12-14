@@ -1,14 +1,28 @@
 module DB
+  # Transactions should be started from `DB#transaction`, `Connection#transaction`
+  # or `Connection#begin_transaction`.
+  #
+  # Use `Transaction#connection` to submit statements to the database.
+  #
+  # Use `Transaction#commit` or `Transaction#rollback` to close the ongoing transaction
+  # explicitly. Or refer to `BeginTransaction#transaction` for documentation on how to
+  # use `#transaction(&block)` methods in `DB` and `Connection`.
+  #
+  # Nested transactions are supported by using sql `SAVEPOINT`. To start a nested
+  # transaction use `Transaction#transaction` or `Transaction#begin_transaction`.
+  #
   abstract class Transaction
     include Disposable
     include BeginTransaction
 
     abstract def connection : Connection
 
+    # commits the current transaction
     def commit
       close!
     end
 
+    # rollbacks the current transaction
     def rollback
       close!
     end
