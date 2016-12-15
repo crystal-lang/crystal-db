@@ -1,3 +1,7 @@
+## v0.3.1 (2016-12-15)
+
+* Add ConnectionRefused exception to flag issues when opening new connections.
+
 ## v0.3.0 (2016-12-14)
 
 * Add support for non prepared statements. [#25](https://github.com/crystal-lang/crystal-db/pull/25)
