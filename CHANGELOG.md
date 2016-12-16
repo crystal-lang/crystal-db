@@ -1,3 +1,7 @@
+## v0.3.2 (2016-12-16)
+
+* Allow connection pool retry logic in `#scalar` queries.
+
 ## v0.3.1 (2016-12-15)
 
 * Add ConnectionRefused exception to flag issues when opening new connections.
