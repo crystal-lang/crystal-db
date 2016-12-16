@@ -39,6 +39,11 @@ module DB
       statement_with_retry &.query(args)
     end
 
+    # See `QueryMethods#scalar`
+    def scalar(*args)
+      statement_with_retry &.scalar(*args)
+    end
+
     # builds a statement over a real connection
     # the conneciton is registered in `@connections`
     private abstract def build_statement : Statement
