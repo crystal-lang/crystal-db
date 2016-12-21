@@ -18,6 +18,11 @@ dependencies:
     github: crystal-lang/crystal-db
 ```
 
+## Documentation
+
+* [Latest API](http://crystal-lang.github.io/crystal-db/api/latest/)
+* [Crystal book](https://crystal-lang.org/docs/database/)
+
 ## Usage
 
 Since this is an abstract db api, it's usage is through a concrete database driver.
