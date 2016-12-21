@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/crystal-lang/crystal-db">
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="js/doc.js"></script>
+  <title>README - github.com/crystal-lang/crystal-db</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li class="current"><a href="index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB" data-name="db">
+      <a href="DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Any" data-name="db::any">
+      <a href="DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Connection" data-name="db::connection">
+      <a href="DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Database" data-name="db::database">
+      <a href="DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Disposable" data-name="db::disposable">
+      <a href="DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Driver" data-name="db::driver">
+      <a href="DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Error" data-name="db::error">
+      <a href="DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ExecResult" data-name="db::execresult">
+      <a href="DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Mappable" data-name="db::mappable">
+      <a href="DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/MappingException" data-name="db::mappingexception">
+      <a href="DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/Pool" data-name="db::pool(t)">
+      <a href="DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Pool/TimeoutHelper" data-name="db::pool::timeouthelper">
+      <a href="DB/Pool/TimeoutHelper.html">TimeoutHelper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/QueryMethods" data-name="db::querymethods">
+      <a href="DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ResultSet" data-name="db::resultset">
+      <a href="DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Statement" data-name="db::statement">
+      <a href="DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<p><a href="https://travis-ci.org/crystal-lang/crystal-db" target="_blank"><img src="https://travis-ci.org/crystal-lang/crystal-db.svg?branch=master" alt="Build Status"/></a></p>
+
+<h1>crystal-db</h1>
+
+<p>Common db api for crystal. You will need to a specific driver to access a database.</p>
+
+<ul><li><a href="https://github.com/crystal-lang/crystal-sqlite3" target="_blank">sqlite</a></li><li><a href="https://github.com/crystal-lang/crystal-mysql" target="_blank">mysql</a></li></ul>
+
+<h2>Installation</h2>
+
+<p>Add this to your application's <code>shard.yml</code>:</p>
+
+<pre><code class='language-yaml'>dependencies:
+  db:
+    github: crystal-lang/crystal-db</code></pre>
+
+<h2>Usage</h2>
+
+<p>Since this is an abstract db api, it's usage is through a concrete database driver.</p>
+
+<pre><code class='language-crystal'><span class="k">require</span> <span class="s">&quot;db&quot;</span>
+<span class="k">require</span> <span class="s">&quot;sqlite3&quot;</span>
+
+<span class="t">DB</span>.open <span class="s">&quot;sqlite3:./file.db&quot;</span> <span class="k">do</span> <span class="o">|</span>db<span class="o">|</span>
+  db.exec <span class="s">&quot;create table contacts &#40;name string, age integer&#41;&quot;</span>
+  db.exec <span class="s">&quot;insert into contacts values &#40;?, ?&#41;&quot;</span>, <span class="s">&quot;John Doe&quot;</span>, <span class="n">30</span>
+
+  args <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">DB</span><span class="t">::</span><span class="t">Any</span>
+  args <span class="o"><<</span> <span class="s">&quot;Sarah&quot;</span>
+  args <span class="o"><<</span> <span class="n">33</span>
+  db.exec <span class="s">&quot;insert into contacts values &#40;?, ?&#41;&quot;</span>, args
+
+  puts <span class="s">&quot;max age:&quot;</span>
+  puts db.scalar <span class="s">&quot;select max&#40;age&#41; from contacts&quot;</span> <span class="c"># &#61;&gt; 33</span>
+
+  puts <span class="s">&quot;contacts:&quot;</span>
+  db.query <span class="s">&quot;select name, age from contacts order by age desc&quot;</span> <span class="k">do</span> <span class="o">|</span>rs<span class="o">|</span>
+    puts <span class="s">&quot;</span><span class="i">#{</span></span>rs.column_name(<span class="n">0</span>)<span class="s"><span class="i">}</span> &#40;</span><span class="i">#{</span></span>rs.column_name(<span class="n">1</span>)<span class="s"><span class="i">}</span>&#41;&quot;</span>
+    <span class="c"># &#61;&gt; name &#40;age&#41;</span>
+    rs.each <span class="k">do</span>
+      puts <span class="s">&quot;</span><span class="i">#{</span></span>rs.read(<span class="t">String</span>)<span class="s"><span class="i">}</span> &#40;</span><span class="i">#{</span></span>rs.read(<span class="t">Int32</span>)<span class="s"><span class="i">}</span>&#41;&quot;</span>
+      <span class="c"># &#61;&gt; Sarah &#40;33&#41;</span>
+      <span class="c"># &#61;&gt; John Doe &#40;30&#41;</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<h2>Roadmap</h2>
+
+<p>Issues not yet addressed</p>
+
+<ul><li>[ ] Support non prepared statements.</li><li>[ ] Time data type.</li><li>[x] Data type extensibility. Allow each driver to extend the data types allowed.</li><li>[ ] Transactions.</li><li>[ ] Connection pool.</li><li>[ ] Direct access to <code>IO</code> to avoid memory allocation for blobs.</li></ul>
+
+<h2>Contributing</h2>
+
+<ol><li>Fork it ( https://github.com/crystal-lang/crystal-db/fork )</li><li>Create your feature branch (git checkout -b my-new-feature)</li><li>Commit your changes (git commit -am 'Add some feature')</li><li>Push to the branch (git push origin my-new-feature)</li><li>Create a new Pull Request</li></ol>
+
+<h2>Contributors</h2>
+
+<ul><li><a href="https://github.com/bcardiff" target="_blank">bcardiff</a> Brian J. Cardiff - creator, maintainer</li></ul>
+</div>
+</body>
+</html>
