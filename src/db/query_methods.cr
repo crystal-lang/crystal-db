@@ -64,7 +64,7 @@ module DB
     # ```
     # name = db.query_one "select name from contacts where id = ?", 18, &.read(String)
     # ```
-    def query_one(query, *args, &block : ResultSet -> U) : U
+    def query_one(query, *args, &block : ResultSet -> U) : U forall U
       query(query, *args) do |rs|
         raise DB::Error.new("no rows") unless rs.move_next
 
@@ -114,7 +114,7 @@ module DB
     # name = db.query_one? "select name from contacts where id = ?", 18, &.read(String)
     # typeof(name) # => String | Nil
     # ```
-    def query_one?(query, *args, &block : ResultSet -> U) : U?
+    def query_one?(query, *args, &block : ResultSet -> U) : U? forall U
       query(query, *args) do |rs|
         return nil unless rs.move_next
 
@@ -164,7 +164,7 @@ module DB
     # ```
     # names = db.query_all "select name from contacts", &.read(String)
     # ```
-    def query_all(query, *args, &block : ResultSet -> U) : Array(U)
+    def query_all(query, *args, &block : ResultSet -> U) : Array(U) forall U
       ary = [] of U
       query(query, *args) do |rs|
         rs.each do
