@@ -1,3 +1,7 @@
+## v0.3.3 (2016-12-24)
+
+* Fix compatibility issues for crystal 0.20.3
+
 ## v0.3.2 (2016-12-16)
 
 * Allow connection pool retry logic in `#scalar` queries.
