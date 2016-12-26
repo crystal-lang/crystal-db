@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/crystal-lang/crystal-db">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>DB::BeginTransaction - github.com/crystal-lang/crystal-db</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/crystal-lang/crystal-db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" current" data-id="github.com/crystal-lang/crystal-db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Pool/TimeoutHelper" data-name="db::pool::timeouthelper">
+      <a href="../DB/Pool/TimeoutHelper.html">TimeoutHelper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/QueryMethods" data-name="db::querymethods">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> DB::BeginTransaction
+
+</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Direct including types</h2>
+  <ul class="other-types-list">
+  
+    <li class="other-type"><a href="../DB/Connection.html">DB::Connection</a></li>
+  
+    <li class="other-type"><a href="../DB/Transaction.html">DB::Transaction</a></li>
+  
+  </ul>
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/c2c1f31a9093bd681be999929ddbe0ae3adae00e/src/db/begin_transaction.cr#L2" target="_blank">db/begin_transaction.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#begin_transaction%3ATransaction-instance-method" class="signature"><strong>#begin_transaction</strong> : Transaction</a>
+        
+          <div class="summary"><p>Creates a transaction from the current context.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#transaction%28%26block%29-instance-method" class="signature"><strong>#transaction</strong>(&block)</a>
+        
+          <div class="summary"><p>yields a transaction from the current context.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+</div>
+
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="begin_transaction:Transaction-instance-method">
+      <div class="signature">
+        abstract 
+        def <strong>begin_transaction</strong> : <a href="../DB/Transaction.html">Transaction</a>
+
+        <a class="method-permalink" href="#begin_transaction%3ATransaction-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Creates a transaction from the current context.
+If is expected that either <code><a href="../DB/Transaction.html#commit-instance-method">Transaction#commit</a></code> or <code><a href="../DB/Transaction.html#rollback-instance-method">Transaction#rollback</a></code>
+are called explictly to release the context.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/c2c1f31a9093bd681be999929ddbe0ae3adae00e/src/db/begin_transaction.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="transaction&#40;&amp;block&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>transaction</strong>(&block)
+
+        <a class="method-permalink" href="#transaction%28%26block%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>yields a transaction from the current context.
+Query the database through <code><a href="../DB/Transaction.html#connection%3AConnection-instance-method">Transaction#connection</a></code> object.
+If an exception is thrown within the block a rollback is performed.
+The exception thrown is blubbled unless it is a <code><a href="../DB/Rollback.html">DB::Rollback</a></code>.
+From the yielded object <code><a href="../DB/Transaction.html#commit-instance-method">Transaction#commit</a></code> or <code><a href="../DB/Transaction.html#rollback-instance-method">Transaction#rollback</a></code>
+can be called explicitly.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/c2c1f31a9093bd681be999929ddbe0ae3adae00e/src/db/begin_transaction.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
