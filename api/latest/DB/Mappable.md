@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - ../../0.3.2/DB/Mappable.html
+  - ../../0.3.3/DB/Mappable.html
 ---
