@@ -98,6 +98,22 @@ describe DB::Database do
     end
   end
 
+  it "should not return connection to pool if checkout explicitly" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&retry_attempts=0" do |db|
+      the_cnn = uninitialized DB::Connection
+      db.using_connection do |cnn|
+        the_cnn = cnn
+        db.pool.is_available?(cnn).should be_false
+        3.times do
+          cnn.exec("stmt1")
+          db.pool.is_available?(cnn).should be_false
+        end
+      end
+      db.pool.is_available?(the_cnn).should be_true
+    end
+  end
+
   describe "prepared_statements connection option" do
     it "defaults to true" do
       with_dummy "dummy://localhost:1027" do |db|

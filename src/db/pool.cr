@@ -41,6 +41,7 @@ module DB
                  end
 
       @available.delete resource
+      resource.before_checkout
       resource
     end
 
@@ -56,6 +57,7 @@ module DB
         resource = ref.target
         if resource && is_available?(resource)
           @available.delete resource
+          resource.before_checkout
           return {resource, true}
         end
       end
@@ -67,6 +69,7 @@ module DB
     def release(resource : T) : Nil
       if can_increase_idle_pool
         @available << resource
+        resource.after_release
         @availability_channel.send nil if are_waiting_for_resource?
       else
         resource.close

@@ -42,8 +42,18 @@ end
 
 class Closable
   include DB::Disposable
+  property before_checkout_called : Bool = false
+  property after_release_called : Bool = false
 
   protected def do_close
+  end
+
+  def before_checkout
+    @before_checkout_called = true
+  end
+
+  def after_release
+    @after_release_called = true
   end
 end
 
@@ -56,7 +66,9 @@ describe DB::Pool do
 
   it "should get resource" do
     pool = DB::Pool.new { Closable.new }
-    pool.checkout.should be_a Closable
+    resource = pool.checkout
+    resource.should be_a Closable
+    resource.before_checkout_called.should be_true
   end
 
   it "should be available if not checkedout" do
@@ -74,8 +86,10 @@ describe DB::Pool do
   it "should be available if returned" do
     pool = DB::Pool.new { Closable.new }
     resource = pool.checkout
+    resource.after_release_called.should be_false
     pool.release resource
     pool.is_available?(resource).should be_true
+    resource.after_release_called.should be_true
   end
 
   it "should wait for available resource" do
