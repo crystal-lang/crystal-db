@@ -28,6 +28,8 @@ module DB
     @statements_cache = StringKeyCache(Statement).new
     @transaction = false
     getter? prepared_statements : Bool
+    # :nodoc:
+    property auto_release : Bool = true
 
     def initialize(@database : Database)
       @prepared_statements = @database.prepared_statements?
@@ -61,8 +63,17 @@ module DB
     end
 
     # :nodoc:
+    protected def before_checkout
+      @auto_release = true
+    end
+
+    # :nodoc:
+    protected def after_release
+    end
+
+    # :nodoc:
     def release_from_statement
-      @database.return_to_pool(self) unless @transaction
+      @database.return_to_pool(self) if @auto_release && !@transaction
     end
 
     # :nodoc:

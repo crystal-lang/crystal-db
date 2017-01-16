@@ -98,6 +98,7 @@ module DB
     # when the block ends
     def using_connection
       connection = @pool.checkout
+      connection.auto_release = false
       begin
         yield connection
       ensure
