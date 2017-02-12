@@ -71,9 +71,16 @@ module DB
     protected def after_release
     end
 
+    # return this connection to the pool
+    # managed by the database. Should be used
+    # only if the connection was obtained by `Database#checkout`.
+    def release
+      @database.return_to_pool(self)
+    end
+
     # :nodoc:
     def release_from_statement
-      @database.return_to_pool(self) if @auto_release && !@transaction
+      self.release if @auto_release && !@transaction
     end
 
     # :nodoc:

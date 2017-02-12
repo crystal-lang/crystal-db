@@ -114,6 +114,41 @@ describe DB::Database do
     end
   end
 
+  it "should checkout different connections until they are released" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=2&retry_attempts=0" do |db|
+      the_first_cnn = uninitialized DB::Connection
+      the_second_cnn = uninitialized DB::Connection
+
+      the_first_cnn = db.checkout
+      the_second_cnn = db.checkout
+      the_second_cnn.should_not eq(the_first_cnn)
+      db.pool.is_available?(the_first_cnn).should be_false
+      db.pool.is_available?(the_second_cnn).should be_false
+
+      the_first_cnn.release
+      db.pool.is_available?(the_first_cnn).should be_true
+      db.pool.is_available?(the_second_cnn).should be_false
+
+      db.checkout.should eq(the_first_cnn)
+      the_first_cnn.release
+      the_second_cnn.release
+    end
+  end
+
+  it "should not return explicit checked out connections to the pool after query" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=2&retry_attempts=0" do |db|
+      cnn = db.checkout
+
+      cnn.query_all("1", as: String)
+
+      db.pool.is_available?(cnn).should be_false
+      cnn.release
+      db.pool.is_available?(cnn).should be_true
+    end
+  end
+
   describe "prepared_statements connection option" do
     it "defaults to true" do
       with_dummy "dummy://localhost:1027" do |db|

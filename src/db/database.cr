@@ -94,16 +94,24 @@ module DB
     end
 
     # yields a connection from the pool
-    # the connection is returned to the pool after
+    # the connection is returned to the pool
     # when the block ends
     def using_connection
-      connection = @pool.checkout
-      connection.auto_release = false
+      connection = self.checkout
       begin
         yield connection
       ensure
-        return_to_pool connection
+        connection.release
       end
+    end
+
+    # returns a connection from the pool
+    # the returned connection must be returned
+    # to the pool by explictly calling `Connection#release`
+    def checkout
+      connection = @pool.checkout
+      connection.auto_release = false
+      connection
     end
 
     # yields a `Transaction` from a connection of the pool
