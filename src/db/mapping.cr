@@ -66,6 +66,11 @@ module DB
 
     {% for key, value in properties %}
       {% value[:nilable] = true if value[:type].is_a?(Generic) && value[:type].type_vars.map(&.resolve).includes?(Nil) %}
+
+      {% if value[:type].is_a?(Call) && value[:type].name == "|" &&
+              (value[:type].receiver.resolve == Nil || value[:type].args.map(&.resolve).any?(&.==(Nil))) %}
+        {% value[:nilable] = true %}
+      {% end %}
     {% end %}
 
     {% for key, value in properties %}
@@ -103,7 +108,7 @@ module DB
                 {% if value[:converter] %}
                   {{value[:converter]}}.from_rs(%rs)
                 {% elsif value[:nilable] || value[:default] != nil %}
-                  %rs.read(Union({{value[:type]}} | Nil))
+                  %rs.read(::Union({{value[:type]}} | Nil))
                 {% else %}
                   %rs.read({{value[:type]}})
                 {% end %}

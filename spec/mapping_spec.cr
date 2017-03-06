@@ -36,6 +36,13 @@ class MappingWithNilTypes
   })
 end
 
+class MappingWithNilUnionTypes
+  DB.mapping({
+    c0: {type: Int32 | Nil, default: 10},
+    c1: Nil | String,
+  })
+end
+
 class MappingWithKeys
   DB.mapping({
     foo: {type: Int32, key: "c0"},
@@ -117,10 +124,12 @@ describe "DB.mapping" do
 
   it "should initialize a mapping with nilable types if columns are missing" do
     expect_mapping("1", MappingWithNilTypes, {c0: 1, c1: nil})
+    expect_mapping("1", MappingWithNilUnionTypes, {c0: 1, c1: nil})
   end
 
   it "should initialize a mapping with nilable types ignoring default value if NULL" do
     expect_mapping("NULL,a", MappingWithNilTypes, {c0: nil, c1: "a"})
+    expect_mapping("NULL,a", MappingWithNilUnionTypes, {c0: nil, c1: "a"})
   end
 
   it "should initialize a mapping with different keys" do
