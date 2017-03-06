@@ -65,6 +65,15 @@ module DB
     {% end %}
 
     {% for key, value in properties %}
+      {% value[:nilable] = true if value[:type].is_a?(Generic) && value[:type].type_vars.map(&.resolve).includes?(Nil) %}
+
+      {% if value[:type].is_a?(Call) && value[:type].name == "|" &&
+              (value[:type].receiver.resolve == Nil || value[:type].args.map(&.resolve).any?(&.==(Nil))) %}
+        {% value[:nilable] = true %}
+      {% end %}
+    {% end %}
+
+    {% for key, value in properties %}
       @{{key.id}} : {{value[:type]}} {{ (value[:nilable] ? "?" : "").id }}
 
       def {{key.id}}=(_{{key.id}} : {{value[:type]}} {{ (value[:nilable] ? "?" : "").id }})
@@ -99,7 +108,7 @@ module DB
                 {% if value[:converter] %}
                   {{value[:converter]}}.from_rs(%rs)
                 {% elsif value[:nilable] || value[:default] != nil %}
-                  %rs.read(Union({{value[:type]}} | Nil))
+                  %rs.read(::Union({{value[:type]}} | Nil))
                 {% else %}
                   %rs.read({{value[:type]}})
                 {% end %}
@@ -131,7 +140,7 @@ module DB
         {% elsif value[:default] != nil %}
           @{{key.id}} = %var{key.id}.is_a?(Nil) ? {{value[:default]}} : %var{key.id}
         {% else %}
-          @{{key.id}} = %var{key.id}.not_nil!
+          @{{key.id}} = %var{key.id}.as({{value[:type]}})
         {% end %}
       {% end %}
     end
