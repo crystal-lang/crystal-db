@@ -2,13 +2,13 @@ require "spec"
 require "../src/db"
 
 class DummyDriver < DB::Driver
-  def build_connection(db : DB::Database) : DB::Connection
-    DummyConnection.new(db)
+  def build_connection(context : DB::ConnectionContext) : DB::Connection
+    DummyConnection.new(context)
   end
 
   class DummyConnection < DB::Connection
-    def initialize(db)
-      super(db)
+    def initialize(context)
+      super(context)
       @connected = true
       @@connections ||= [] of DummyConnection
       @@connections.not_nil! << self

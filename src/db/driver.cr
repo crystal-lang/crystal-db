@@ -6,9 +6,9 @@ module DB
   # ```
   # require "db"
   #
-  # class FakeDriver < Driver
-  #   def build_connection(db)
-  #     FakeConnection.new db
+  # class FakeDriver < DB::Driver
+  #   def build_connection(context : DB::ConnectionContext)
+  #     FakeConnection.new context
   #   end
   # end
   #
@@ -26,7 +26,7 @@ module DB
   # Refer to `Connection`, `Statement` and `ResultSet` for further
   # driver implementation instructions.
   abstract class Driver
-    abstract def build_connection(db : Database) : Connection
+    abstract def build_connection(context : ConnectionContext) : Connection
 
     def connection_pool_options(params : HTTP::Params)
       {

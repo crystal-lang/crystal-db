@@ -43,8 +43,8 @@ class FooDriver < DB::Driver
     @@row
   end
 
-  def build_connection(db : DB::Database) : DB::Connection
-    FooConnection.new(db)
+  def build_connection(context : DB::ConnectionContext) : DB::Connection
+    FooConnection.new(context)
   end
 
   class FooConnection < DB::Connection
@@ -106,8 +106,8 @@ class BarDriver < DB::Driver
     @@row
   end
 
-  def build_connection(db : DB::Database) : DB::Connection
-    BarConnection.new(db)
+  def build_connection(context : DB::ConnectionContext) : DB::Connection
+    BarConnection.new(context)
   end
 
   class BarConnection < DB::Connection
