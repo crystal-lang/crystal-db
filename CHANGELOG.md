@@ -1,3 +1,10 @@
+## v0.4.0 (2017-03-20)
+
+* Add `DB.connect` to create non pooled connections
+* Add `Database#checkout` to allow explicit checkout/release connection (see #38)
+* Fix `Mapping.from_rs` closes the result_set
+* Fix `Mapping` works with nilable types (see #40, thanks @RX14)
+
 ## v0.3.3 (2016-12-24)
 
 * Fix compatibility issues for crystal 0.20.3
