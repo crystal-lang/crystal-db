@@ -25,6 +25,25 @@ describe DB do
     connections.first.closed?.should be_true
   end
 
+  it "should create a connection and close it" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.connect "dummy://localhost" do |cnn|
+      cnn.should be_a(DummyDriver::DummyConnection)
+    end
+    connections.size.should eq(1)
+    connections.first.closed?.should be_true
+  end
+
+  it "should create a connection and wait for explicit closing" do
+    DummyDriver::DummyConnection.clear_connections
+    cnn = DB.connect "dummy://localhost"
+    cnn.should be_a(DummyDriver::DummyConnection)
+    connections.size.should eq(1)
+    connections.first.closed?.should be_false
+    cnn.close
+    connections.first.closed?.should be_true
+  end
+
   it "query should close result_set" do
     with_witness do |w|
       with_dummy do |db|

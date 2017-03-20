@@ -113,12 +113,42 @@ module DB
     end
   end
 
+  # Opens a connection using the specified *uri*.
+  # The scheme of the *uri* determines the driver to use.
+  # Returned connection must be closed by `Connection#close`.
+  # If a block is used the connection is yielded and closed automatically.
+  def self.connect(uri : URI | String)
+    build_connection(uri)
+  end
+
+  # ditto
+  def self.connect(uri : URI | String, &block)
+    cnn = build_connection(uri)
+    begin
+      yield cnn
+    ensure
+      cnn.close
+    end
+  end
+
   private def self.build_database(connection_string : String)
     build_database(URI.parse(connection_string))
   end
 
   private def self.build_database(uri : URI)
-    Database.new(driver_class(uri.scheme).new, uri)
+    Database.new(build_driver(uri), uri)
+  end
+
+  private def self.build_connection(connection_string : String)
+    build_connection(URI.parse(connection_string))
+  end
+
+  private def self.build_connection(uri : URI)
+    build_driver(uri).build_connection(SingleConnectionContext.new(uri)).as(Connection)
+  end
+
+  private def self.build_driver(uri : URI)
+    driver_class(uri.scheme).new
   end
 
   # :nodoc:
@@ -144,6 +174,7 @@ require "./db/disposable"
 require "./db/driver"
 require "./db/statement"
 require "./db/begin_transaction"
+require "./db/connection_context"
 require "./db/connection"
 require "./db/transaction"
 require "./db/statement"

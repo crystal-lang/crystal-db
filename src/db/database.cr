@@ -23,6 +23,7 @@ module DB
   # Refer to `QueryMethods` and `SessionMethods` for documentation about querying the database.
   class Database
     include SessionMethods(Database, PoolStatement)
+    include ConnectionContext
 
     # :nodoc:
     getter driver
@@ -69,6 +70,16 @@ module DB
     end
 
     # :nodoc:
+    def discard(connection : Connection)
+      @pool.delete connection
+    end
+
+    # :nodoc:
+    def release(connection : Connection)
+      @pool.release connection
+    end
+
+    # :nodoc:
     def fetch_or_build_prepared_statement(query)
       @statements_cache.fetch(query) { build_prepared_statement(query) }
     end
@@ -86,11 +97,6 @@ module DB
     # :nodoc:
     def checkout_some(candidates : Enumerable(WeakRef(Connection))) : {Connection, Bool}
       @pool.checkout_some candidates
-    end
-
-    # :nodoc:
-    def return_to_pool(connection)
-      @pool.release connection
     end
 
     # yields a connection from the pool

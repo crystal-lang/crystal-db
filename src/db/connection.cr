@@ -24,15 +24,15 @@ module DB
     include BeginTransaction
 
     # :nodoc:
-    getter database
+    getter context
     @statements_cache = StringKeyCache(Statement).new
     @transaction = false
     getter? prepared_statements : Bool
     # :nodoc:
     property auto_release : Bool = true
 
-    def initialize(@database : Database)
-      @prepared_statements = @database.prepared_statements?
+    def initialize(@context : ConnectionContext)
+      @prepared_statements = @context.prepared_statements?
     end
 
     # :nodoc:
@@ -59,7 +59,7 @@ module DB
     protected def do_close
       @statements_cache.each_value &.close
       @statements_cache.clear
-      @database.pool.delete self
+      @context.discard self
     end
 
     # :nodoc:
@@ -75,7 +75,7 @@ module DB
     # managed by the database. Should be used
     # only if the connection was obtained by `Database#checkout`.
     def release
-      @database.return_to_pool(self)
+      @context.release(self)
     end
 
     # :nodoc:
