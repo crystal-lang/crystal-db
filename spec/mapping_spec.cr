@@ -153,6 +153,20 @@ describe "DB.mapping" do
     end
   end
 
+  it "Class.from_rs should close resultset" do
+    with_dummy do |db|
+      rs = db.query("1,a 2,b")
+      objs = SimpleMapping.from_rs(rs)
+      rs.closed?.should be_true
+
+      objs.size.should eq(2)
+      objs[0].c0.should eq(1)
+      objs[0].c1.should eq("a")
+      objs[1].c0.should eq(2)
+      objs[1].c1.should eq("b")
+    end
+  end
+
   it "should initialize from a query_one" do
     with_dummy do |db|
       obj = db.query_one "1,a", as: SimpleMapping

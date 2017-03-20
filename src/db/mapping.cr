@@ -91,6 +91,8 @@ module DB
         %objs << self.new(%rs)
       end
       %objs
+    ensure
+      %rs.close
     end
 
     def initialize(%rs : ::DB::ResultSet)
