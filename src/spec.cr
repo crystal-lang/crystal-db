@@ -64,7 +64,7 @@ module DB
 
     db_spec_config connection_string : String
     db_spec_config binding_syntax : Proc(Int32, String), block: true
-    db_spec_config select_scalar_syntax : Proc(String, String), block: true
+    db_spec_config select_scalar_syntax : Proc(String, String?, String), block: true
     db_spec_config create_table_1column_syntax : Proc(String, ColumnDef, String), block: true
     db_spec_config create_table_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String), block: true
     db_spec_config insert_1column_syntax : Proc(String, ColumnDef, String, String), block: true
@@ -88,7 +88,7 @@ module DB
       @values << ValueDef(DBAnyType).new(value, sql_type, value_encoded)
 
       it "select nil as (#{typeof(value)} | Nil)", prepared: :both do |db|
-        db.query select_scalar(encode_null) do |rs|
+        db.query select_scalar(encode_null, nil) do |rs|
           assert_single_read rs, typeof(value || nil), nil
         end
       end
@@ -99,17 +99,17 @@ module DB
 
       if type_safe_value
         it "executes with bind #{value_desc}" do |db|
-          db.scalar(select_scalar(param(1)), value).should eq(value)
+          db.scalar(select_scalar(param(1), sql_type), value).should eq(value)
         end
 
         it "executes with bind #{value_desc} as array" do |db|
-          db.scalar(select_scalar(param(1)), [value]).should eq(value)
+          db.scalar(select_scalar(param(1), sql_type), [value]).should eq(value)
         end
 
         it "select #{value_desc} as literal" do |db|
-          db.scalar(select_scalar(value_encoded)).should eq(value)
+          db.scalar(select_scalar(value_encoded, sql_type)).should eq(value)
 
-          db.query select_scalar(value_encoded) do |rs|
+          db.query select_scalar(value_encoded, sql_type) do |rs|
             assert_single_read rs, typeof(value), value
           end
         end
@@ -167,16 +167,16 @@ module DB
       it "can create direct connection" do
         DB.connect(connection_string) do |cnn|
           cnn.is_a?(DB::Connection)
-          cnn.scalar(select_scalar(encode_null)).should be_nil
+          cnn.scalar(select_scalar(encode_null, nil)).should be_nil
         end
       end
 
       it "binds nil" do |db|
-        db.scalar(select_scalar(param(1)), nil).should be_nil
+        db.scalar(select_scalar(param(1), nil), nil).should be_nil
       end
 
       it "selects nil as scalar", prepared: :both do |db|
-        db.scalar(select_scalar(encode_null)).should be_nil
+        db.scalar(select_scalar(encode_null, nil)).should be_nil
       end
 
       it "gets column count", prepared: :both do |db|
@@ -272,8 +272,8 @@ module DB
     end
 
     # :nodoc:
-    def select_scalar(expression)
-      select_scalar_syntax.call(expression)
+    def select_scalar(expression, sql_type)
+      select_scalar_syntax.call(expression, sql_type)
     end
 
     # :nodoc:
