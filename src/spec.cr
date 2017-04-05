@@ -14,6 +14,8 @@ module DB
     @before : Proc(Nil) = ->{}
     @after : Proc(Nil) = ->{}
     @encode_null = "NULL"
+    @support_prepared = true
+    @support_unprepared = true
 
     def before(&@before : -> Nil)
     end
@@ -22,6 +24,20 @@ module DB
     end
 
     def encode_null(@encode_null : String)
+    end
+
+    def support_prepared(@support_prepared : Bool)
+    end
+
+    def support_prepared
+      @support_prepared
+    end
+
+    def support_unprepared(@support_unprepared : Bool)
+    end
+
+    def support_unprepared
+      @support_unprepared
     end
 
     # :nodoc:
@@ -51,10 +67,10 @@ module DB
     db_spec_config select_scalar_syntax : Proc(String, String), block: true
     db_spec_config create_table_1column_syntax : Proc(String, ColumnDef, String), block: true
     db_spec_config create_table_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String), block: true
-    db_spec_config insert_1column_syntax : Proc(String, String, String, String), block: true
-    db_spec_config insert_2columns_syntax : Proc(String, String, String, String, String, String), block: true
-    db_spec_config select_1column_syntax : Proc(String, String, String), block: true
-    db_spec_config select_2columns_syntax : Proc(String, String, String, String), block: true
+    db_spec_config insert_1column_syntax : Proc(String, ColumnDef, String, String), block: true
+    db_spec_config insert_2columns_syntax : Proc(String, ColumnDef, String, ColumnDef, String, String), block: true
+    db_spec_config select_1column_syntax : Proc(String, ColumnDef, String), block: true
+    db_spec_config select_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String), block: true
     db_spec_config select_count_syntax : Proc(String, String), block: true
 
     record SpecIt, description : String, prepared : Symbol, file : String, line : Int32, end_line : Int32, block : DB::Database -> Nil
@@ -100,45 +116,45 @@ module DB
       end
 
       it "insert/get value #{value_desc} from table", prepared: :both do |db|
-        db.exec sql_create_table_table1(sql_type)
-        db.exec sql_insert_table1(value_encoded)
+        db.exec sql_create_table_table1(c1 = col1(sql_type))
+        db.exec sql_insert_table1(c1, value_encoded)
 
-        db.query_one(sql_select_table1, as: typeof(value)).should eq(value)
+        db.query_one(sql_select_table1(c1), as: typeof(value)).should eq(value)
       end
 
       it "insert/get value #{value_desc} from table as nillable", prepared: :both do |db|
-        db.exec sql_create_table_table1(sql_type)
-        db.exec sql_insert_table1(value_encoded)
+        db.exec sql_create_table_table1(c1 = col1(sql_type))
+        db.exec sql_insert_table1(c1, value_encoded)
 
-        db.query_one(sql_select_table1, as: ::Union(typeof(value) | Nil)).should eq(value)
+        db.query_one(sql_select_table1(c1), as: ::Union(typeof(value) | Nil)).should eq(value)
       end
 
       it "insert/get value nil from table as nillable #{sql_type}", prepared: :both do |db|
-        db.exec sql_create_table_table1(sql_type, null: true)
-        db.exec sql_insert_table1(encode_null)
+        db.exec sql_create_table_table1(c1 = col1(sql_type, null: true))
+        db.exec sql_insert_table1(c1, encode_null)
 
-        db.query_one(sql_select_table1, as: ::Union(typeof(value) | Nil)).should eq(nil)
+        db.query_one(sql_select_table1(c1), as: ::Union(typeof(value) | Nil)).should eq(nil)
       end
 
       it "insert/get value #{value_desc} from table with binding" do |db|
-        db.exec sql_create_table_table2(sql_type_for(String), sql_type)
+        db.exec sql_create_table_table2(c1 = col1(sql_type_for(String)), c2 = col2(sql_type))
         # the next statement will force a union in the *args
-        db.exec sql_insert_table2(param(1), param(2)), value_for(String), value
-        db.query_one(sql_select_table2_col2, as: typeof(value)).should eq(value)
+        db.exec sql_insert_table2(c1, param(1), c2, param(2)), value_for(String), value
+        db.query_one(sql_select_table2(c2), as: typeof(value)).should eq(value)
       end
 
       it "insert/get value #{value_desc} from table as nillable with binding" do |db|
-        db.exec sql_create_table_table2(sql_type_for(String), sql_type)
+        db.exec sql_create_table_table2(c1 = col1(sql_type_for(String)), c2 = col2(sql_type))
         # the next statement will force a union in the *args
-        db.exec sql_insert_table2(param(1), param(2)), value_for(String), value
-        db.query_one(sql_select_table2_col2, as: ::Union(typeof(value) | Nil)).should eq(value)
+        db.exec sql_insert_table2(c1, param(1), c2, param(2)), value_for(String), value
+        db.query_one(sql_select_table2(c2), as: ::Union(typeof(value) | Nil)).should eq(value)
       end
 
       it "insert/get value nil from table as nillable #{sql_type} with binding" do |db|
-        db.exec sql_create_table_table2(sql_type_for(String), sql_type, null: true)
-        db.exec sql_insert_table2(param(1), param(2)), value_for(String), nil
+        db.exec sql_create_table_table2(c1 = col1(sql_type_for(String)), c2 = col2(sql_type, null: true))
+        db.exec sql_insert_table2(c1, param(1), c2, param(2)), value_for(String), nil
 
-        db.query_one(sql_select_table2_col2, as: ::Union(typeof(value) | Nil)).should eq(nil)
+        db.query_one(sql_select_table2(c2), as: ::Union(typeof(value) | Nil)).should eq(nil)
       end
     end
 
@@ -245,11 +261,13 @@ module DB
       # end
     end
 
-    def with_db(options = "")
+    # :nodoc:
+    def with_db(options = nil)
       @before.call
-      DB.open("#{connection_string}?#{options}") do |db|
+      DB.open("#{connection_string}#{"?#{options}" if options}") do |db|
         yield db
       end
+    ensure
       @after.call
     end
 
@@ -293,22 +311,27 @@ module DB
       end
     end
 
+    def col_name
+      ColumnDef.new("name", sql_type_for(String), false)
+    end
+
+    def col_age
+      ColumnDef.new("age", sql_type_for(Int32), false)
+    end
+
     # :nodoc:
     def sql_create_table_person
-      create_table_2columns_syntax.call("person",
-        ColumnDef.new("name", sql_type_for(String), false),
-        ColumnDef.new("age", sql_type_for(Int32), false)
-      )
+      create_table_2columns_syntax.call("person",col_name, col_age)
     end
 
     # :nodoc:
     def sql_select_person
-      select_2columns_syntax.call("person", "name", "age")
+      select_2columns_syntax.call("person", col_name, col_age)
     end
 
     # :nodoc:
     def sql_insert_person
-      insert_2columns_syntax.call("person", "name", param(1), "age", param(2))
+      insert_2columns_syntax.call("person", col_name, param(1), col_age, param(2))
     end
 
     # :nodoc:
@@ -317,38 +340,43 @@ module DB
     end
 
     # :nodoc:
-    def sql_create_table_table1(sql_type, *, null = false)
-      create_table_1column_syntax.call("table1",
-        ColumnDef.new("col1", sql_type, null)
-      )
+    def col1(sql_type, *, null = false)
+      ColumnDef.new("col1", sql_type, null)
     end
 
     # :nodoc:
-    def sql_create_table_table2(sql_type1, sql_type2, *, null = false)
-      create_table_2columns_syntax.call("table2",
-        ColumnDef.new("col1", sql_type1, null),
-        ColumnDef.new("col2", sql_type2, null)
-      )
+    def col2(sql_type, *, null = false)
+      ColumnDef.new("col2", sql_type, null)
     end
 
     # :nodoc:
-    def sql_insert_table1(expression)
-      insert_1column_syntax.call("table1", "col1", expression)
+    def sql_create_table_table1(col : ColumnDef)
+      create_table_1column_syntax.call("table1", col)
     end
 
     # :nodoc:
-    def sql_insert_table2(expr1, expr2)
-      insert_2columns_syntax.call("table2", "col1", expr1, "col2", expr2)
+    def sql_create_table_table2(col1 : ColumnDef, col2 : ColumnDef)
+      create_table_2columns_syntax.call("table2", col1, col2)
     end
 
     # :nodoc:
-    def sql_select_table1
-      select_1column_syntax.call("table1", "col1")
+    def sql_insert_table1(col1 : ColumnDef, expression)
+      insert_1column_syntax.call("table1", col1, expression)
     end
 
     # :nodoc:
-    def sql_select_table2_col2
-      select_1column_syntax.call("table2", "col2")
+    def sql_insert_table2(col1 : ColumnDef, expr1, col2 : ColumnDef, expr2)
+      insert_2columns_syntax.call("table2", col1, expr1, col2, expr2)
+    end
+
+    # :nodoc:
+    def sql_select_table1(col : ColumnDef)
+      select_1column_syntax.call("table1", col)
+    end
+
+    # :nodoc:
+    def sql_select_table2(col : ColumnDef)
+      select_1column_syntax.call("table2", col)
     end
 
     def self.run(description = "as a db")
@@ -368,11 +396,26 @@ module DB
               end
             end
           when :both
-            [true, false].each do |prepared_statements|
-              it("#{db_it.description} (prepared_statements=#{prepared_statements})", db_it.file, db_it.line, db_it.end_line) do
-                ctx.with_db "prepared_statements=#{prepared_statements}" do |db|
+            values = [] of Bool
+            values << true if ctx.support_prepared
+            values << false if ctx.support_unprepared
+            case values.size
+            when 0
+              raise "Neither prepared non unprepared statements allowed"
+            when 1
+              it(db_it.description, db_it.file, db_it.line, db_it.end_line) do
+                ctx.with_db do |db|
                   db_it.block.call db
                   nil
+                end
+              end
+            else
+              values.each do |prepared_statements|
+                it("#{db_it.description} (prepared_statements=#{prepared_statements})", db_it.file, db_it.line, db_it.end_line) do
+                  ctx.with_db "prepared_statements=#{prepared_statements}" do |db|
+                    db_it.block.call db
+                    nil
+                  end
                 end
               end
             end
