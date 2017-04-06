@@ -7,8 +7,48 @@ private def assert_single_read(rs, value_type, value)
 end
 
 module DB
+  # Helper class to ensure behaviour of custom drivers
+  #
+  # ```
+  # require "db/spec"
+  #
+  # DB::DriverSpecs(DB::Any).run do
+  #   # How to connect to database
+  #   connection_string "scheme://database_url"
+  #
+  #   # Clean up database if needed using before/after callbacks
+  #   before do
+  #     # ...
+  #   end
+  #
+  #   after do
+  #     # ...
+  #   end
+  #
+  #   # Sample values that will be stored, retrieved across many specs
+  #   sample_value "hello", "varchar(25)", "'hello'"
+  #
+  #   it "custom spec with a db initialized" do |db|
+  #     # assert something using *db*
+  #   end
+  #
+  #   # Configure the appropiate syntax for different commands needed to run the specs
+  #   binding_syntax do |index|
+  #     "?"
+  #   end
+  #
+  #   create_table_1column_syntax do |table_name, col1|
+  #     "create table #{table_name} (#{col1.name} #{col1.sql_type} #{col1.null ? "NULL" : "NOT NULL"})"
+  #   end
+  # end
+  # ```
+  #
+  # The following methods needs to be called to configure the appropiate syntax
+  # for different commands and allow all the specs to run: `binding_syntax`, `create_table_1column_syntax`,
+  # `create_table_2columns_syntax`, `select_1column_syntax`, `select_2columns_syntax`, `select_count_syntax`,
+  # `select_scalar_syntax`, `insert_1column_syntax`, `insert_2columns_syntax`, `drop_table_if_exists_syntax`.
+  #
   class DriverSpecs(DBAnyType)
-
     record ColumnDef, name : String, sql_type : String, null : Bool
 
     @before : Proc(Nil) = ->{}
@@ -26,16 +66,20 @@ module DB
     def encode_null(@encode_null : String)
     end
 
+    # Allow specs that uses prepared statements (default `true`)
     def support_prepared(@support_prepared : Bool)
     end
 
+    # :nodoc:
     def support_prepared
       @support_prepared
     end
 
+    # Allow specs that uses unprepared statements (default `true`)
     def support_unprepared(@support_unprepared : Bool)
     end
 
+    # :nodoc:
     def support_unprepared
       @support_unprepared
     end
@@ -56,7 +100,7 @@ module DB
         # :nodoc:
         def {{name.var.id}}
           res = @{{name.var.id}}
-          raise %{Missing {{name.var.id}} to setup db} unless res
+          raise "Missing {{name.var.id}} to setup db" unless res
           res
         end
       {% end %}
@@ -74,6 +118,7 @@ module DB
     db_spec_config select_count_syntax : Proc(String, String), block: true
     db_spec_config drop_table_if_exists_syntax : Proc(String, String), block: true
 
+    # :nodoc:
     record SpecIt, description : String, prepared : Symbol, file : String, line : Int32, end_line : Int32, block : DB::Database -> Nil
     getter its = [] of SpecIt
 
@@ -82,9 +127,15 @@ module DB
       @its << SpecIt.new(description, prepared, file, line, end_line, block)
     end
 
+    # :nodoc:
     record ValueDef(T), value : T, sql_type : String, value_encoded : String
 
     @values = [] of ValueDef(DBAnyType)
+
+    # Use *value* as sample value that should be stored in columns of type *sql_type*.
+    # *value_encoded* is driver specific expression that should generate that value in the database.
+    # *type_safe_value* indicates whether *value_encoded* is expected to generate the *value* even without
+    # been stored in a table (default `true`).
     def sample_value(value, sql_type, value_encoded, *, type_safe_value = true)
       @values << ValueDef(DBAnyType).new(value, sql_type, value_encoded)
 
@@ -340,10 +391,12 @@ module DB
       end
     end
 
+    # :nodoc:
     def col_name
       ColumnDef.new("name", sql_type_for(String), false)
     end
 
+    # :nodoc:
     def col_age
       ColumnDef.new("age", sql_type_for(Int32), false)
     end
@@ -455,7 +508,6 @@ module DB
             end
           end
         end
-
       end
     end
   end
