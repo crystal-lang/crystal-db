@@ -94,7 +94,7 @@ module DB
       end
 
       value_desc = value.to_s
-      value_desc = "#{value_desc[0..20]}...(#{value_desc.size})" if value_desc.size > 20
+      value_desc = "#{value_desc[0..25]}...(#{value_desc.size})" if value_desc.size > 25
       value_desc = "#{value_desc} as #{sql_type}"
 
       if type_safe_value
@@ -172,7 +172,8 @@ module DB
       end
 
       it "binds nil" do |db|
-        db.scalar(select_scalar(param(1), nil), nil).should be_nil
+        # PG is unable to perform this query without a type annotation
+        db.scalar(select_scalar(param(1), sql_type_for(String)), nil).should be_nil
       end
 
       it "selects nil as scalar", prepared: :both do |db|
@@ -321,7 +322,7 @@ module DB
 
     # :nodoc:
     def sql_create_table_person
-      create_table_2columns_syntax.call("person",col_name, col_age)
+      create_table_2columns_syntax.call("person", col_name, col_age)
     end
 
     # :nodoc:
