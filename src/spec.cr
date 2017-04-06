@@ -157,6 +157,30 @@ module DB
 
         db.query_one(sql_select_table2(c2), as: ::Union(typeof(value) | Nil)).should eq(nil)
       end
+
+      it "can use read(#{typeof(value)}) with DB::ResultSet", prepared: :both do |db|
+        db.exec sql_create_table_table1(c1 = col1(sql_type))
+        db.exec sql_insert_table1(c1, value_encoded)
+        db.query(sql_select_table1(c1)) do |rs|
+          assert_single_read rs.as(DB::ResultSet), typeof(value), value
+        end
+      end
+
+      it "can use read(#{typeof(value)}?) with DB::ResultSet", prepared: :both do |db|
+        db.exec sql_create_table_table1(c1 = col1(sql_type))
+        db.exec sql_insert_table1(c1, value_encoded)
+        db.query(sql_select_table1(c1)) do |rs|
+          assert_single_read rs.as(DB::ResultSet), ::Union(typeof(value) | Nil), value
+        end
+      end
+
+      it "can use read(#{typeof(value)}?) with DB::ResultSet for nil", prepared: :both do |db|
+        db.exec sql_create_table_table1(c1 = col1(sql_type, null: true))
+        db.exec sql_insert_table1(c1, encode_null)
+        db.query(sql_select_table1(c1)) do |rs|
+          assert_single_read rs.as(DB::ResultSet), ::Union(typeof(value) | Nil), nil
+        end
+      end
     end
 
     # :nodoc:
