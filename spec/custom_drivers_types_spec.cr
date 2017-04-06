@@ -197,7 +197,7 @@ describe DB do
         FooDriver.fake_row = [1] of FooDriver::Any
         db.query "query" do |rs|
           rs.move_next
-          expect_raises(TypeCastError) do
+          expect_raises(Exception, "FooResultSet#read returned a Int32. A BarValue was expected.") do
             w.check
             rs.read(BarValue)
           end
@@ -210,7 +210,7 @@ describe DB do
         BarDriver.fake_row = [1] of BarDriver::Any
         db.query "query" do |rs|
           rs.move_next
-          expect_raises(TypeCastError) do
+          expect_raises(Exception, "BarResultSet#read returned a Int32. A FooValue was expected.") do
             w.check
             rs.read(FooValue)
           end

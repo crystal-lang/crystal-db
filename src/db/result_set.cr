@@ -76,7 +76,12 @@ module DB
 
     # Reads the next column value as a **type**
     def read(type : T.class) : T forall T
-      read.as(T)
+      value = read
+      if value.is_a?(T)
+        value
+      else
+        raise "#{self.class}#read returned a #{value.class}. A #{T} was expected."
+      end
     end
 
     # Reads the next columns and returns a tuple of the values.
