@@ -72,6 +72,7 @@ module DB
     db_spec_config select_1column_syntax : Proc(String, ColumnDef, String), block: true
     db_spec_config select_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String), block: true
     db_spec_config select_count_syntax : Proc(String, String), block: true
+    db_spec_config drop_table_if_exists_syntax : Proc(String, String), block: true
 
     record SpecIt, description : String, prepared : Symbol, file : String, line : Int32, end_line : Int32, block : DB::Database -> Nil
     getter its = [] of SpecIt
@@ -266,6 +267,9 @@ module DB
     def with_db(options = nil)
       @before.call
       DB.open("#{connection_string}#{"?#{options}" if options}") do |db|
+        db.exec(sql_drop_table("table1"))
+        db.exec(sql_drop_table("table2"))
+        db.exec(sql_drop_table("person"))
         yield db
       end
     ensure
@@ -378,6 +382,11 @@ module DB
     # :nodoc:
     def sql_select_table2(col : ColumnDef)
       select_1column_syntax.call("table2", col)
+    end
+
+    # :nodoc:
+    def sql_drop_table(table_name)
+      drop_table_if_exists_syntax.call(table_name)
     end
 
     def self.run(description = "as a db")
