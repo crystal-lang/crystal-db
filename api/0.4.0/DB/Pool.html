@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/crystal-lang/crystal-db">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>DB::Pool(T) - github.com/crystal-lang/crystal-db</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/crystal-lang/crystal-db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="../DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class="parent current" data-id="github.com/crystal-lang/crystal-db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Pool/TimeoutHelper" data-name="db::pool::timeouthelper">
+      <a href="../DB/Pool/TimeoutHelper.html">TimeoutHelper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/QueryMethods" data-name="db::querymethods">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> DB::Pool(T)
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../DB/Pool.html">DB::Pool(T)</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/545d758ae0e8ff107c3fcb62445cda7b38c0fd72/src/db/pool.cr#L4" target="_blank">db/pool.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>Class Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28initial_pool_size%3D1%2Cmax_pool_size%3D0%2Cmax_idle_pool_size%3D1%2Ccheckout_timeout%3D5.0%2Cretry_attempts%3D1%2Cretry_delay%3D0.2%2C%26factory%3A-%3ET%29-class-method" class="signature"><strong>.new</strong>(initial_pool_size = <span class="n">1</span>, max_pool_size = <span class="n">0</span>, max_idle_pool_size = <span class="n">1</span>, checkout_timeout = <span class="n">5.0</span>, retry_attempts = <span class="n">1</span>, retry_delay = <span class="n">0.2</span>, &factory :  -> T)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#checkout%3AT-instance-method" class="signature"><strong>#checkout</strong> : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#checkout_some%28candidates%3AEnumerable%28WeakRef%28T%29%29%29%3A%3A%3ATuple%28T%2CBool%29-instance-method" class="signature"><strong>#checkout_some</strong>(candidates : Enumerable(WeakRef(T))) : ::Tuple(T, Bool)</a>
+        
+          <div class="summary"><pre><code class='language-selected, is_candidate = pool.checkout_some(candidates) ``` `selected` be a resource from the `candidates` list and `is_candidate` == `true` or `selected` will be a new resource adn `is_candidate` == `false`'></code></pre></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#close%3ANil-instance-method" class="signature"><strong>#close</strong> : Nil</a>
+        
+          <div class="summary"><p>close all resources in the pool</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#release%28resource%3AT%29%3ANil-instance-method" class="signature"><strong>#release</strong>(resource : T) : Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#retry%28%26block%29-instance-method" class="signature"><strong>#retry</strong>(&block)</a>
+        
+          <div class="summary"><p>:nodoc: Will retry the block if a <code><a href="../DB/ConnectionLost.html">ConnectionLost</a></code> exception is thrown.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>Class Method Detail</h2>
+  
+    <div class="entry-detail" id="new&#40;initial_pool_size&#61;1,max_pool_size&#61;0,max_idle_pool_size&#61;1,checkout_timeout&#61;5.0,retry_attempts&#61;1,retry_delay&#61;0.2,&amp;factory:-&gt;T&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(initial_pool_size = <span class="n">1</span>, max_pool_size = <span class="n">0</span>, max_idle_pool_size = <span class="n">1</span>, checkout_timeout = <span class="n">5.0</span>, retry_attempts = <span class="n">1</span>, retry_delay = <span class="n">0.2</span>, &factory :  -> T)
+
+        <a class="method-permalink" href="#new%28initial_pool_size%3D1%2Cmax_pool_size%3D0%2Cmax_idle_pool_size%3D1%2Ccheckout_timeout%3D5.0%2Cretry_attempts%3D1%2Cretry_delay%3D0.2%2C%26factory%3A-%3ET%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/545d758ae0e8ff107c3fcb62445cda7b38c0fd72/src/db/pool.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="checkout:T-instance-method">
+      <div class="signature">
+        
+        def <strong>checkout</strong> : T
+
+        <a class="method-permalink" href="#checkout%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/545d758ae0e8ff107c3fcb62445cda7b38c0fd72/src/db/pool.cr#L31" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="checkout_some&#40;candidates:Enumerable&#40;WeakRef&#40;T&#41;&#41;&#41;:::Tuple&#40;T,Bool&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>checkout_some</strong>(candidates : Enumerable(WeakRef(T))) : ::Tuple(T, Bool)
+
+        <a class="method-permalink" href="#checkout_some%28candidates%3AEnumerable%28WeakRef%28T%29%29%29%3A%3A%3ATuple%28T%2CBool%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><pre><code>selected, is_candidate <span class="o">=</span> pool.checkout_some(candidates)</code></pre>
+
+<p><code>selected</code> be a resource from the <code>candidates</code> list and <code>is_candidate</code> == <code>true</code>
+or <code>selected</code> will be a new resource adn <code>is_candidate</code> == <code>false</code></p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/545d758ae0e8ff107c3fcb62445cda7b38c0fd72/src/db/pool.cr#L53" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="close:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>close</strong> : Nil
+
+        <a class="method-permalink" href="#close%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>close all resources in the pool</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/545d758ae0e8ff107c3fcb62445cda7b38c0fd72/src/db/pool.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="release&#40;resource:T&#41;:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>release</strong>(resource : T) : Nil
+
+        <a class="method-permalink" href="#release%28resource%3AT%29%3ANil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/545d758ae0e8ff107c3fcb62445cda7b38c0fd72/src/db/pool.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="retry&#40;&amp;block&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>retry</strong>(&block)
+
+        <a class="method-permalink" href="#retry%28%26block%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>:nodoc:
+Will retry the block if a <code><a href="../DB/ConnectionLost.html">ConnectionLost</a></code> exception is thrown.
+It will try to reuse all of the available connection right away,
+but if a new connection is needed there is a <code>retry_delay</code> seconds delay.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/545d758ae0e8ff107c3fcb62445cda7b38c0fd72/src/db/pool.cr#L84" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
