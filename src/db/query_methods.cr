@@ -178,7 +178,7 @@ module DB
     # read as a tuple of the given *types*.
     #
     # ```
-    # contacts = db.query_all "select name, age from contactas", as: {String, Int32}
+    # contacts = db.query_all "select name, age from contacts", as: {String, Int32}
     # ```
     def query_all(query, *args, as types : Tuple)
       query_all(query, *args) do |rs|
@@ -190,7 +190,7 @@ module DB
     # column's value of each row is read as the given *type*.
     #
     # ```
-    # names = db.query_all "select name from contactas", as: String
+    # names = db.query_all "select name from contacts", as: String
     # ```
     def query_all(query, *args, as type : Class)
       query_all(query, *args) do |rs|
