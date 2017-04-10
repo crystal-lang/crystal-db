@@ -1,3 +1,9 @@
+## v0.4.1 (2017-04-10)
+
+* Add spec helper for drivers. [#48](https://github.com/crystal-lang/crystal-db/pull/48)
+* Add `#query_each`. [#18](https://github.com/crystal-lang/crystal-db/issues/18)
+* Fix `#read(T.class)` to deal better with unhandled types.
+
 ## v0.4.0 (2017-03-20)
 
 * Add `DB.connect` to create non pooled connections
