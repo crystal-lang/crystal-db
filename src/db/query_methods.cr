@@ -166,10 +166,8 @@ module DB
     # ```
     def query_all(query, *args, &block : ResultSet -> U) : Array(U) forall U
       ary = [] of U
-      query(query, *args) do |rs|
-        rs.each do
-          ary.push(yield rs)
-        end
+      query_each(query, *args) do |rs|
+        ary.push(yield rs)
       end
       ary
     end
@@ -195,6 +193,22 @@ module DB
     def query_all(query, *args, as type : Class)
       query_all(query, *args) do |rs|
         rs.read(type)
+      end
+    end
+
+    # Executes a *query* and yields the `ResultSet` once per each row.
+    # The `ResultSet` is closed automatically.
+    #
+    # ```
+    # db.query_each "select name from contacts" do |rs|
+    #   puts rs.read(String)
+    # end
+    # ```
+    def query_each(query, *args)
+      query(query, *args) do |rs|
+        rs.each do
+          yield rs
+        end
       end
     end
 

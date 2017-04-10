@@ -208,6 +208,24 @@ describe DummyDriver do
       end
     end
 
+    describe "query each" do
+      it "queries" do
+        with_dummy do |db|
+          i = 0
+          db.query_each "3,4 1,2" do |rs|
+            case i
+            when 0
+              rs.read(Int64, Int64).should eq({3i64, 4i64})
+            when 1
+              rs.read(Int64, Int64).should eq({1i64, 2i64})
+            end
+            i += 1
+          end
+          i.should eq(2)
+        end
+      end
+    end
+
     it "reads multiple values" do
       with_dummy do |db|
         db.query "3,4 1,2" do |rs|
