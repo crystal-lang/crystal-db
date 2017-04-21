@@ -1,7 +1,9 @@
 name: db
-version: 0.4.1
+version: 0.4.2
 
 authors:
   - Brian J. Cardiff <bcardiff@manas.tech>
+
+crystal: 0.22.0
 
 license: MIT

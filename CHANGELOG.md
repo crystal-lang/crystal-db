@@ -1,3 +1,7 @@
+## v0.4.2 (2017-04-21)
+
+* Fix compatibility issues for crystal 0.22.0
+
 ## v0.4.1 (2017-04-10)
 
 * Add spec helper for drivers. [#48](https://github.com/crystal-lang/crystal-db/pull/48)
