@@ -54,7 +54,7 @@ module DB
       # TODO honor candidates while waiting for availables
       # this will allow us to remove `candidates.includes?(resource)`
       candidates.each do |ref|
-        resource = ref.target
+        resource = ref.value
         if resource && is_available?(resource)
           @available.delete resource
           resource.before_checkout
@@ -63,7 +63,7 @@ module DB
       end
 
       resource = checkout
-      {resource, candidates.any? { |ref| ref.target == resource }}
+      {resource, candidates.any? { |ref| ref.value == resource }}
     end
 
     def release(resource : T) : Nil
