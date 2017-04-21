@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/crystal-lang/crystal-db">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>DB::DriverSpecs(DBAnyType) - github.com/crystal-lang/crystal-db</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/crystal-lang/crystal-db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="../DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class="parent current" data-id="github.com/crystal-lang/crystal-db/DB/DriverSpecs" data-name="db::driverspecs(dbanytype)">
+      <a href="../DB/DriverSpecs.html">DriverSpecs</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/DriverSpecs/ColumnDef" data-name="db::driverspecs::columndef">
+      <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Pool/TimeoutHelper" data-name="db::pool::timeouthelper">
+      <a href="../DB/Pool/TimeoutHelper.html">TimeoutHelper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/QueryMethods" data-name="db::querymethods">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> DB::DriverSpecs(DBAnyType)
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../DB/DriverSpecs.html">DB::DriverSpecs(DBAnyType)</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>Helper class to ensure behaviour of custom drivers</p>
+
+<pre><code><span class="k">require</span> <span class="s">&quot;db/spec&quot;</span>
+
+<span class="t">DB</span><span class="t">::</span><span class="t">DriverSpecs</span>(<span class="t">DB</span><span class="t">::</span><span class="t">Any</span>).run <span class="k">do</span>
+  <span class="c"># How to connect to database</span>
+  connection_string <span class="s">&quot;scheme://database_url&quot;</span>
+
+  <span class="c"># Clean up database if needed using before/after callbacks</span>
+  before <span class="k">do</span>
+    <span class="c"># ...</span>
+  <span class="k">end</span>
+
+  after <span class="k">do</span>
+    <span class="c"># ...</span>
+  <span class="k">end</span>
+
+  <span class="c"># Sample values that will be stored, retrieved across many specs</span>
+  sample_value <span class="s">&quot;hello&quot;</span>, <span class="s">&quot;varchar&#40;25&#41;&quot;</span>, <span class="s">&quot;&#39;hello&#39;&quot;</span>
+
+  it <span class="s">&quot;custom spec with a db initialized&quot;</span> <span class="k">do</span> <span class="o">|</span>db<span class="o">|</span>
+    <span class="c"># assert something using *db*</span>
+  <span class="k">end</span>
+
+  <span class="c"># Configure the appropiate syntax for different commands needed to run the specs</span>
+  binding_syntax <span class="k">do</span> <span class="o">|</span>index<span class="o">|</span>
+    <span class="s">&quot;?&quot;</span>
+  <span class="k">end</span>
+
+  create_table_1column_syntax <span class="k">do</span> <span class="o">|</span>table_name, col1<span class="o">|</span>
+    <span class="s">&quot;create table </span><span class="i">#{</span></span>table_name<span class="s"><span class="i">}</span> &#40;</span><span class="i">#{</span></span>col1.name<span class="s"><span class="i">}</span> </span><span class="i">#{</span></span>col1.sql_type<span class="s"><span class="i">}</span> </span><span class="i">#{</span></span>col1.null ? <span class="s">&quot;NULL&quot;</span> : <span class="s">&quot;NOT NULL&quot;</span><span class="s"><span class="i">}</span>&#41;&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>The following methods needs to be called to configure the appropiate syntax
+for different commands and allow all the specs to run: <code><a href="../DB/DriverSpecs.html#binding_syntax%28%26binding_syntax%3AProc%28Int32%2CString%29%29-instance-method">#binding_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#create_table_1column_syntax%28%26create_table_1column_syntax%3AProc%28String%2CColumnDef%2CString%29%29-instance-method">#create_table_1column_syntax</a></code>,
+<code><a href="../DB/DriverSpecs.html#create_table_2columns_syntax%28%26create_table_2columns_syntax%3AProc%28String%2CColumnDef%2CColumnDef%2CString%29%29-instance-method">#create_table_2columns_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#select_1column_syntax%28%26select_1column_syntax%3AProc%28String%2CColumnDef%2CString%29%29-instance-method">#select_1column_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#select_2columns_syntax%28%26select_2columns_syntax%3AProc%28String%2CColumnDef%2CColumnDef%2CString%29%29-instance-method">#select_2columns_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#select_count_syntax%28%26select_count_syntax%3AProc%28String%2CString%29%29-instance-method">#select_count_syntax</a></code>,
+<code><a href="../DB/DriverSpecs.html#select_scalar_syntax%28%26select_scalar_syntax%3AProc%28String%2CString%3F%2CString%29%29-instance-method">#select_scalar_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#insert_1column_syntax%28%26insert_1column_syntax%3AProc%28String%2CColumnDef%2CString%2CString%29%29-instance-method">#insert_1column_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#insert_2columns_syntax%28%26insert_2columns_syntax%3AProc%28String%2CColumnDef%2CString%2CColumnDef%2CString%2CString%29%29-instance-method">#insert_2columns_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#drop_table_if_exists_syntax%28%26drop_table_if_exists_syntax%3AProc%28String%2CString%29%29-instance-method">#drop_table_if_exists_syntax</a></code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L51" target="_blank">spec.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>Class Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#run%28description%3D%26quot%3Basadb%26quot%3B%2C%26block%29-class-method" class="signature"><strong>.run</strong>(description = <span class="s">&quot;as a db&quot;</span>, &block)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#after%28%26after%3A-%3ENil%29-instance-method" class="signature"><strong>#after</strong>(&after :  -> Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before%28%26before%3A-%3ENil%29-instance-method" class="signature"><strong>#before</strong>(&before :  -> Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#binding_syntax%28%26binding_syntax%3AProc%28Int32%2CString%29%29-instance-method" class="signature"><strong>#binding_syntax</strong>(&binding_syntax : Proc(Int32, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#connection_string%28connection_string%3AString%29-instance-method" class="signature"><strong>#connection_string</strong>(connection_string : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#create_table_1column_syntax%28%26create_table_1column_syntax%3AProc%28String%2CColumnDef%2CString%29%29-instance-method" class="signature"><strong>#create_table_1column_syntax</strong>(&create_table_1column_syntax : Proc(String, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#create_table_2columns_syntax%28%26create_table_2columns_syntax%3AProc%28String%2CColumnDef%2CColumnDef%2CString%29%29-instance-method" class="signature"><strong>#create_table_2columns_syntax</strong>(&create_table_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#drop_table_if_exists_syntax%28%26drop_table_if_exists_syntax%3AProc%28String%2CString%29%29-instance-method" class="signature"><strong>#drop_table_if_exists_syntax</strong>(&drop_table_if_exists_syntax : Proc(String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#encode_null%28encode_null%3AString%29-instance-method" class="signature"><strong>#encode_null</strong>(encode_null : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#insert_1column_syntax%28%26insert_1column_syntax%3AProc%28String%2CColumnDef%2CString%2CString%29%29-instance-method" class="signature"><strong>#insert_1column_syntax</strong>(&insert_1column_syntax : Proc(String, ColumnDef, String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#insert_2columns_syntax%28%26insert_2columns_syntax%3AProc%28String%2CColumnDef%2CString%2CColumnDef%2CString%2CString%29%29-instance-method" class="signature"><strong>#insert_2columns_syntax</strong>(&insert_2columns_syntax : Proc(String, ColumnDef, String, ColumnDef, String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#it%28description%3D%26quot%3Bassert%26quot%3B%2Cprepared%3D%3Adefault%2Cfile%3D__FILE__%2Cline%3D__LINE__%2Cend_line%3D__END_LINE__%2C%26block%3ADB%3A%3ADatabase-%3E%29-instance-method" class="signature"><strong>#it</strong>(description = <span class="s">&quot;assert&quot;</span>, prepared = <span class="n">:default</span>, file = __FILE__, line = __LINE__, end_line = __END_LINE__, &block : DB::Database -> )</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#its-instance-method" class="signature"><strong>#its</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#sample_value%28value%2Csql_type%2Cvalue_encoded%2C%2A%2Ctype_safe_value%3Dtrue%29-instance-method" class="signature"><strong>#sample_value</strong>(value, sql_type, value_encoded, *, type_safe_value = <span class="n">true</span>)</a>
+        
+          <div class="summary"><p>Use <em>value</em> as sample value that should be stored in columns of type <em>sql_type</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_1column_syntax%28%26select_1column_syntax%3AProc%28String%2CColumnDef%2CString%29%29-instance-method" class="signature"><strong>#select_1column_syntax</strong>(&select_1column_syntax : Proc(String, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_2columns_syntax%28%26select_2columns_syntax%3AProc%28String%2CColumnDef%2CColumnDef%2CString%29%29-instance-method" class="signature"><strong>#select_2columns_syntax</strong>(&select_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_count_syntax%28%26select_count_syntax%3AProc%28String%2CString%29%29-instance-method" class="signature"><strong>#select_count_syntax</strong>(&select_count_syntax : Proc(String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_scalar_syntax%28%26select_scalar_syntax%3AProc%28String%2CString%3F%2CString%29%29-instance-method" class="signature"><strong>#select_scalar_syntax</strong>(&select_scalar_syntax : Proc(String, String?, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#support_prepared%28support_prepared%3ABool%29-instance-method" class="signature"><strong>#support_prepared</strong>(support_prepared : Bool)</a>
+        
+          <div class="summary"><p>Allow specs that uses prepared statements (default <code>true</code>)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#support_unprepared%28support_unprepared%3ABool%29-instance-method" class="signature"><strong>#support_unprepared</strong>(support_unprepared : Bool)</a>
+        
+          <div class="summary"><p>Allow specs that uses unprepared statements (default <code>true</code>)</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>Class Method Detail</h2>
+  
+    <div class="entry-detail" id="run&#40;description&#61;&amp;quot;asadb&amp;quot;,&amp;block&#41;-class-method">
+      <div class="signature">
+        
+        def self.<strong>run</strong>(description = <span class="s">&quot;as a db&quot;</span>, &block)
+
+        <a class="method-permalink" href="#run%28description%3D%26quot%3Basadb%26quot%3B%2C%26block%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L469" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="after&#40;&amp;after:-&gt;Nil&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>after</strong>(&after :  -> Nil)
+
+        <a class="method-permalink" href="#after%28%26after%3A-%3ENil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before&#40;&amp;before:-&gt;Nil&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>before</strong>(&before :  -> Nil)
+
+        <a class="method-permalink" href="#before%28%26before%3A-%3ENil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L60" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="binding_syntax&#40;&amp;binding_syntax:Proc&#40;Int32,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>binding_syntax</strong>(&binding_syntax : Proc(Int32, String))
+
+        <a class="method-permalink" href="#binding_syntax%28%26binding_syntax%3AProc%28Int32%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L110" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="connection_string&#40;connection_string:String&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>connection_string</strong>(connection_string : String)
+
+        <a class="method-permalink" href="#connection_string%28connection_string%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L109" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="create_table_1column_syntax&#40;&amp;create_table_1column_syntax:Proc&#40;String,ColumnDef,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>create_table_1column_syntax</strong>(&create_table_1column_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#create_table_1column_syntax%28%26create_table_1column_syntax%3AProc%28String%2CColumnDef%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L112" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="create_table_2columns_syntax&#40;&amp;create_table_2columns_syntax:Proc&#40;String,ColumnDef,ColumnDef,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>create_table_2columns_syntax</strong>(&create_table_2columns_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#create_table_2columns_syntax%28%26create_table_2columns_syntax%3AProc%28String%2CColumnDef%2CColumnDef%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L113" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="drop_table_if_exists_syntax&#40;&amp;drop_table_if_exists_syntax:Proc&#40;String,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>drop_table_if_exists_syntax</strong>(&drop_table_if_exists_syntax : Proc(String, String))
+
+        <a class="method-permalink" href="#drop_table_if_exists_syntax%28%26drop_table_if_exists_syntax%3AProc%28String%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="encode_null&#40;encode_null:String&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>encode_null</strong>(encode_null : String)
+
+        <a class="method-permalink" href="#encode_null%28encode_null%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L66" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="insert_1column_syntax&#40;&amp;insert_1column_syntax:Proc&#40;String,ColumnDef,String,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>insert_1column_syntax</strong>(&insert_1column_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String, String))
+
+        <a class="method-permalink" href="#insert_1column_syntax%28%26insert_1column_syntax%3AProc%28String%2CColumnDef%2CString%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L114" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="insert_2columns_syntax&#40;&amp;insert_2columns_syntax:Proc&#40;String,ColumnDef,String,ColumnDef,String,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>insert_2columns_syntax</strong>(&insert_2columns_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String, String))
+
+        <a class="method-permalink" href="#insert_2columns_syntax%28%26insert_2columns_syntax%3AProc%28String%2CColumnDef%2CString%2CColumnDef%2CString%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L115" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="it&#40;description&#61;&amp;quot;assert&amp;quot;,prepared&#61;:default,file&#61;__FILE__,line&#61;__LINE__,end_line&#61;__END_LINE__,&amp;block:DB::Database-&gt;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>it</strong>(description = <span class="s">&quot;assert&quot;</span>, prepared = <span class="n">:default</span>, file = __FILE__, line = __LINE__, end_line = __END_LINE__, &block : <a href="../DB/Database.html">DB::Database</a> -> )
+
+        <a class="method-permalink" href="#it%28description%3D%26quot%3Bassert%26quot%3B%2Cprepared%3D%3Adefault%2Cfile%3D__FILE__%2Cline%3D__LINE__%2Cend_line%3D__END_LINE__%2C%26block%3ADB%3A%3ADatabase-%3E%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L125" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="its-instance-method">
+      <div class="signature">
+        
+        def <strong>its</strong>
+
+        <a class="method-permalink" href="#its-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L123" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="sample_value&#40;value,sql_type,value_encoded,*,type_safe_value&#61;true&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>sample_value</strong>(value, sql_type, value_encoded, *, type_safe_value = <span class="n">true</span>)
+
+        <a class="method-permalink" href="#sample_value%28value%2Csql_type%2Cvalue_encoded%2C%2A%2Ctype_safe_value%3Dtrue%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Use <em>value</em> as sample value that should be stored in columns of type <em>sql_type</em>.
+<em>value_encoded</em> is driver specific expression that should generate that value in the database.
+<em>type_safe_value</em> indicates whether <em>value_encoded</em> is expected to generate the <em>value</em> even without
+been stored in a table (default <code>true</code>).</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L139" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_1column_syntax&#40;&amp;select_1column_syntax:Proc&#40;String,ColumnDef,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>select_1column_syntax</strong>(&select_1column_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#select_1column_syntax%28%26select_1column_syntax%3AProc%28String%2CColumnDef%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L116" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_2columns_syntax&#40;&amp;select_2columns_syntax:Proc&#40;String,ColumnDef,ColumnDef,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>select_2columns_syntax</strong>(&select_2columns_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#select_2columns_syntax%28%26select_2columns_syntax%3AProc%28String%2CColumnDef%2CColumnDef%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L117" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_count_syntax&#40;&amp;select_count_syntax:Proc&#40;String,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>select_count_syntax</strong>(&select_count_syntax : Proc(String, String))
+
+        <a class="method-permalink" href="#select_count_syntax%28%26select_count_syntax%3AProc%28String%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L118" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_scalar_syntax&#40;&amp;select_scalar_syntax:Proc&#40;String,String?,String&#41;&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>select_scalar_syntax</strong>(&select_scalar_syntax : Proc(String, String?, String))
+
+        <a class="method-permalink" href="#select_scalar_syntax%28%26select_scalar_syntax%3AProc%28String%2CString%3F%2CString%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="support_prepared&#40;support_prepared:Bool&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>support_prepared</strong>(support_prepared : Bool)
+
+        <a class="method-permalink" href="#support_prepared%28support_prepared%3ABool%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Allow specs that uses prepared statements (default <code>true</code>)</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L70" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="support_unprepared&#40;support_unprepared:Bool&#41;-instance-method">
+      <div class="signature">
+        
+        def <strong>support_unprepared</strong>(support_unprepared : Bool)
+
+        <a class="method-permalink" href="#support_unprepared%28support_unprepared%3ABool%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Allow specs that uses unprepared statements (default <code>true</code>)</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/28c6f3b715f0c82d2a37106fd5a55882a238cc1f/src/spec.cr#L79" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
