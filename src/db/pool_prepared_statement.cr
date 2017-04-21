@@ -40,7 +40,7 @@ module DB
     private def clean_connections
       # remove disposed or closed connections
       @connections.each do |ref|
-        conn = ref.target
+        conn = ref.value
         if !conn || conn.closed?
           @connections.delete ref
         end
