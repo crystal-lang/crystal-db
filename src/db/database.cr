@@ -81,6 +81,7 @@ module DB
 
     # :nodoc:
     def fetch_or_build_prepared_statement(query)
+      Logger.log(query)
       @statements_cache.fetch(query) { build_prepared_statement(query) }
     end
 
@@ -91,6 +92,7 @@ module DB
 
     # :nodoc:
     def build_unprepared_statement(query)
+      Logger.log(query)
       PoolUnpreparedStatement.new(self, query)
     end
 
