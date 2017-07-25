@@ -36,13 +36,15 @@ describe DB::Logger do
     end
   end
 
-  it "should log to std out" do
+  it "should log to std out / provided io" do
     with_dummy do |db|
-      test = ""
-      db.logger = nil
+      myio = IO::Memory.new
+      db.logger = ::Logger.new(myio)
       db.logging = true
       db.query("a query for logging ?,?", 1, "Hello")
-      test.should eq("")
+      myio.rewind
+      log = myio.gets_to_end
+      log.should contain(%{INFO -- : QUERY "a query for logging ?,?" with params: 1, Hello\n})
     end
   end
 
@@ -55,7 +57,7 @@ describe DB::Logger do
       }
       db.logging = true
       db.query("a query for logging ?,?", [1, "Hello"])
-      test.should eq(%{QUERY "a query for logging ?,?" WITH PARAMS: [1, "Hello"]})
+      test.should eq(%{QUERY "a query for logging ?,?" with params: [1, "Hello"]})
     end
   end
 
@@ -68,7 +70,7 @@ describe DB::Logger do
       }
       db.logging = true
       db.query("a query for logging ?,?", 1, "Hi")
-      test.should eq(%{QUERY "a query for logging ?,?" WITH PARAMS: 1, Hi})
+      test.should eq(%{QUERY "a query for logging ?,?" with params: 1, Hi})
     end
   end
 end

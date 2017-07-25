@@ -3,11 +3,10 @@ require "logger"
 module DB
   # :nodoc:
   class Logger
-    @logger : Proc(String, Void)?
+    @logger : Proc(String, Void) | ::Logger = ::Logger.new(STDOUT)
     @enabled = false
-    @default_logger = ::Logger.new(STDOUT)
 
-    def config(@logger)
+    def config(@logger = ::Logger.new(STDOUT))
     end
 
     def logging=(@enabled : Bool)
@@ -15,16 +14,9 @@ module DB
 
     def log(query : String, *args)
       return if !@enabled
-      if args && args.size > 0
-        log = %{QUERY "#{query}" WITH PARAMS: #{args.join(", ")}}
-      else
-        log = %{QUERY "#{query}"}
-      end
-      if (logger = @logger)
-        logger.call(log)
-      else
-        @default_logger.info(log)
-      end
+      logger = @logger
+      log = args && args.size > 0 ? %{QUERY "#{query}" with params: #{args.join(", ")}} : %{QUERY "#{query}"}
+      logger.is_a?(::Logger) ? logger.info(log) : logger.call(log)
     end
   end
 end
