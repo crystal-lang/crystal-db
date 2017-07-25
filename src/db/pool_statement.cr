@@ -7,6 +7,7 @@ module DB
     include StatementMethods
 
     def initialize(@db : Database, @query : String)
+      Logger.log(@query)
     end
 
     # See `QueryMethods#exec`
