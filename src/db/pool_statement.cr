@@ -11,36 +11,43 @@ module DB
 
     # See `QueryMethods#exec`
     def exec : ExecResult
+      @db.log(@query)
       statement_with_retry &.exec
     end
 
     # See `QueryMethods#exec`
     def exec(*args) : ExecResult
+      @db.log(@query, *args)
       statement_with_retry &.exec(*args)
     end
 
     # See `QueryMethods#exec`
     def exec(args : Array) : ExecResult
+      @db.log(@query, args)
       statement_with_retry &.exec(args)
     end
 
     # See `QueryMethods#query`
     def query : ResultSet
+      @db.log(@query)
       statement_with_retry &.query
     end
 
     # See `QueryMethods#query`
     def query(*args) : ResultSet
+      @db.log(@query, *args)
       statement_with_retry &.query(*args)
     end
 
     # See `QueryMethods#query`
     def query(args : Array) : ResultSet
+      @db.log(@query, args)
       statement_with_retry &.query(args)
     end
 
     # See `QueryMethods#scalar`
     def scalar(*args)
+      @db.log(@query, *args)
       statement_with_retry &.scalar(*args)
     end
 

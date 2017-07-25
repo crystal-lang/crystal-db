@@ -38,6 +38,7 @@ module DB
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
     @statements_cache = StringKeyCache(PoolPreparedStatement).new
+    @logger = DB::Logger.new
 
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
@@ -81,7 +82,6 @@ module DB
 
     # :nodoc:
     def fetch_or_build_prepared_statement(query)
-      Logger.log(query)
       @statements_cache.fetch(query) { build_prepared_statement(query) }
     end
 
@@ -92,7 +92,6 @@ module DB
 
     # :nodoc:
     def build_unprepared_statement(query)
-      Logger.log(query)
       PoolUnpreparedStatement.new(self, query)
     end
 
@@ -137,6 +136,34 @@ module DB
       @pool.retry do
         yield
       end
+    end
+
+    # Set logging callback
+    #
+    # This is an optional parameter.
+    # If not set the logger will use the Crystal Standar Logger, log level info
+    #
+    # ```
+    # def mylogger(sql : String)
+    #   puts "#{Time.new} #{sql}"
+    # end
+    # db.logger = ->mylogger(String)
+    #
+    def logging=(enabled)
+      @logger.logging = enabled
+    end
+
+    # Enable / Disable Logging
+    #
+    # ``
+    # db.logging = true
+    # ```
+    def logger=(logger)
+      @logger.config(logger)
+    end
+
+    def log(query, *args)
+      @logger.log(query, *args)
     end
   end
 end
