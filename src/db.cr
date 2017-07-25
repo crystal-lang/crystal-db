@@ -164,7 +164,7 @@ module DB
       raise ArgumentError.new(%(invalid "#{value}" value for option "#{name}"))
     end
   end
-  
+
   # Set logging callback
   #
   # ```
@@ -172,8 +172,8 @@ module DB
   #   puts "#{Time.new} #{sql}"
   # end
   # DB.logger = ->mylogger(String)
-  # 
-  def self.logging=(enabled) 
+  #
+  def self.logging=(enabled)
     DB::Logger.logging = enabled
   end
 
@@ -182,7 +182,7 @@ module DB
   # ``
   # DB.logging = true
   # ```
-  def self.logger=(logger) 
+  def self.logger=(logger)
     DB::Logger.config(logger)
   end
 end
