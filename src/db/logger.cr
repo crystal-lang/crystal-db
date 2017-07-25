@@ -3,6 +3,7 @@ module DB
   class Logger
     @@logger : Proc(String, Void)?
     @@enabled = false
+
     def self.config(@@logger)
     end
 

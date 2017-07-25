@@ -18,67 +18,64 @@ describe DB::Logger do
   it "should work without logger setup" do
     with_dummy do |db|
       db.query("a query for logging")
-     end
+    end
   end
 
   it "should callback to logger" do
-     test = ""
-     DB::Logger.config ->(sql : String){
-       test=sql
-     } 
-     DB::Logger.logging = true
-     with_dummy do |db|
+    test = ""
+    DB::Logger.config ->(sql : String) {
+      test = sql
+    }
+    DB::Logger.logging = true
+    with_dummy do |db|
       db.query("a query for logging")
-     end
-     test.should eq("a query for logging")
+    end
+    test.should eq("a query for logging")
   end
 
   it "should disabled logger if logging is false" do
-     test = ""
-     DB::Logger.logging = false
-     DB::Logger.config logger: ->(sql : String){ test=sql } 
-     with_dummy do |db|
+    test = ""
+    DB::Logger.logging = false
+    DB::Logger.config logger: ->(sql : String) { test = sql }
+    with_dummy do |db|
       db.query("a query for logging")
-     end
-     test.should eq("")
+    end
+    test.should eq("")
   end
- 
   it "should disabled logger if set to nil" do
-     test = ""
-     DB.logging = true
-     DB::Logger.config logger: ->(sql : String){
-       test=sql
-     } 
-     with_dummy do |db|
+    test = ""
+    DB.logging = true
+    DB::Logger.config logger: ->(sql : String) {
+      test = sql
+    }
+    with_dummy do |db|
       db.query("a query for logging")
-     end
-     test.should eq("a query for logging")
+    end
+    test.should eq("a query for logging")
 
-     test = ""
-     DB::Logger.config(logger: nil)
-     with_dummy do |db|
+    test = ""
+    DB::Logger.config(logger: nil)
+    with_dummy do |db|
       db.query("a query for logging")
-     end
-     test.should eq("")
+    end
+    test.should eq("")
   end
 
-  it "should work with shorter syntax" do 
-     test = ""
-     DB.logger = ->(sql : String){ 
-       test=sql 
-     } 
-     DB.logging = true
-     with_dummy do |db|
+  it "should work with shorter syntax" do
+    test = ""
+    DB.logger = ->(sql : String) {
+      test = sql
+    }
+    DB.logging = true
+    with_dummy do |db|
       db.query("a simpler logging")
-     end
-     test.should eq("a simpler logging")
-     DB.logging = false
-    
-     test = ""
-     with_dummy do |db|
+    end
+    test.should eq("a simpler logging")
+    DB.logging = false
+    test = ""
+    with_dummy do |db|
       db.query("a simpler logging")
-     end
-     test.should eq("")
+    end
+    test.should eq("")
   end
-    
 end
