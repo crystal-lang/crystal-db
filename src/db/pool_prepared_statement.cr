@@ -34,7 +34,12 @@ module DB
       clean_connections
       conn, existing = @db.checkout_some(@connections)
       @connections << WeakRef.new(conn) unless existing
-      conn.prepared.build(@query)
+      begin
+        conn.prepared.build(@query)
+      rescue ex
+        conn.release
+        raise ex
+      end
     end
 
     private def clean_connections
