@@ -29,7 +29,7 @@ module DB
     end
 
     # builds a statement over a real connection
-    # the conneciton is registered in `@connections`
+    # the connection is registered in `@connections`
     private def build_statement
       clean_connections
       conn, existing = @db.checkout_some(@connections)
