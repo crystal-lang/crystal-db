@@ -99,6 +99,7 @@ class DummyDriver < DB::Driver
     def initialize(connection, @query : String, @prepared : Bool)
       @params = Hash(Int32 | String, DB::Any).new
       super(connection)
+      raise query if query == "syntax error"
     end
 
     protected def perform_query(args : Enumerable)

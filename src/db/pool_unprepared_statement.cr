@@ -15,7 +15,13 @@ module DB
 
     # builds a statement over a real connection
     private def build_statement
-      @db.pool.checkout.unprepared.build(@query)
+      conn = @db.pool.checkout
+      begin
+        conn.unprepared.build(@query)
+      rescue ex
+        conn.release
+        raise ex
+      end
     end
   end
 end
