@@ -2,7 +2,7 @@ module DB
   class Error < Exception
   end
 
-  class MappingException < Exception
+  class MappingException < Error
   end
 
   class PoolTimeout < Error
@@ -27,6 +27,6 @@ module DB
   class ConnectionRefused < Error
   end
 
-  class Rollback < Exception
+  class Rollback < Error
   end
 end
