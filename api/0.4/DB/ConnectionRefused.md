@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.4.2/DB/ConnectionRefused.html
+  - /api/0.4.3/DB/ConnectionRefused.html
 ---

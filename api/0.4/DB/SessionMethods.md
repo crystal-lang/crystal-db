@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.4.2/DB/SessionMethods.html
+  - /api/0.4.3/DB/SessionMethods.html
 ---
