@@ -98,7 +98,7 @@ module DB
           e.connection.close
         rescue e : ConnectionRefused
           # a ConnectionRefused means a new connection
-          # was intented to be created
+          # was intended to be created
           # nothing to due but to retry soon
         end
       end
