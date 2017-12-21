@@ -138,6 +138,12 @@ describe DummyDriver do
         end
       end
 
+      it "with as named tuple" do
+        with_dummy do |db|
+          db.query_one("3,4", as: {a: Int64, b: Int64}).should eq({a: 3i64, b: 4i64})
+        end
+      end
+
       it "with as, just one" do
         with_dummy do |db|
           db.query_one("3", as: Int64).should eq(3i64)
@@ -197,6 +203,13 @@ describe DummyDriver do
         with_dummy do |db|
           ary = db.query_all "3,4 1,2", as: {Int64, Int64}
           ary.should eq([{3, 4}, {1, 2}])
+        end
+      end
+
+      it "queries with as named tuple" do
+        with_dummy do |db|
+          ary = db.query_all "3,4 1,2", as: {a: Int64, b: Int64}
+          ary.should eq([{a: 3, b: 4}, {a: 1, b: 2}])
         end
       end
 
