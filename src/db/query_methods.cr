@@ -89,12 +89,13 @@ module DB
     end
 
     # Executes a *query* that expects a single row and returns it
-    # as a named tuple of the given *types*.
+    # as a named tuple of the given *types* (the keys of the named tuple
+    # are not necessarily the column names).
     #
     # Raises `DB::Error` if there were no rows, or if there were more than one row.
     #
     # ```
-    # db.query_one "select name, age from contacts where id = ?", 1, as: {name, String, age : Int32}
+    # db.query_one "select name, age from contacts where id = ?", 1, as: {name: String, age: Int32}
     # ```
     def query_one(query, *args, as types : NamedTuple)
       query_one(query, *args) do |rs|
@@ -216,7 +217,8 @@ module DB
     end
 
     # Executes a *query* and returns an array where each row is
-    # read as a named tuple of the given *types*.
+    # read as a named tuple of the given *types* (the keys of the named tuple
+    # are not necessarily the column names).
     #
     # ```
     # contacts = db.query_all "select name, age from contacts", as: {name: String, age: Int32}
