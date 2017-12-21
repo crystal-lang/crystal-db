@@ -229,8 +229,8 @@ module DB
       end
     end
 
-    # Executes a *query* and returns an array where there first
-    # column's value of each row is read as the given *type*.
+    # Executes a *query* and returns an array where the
+    # value of each row is read as the given *type*.
     #
     # ```
     # names = db.query_all "select name from contacts", as: String

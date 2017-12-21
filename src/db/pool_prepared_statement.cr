@@ -29,12 +29,18 @@ module DB
     end
 
     # builds a statement over a real connection
-    # the conneciton is registered in `@connections`
+    # the connection is registered in `@connections`
     private def build_statement
       clean_connections
       conn, existing = @db.checkout_some(@connections)
+      begin
+        stmt = conn.prepared.build(@query)
+      rescue ex
+        conn.release
+        raise ex
+      end
       @connections << WeakRef.new(conn) unless existing
-      conn.prepared.build(@query)
+      stmt
     end
 
     private def clean_connections

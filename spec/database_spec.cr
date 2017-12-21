@@ -149,6 +149,28 @@ describe DB::Database do
     end
   end
 
+  it "should return connection to the pool if prepared statement is unable to be built" do
+    connection = uninitialized DB::Connection
+    with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
+      connection = DummyDriver::DummyConnection.connections.first
+      expect_raises do
+        db.prepared.exec("syntax error")
+      end
+      db.pool.is_available?(connection).should be_true
+    end
+  end
+
+  it "should return connection to the pool if unprepared statement is unable to be built" do
+    connection = uninitialized DB::Connection
+    with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
+      connection = DummyDriver::DummyConnection.connections.first
+      expect_raises do
+        db.unprepared.exec("syntax error")
+      end
+      db.pool.is_available?(connection).should be_true
+    end
+  end
+
   describe "prepared_statements connection option" do
     it "defaults to true" do
       with_dummy "dummy://localhost:1027" do |db|

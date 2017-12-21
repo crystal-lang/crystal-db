@@ -1,3 +1,8 @@
+## v0.4.3 (2017-11-07)
+
+* Fix connections were not released when building invalid statements. (see [#65](https://github.com/crystal-lang/crystal-db/pull/65), thanks @crisward)
+* Fix some exceptions were not deriving from `DB::Error`. (see [#70](https://github.com/crystal-lang/crystal-db/pull/70), thanks @exts)
+
 ## v0.4.2 (2017-04-21)
 
 * Fix compatibility issues for crystal 0.22.0
