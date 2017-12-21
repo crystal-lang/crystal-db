@@ -173,6 +173,24 @@ module DB
       end
     end
 
+    # Executes a *query* that expects a single row and returns it
+    # as a named tuple of the given *types* (the keys of the named tuple
+    # are not necessarily the column names).
+    #
+    # Returns `nil` if there were no rows.
+    #
+    # Raises `DB::Error` if there were more than one row.
+    #
+    # ```
+    # result = db.query_one? "select name, age from contacts where id = ?", 1, as: {age: String, name: Int32}
+    # typeof(result) # => NamedTuple(age: String, name: Int32) | Nil
+    # ```
+    def query_one?(query, *args, as types : NamedTuple)
+      query_one(query, *args) do |rs|
+        rs.read(**types)
+      end
+    end
+
     # Executes a *query* that expects a single row
     # and returns the first column's value as the given *type*.
     #
