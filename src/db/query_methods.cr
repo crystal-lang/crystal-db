@@ -155,6 +155,7 @@ module DB
         rs.read(*types)
       end
     end
+
     # Executes a *query* that expects a single row and returns it
     # as a named tuple of the given *types* (the keys of the named tuple
     # are not necessarily the column names).
