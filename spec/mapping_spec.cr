@@ -87,15 +87,21 @@ describe "DB.mapping" do
   end
 
   it "should fail to initialize a simple mapping if types do not match" do
-    expect_raises { from_dummy("b,a", SimpleMapping) }
+    expect_raises ArgumentError do
+      from_dummy("b,a", SimpleMapping)
+    end
   end
 
   it "should fail to initialize a simple mapping if there is a missing column" do
-    expect_raises { from_dummy("1", SimpleMapping) }
+    expect_raises DB::MappingException do
+      from_dummy("1", SimpleMapping)
+    end
   end
 
   it "should fail to initialize a simple mapping if there is an unexpected column" do
-    expect_raises { from_dummy("1,a,b", SimpleMapping) }
+    expect_raises DB::MappingException do
+      from_dummy("1,a,b", SimpleMapping)
+    end
   end
 
   it "should initialize a non-strict mapping if there is an unexpected column" do

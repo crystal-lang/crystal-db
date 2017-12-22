@@ -99,7 +99,7 @@ class DummyDriver < DB::Driver
     def initialize(connection, @query : String, @prepared : Bool)
       @params = Hash(Int32 | String, DB::Any).new
       super(connection)
-      raise query if query == "syntax error"
+      raise DB::Error.new(query) if query == "syntax error"
     end
 
     protected def perform_query(args : Enumerable)
@@ -111,7 +111,7 @@ class DummyDriver < DB::Driver
     protected def perform_exec(args : Enumerable)
       @connection.as(DummyConnection).check
       set_params args
-      raise "forced exception due to query" if @query == "raise"
+      raise DB::Error.new("forced exception due to query") if @query == "raise"
       DB::ExecResult.new 0i64, 0_i64
     end
 

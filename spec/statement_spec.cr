@@ -147,7 +147,7 @@ describe DB::Statement do
 
   it "connection should be released if error occurs during exec" do
     with_dummy do |db|
-      expect_raises do
+      expect_raises DB::Error do
         db.exec "raise"
       end
       DummyDriver::DummyConnection.connections.size.should eq(1)

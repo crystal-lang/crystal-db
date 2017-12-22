@@ -278,7 +278,7 @@ describe DummyDriver do
 
     it "should raise executing raise query" do
       with_dummy do |db|
-        expect_raises do
+        expect_raises DB::Error do
           db.exec "raise"
         end
       end

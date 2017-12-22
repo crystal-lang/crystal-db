@@ -153,7 +153,7 @@ describe DB::Database do
     connection = uninitialized DB::Connection
     with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
       connection = DummyDriver::DummyConnection.connections.first
-      expect_raises do
+      expect_raises DB::Error do
         db.prepared.exec("syntax error")
       end
       db.pool.is_available?(connection).should be_true
@@ -164,7 +164,7 @@ describe DB::Database do
     connection = uninitialized DB::Connection
     with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
       connection = DummyDriver::DummyConnection.connections.first
-      expect_raises do
+      expect_raises DB::Error do
         db.unprepared.exec("syntax error")
       end
       db.pool.is_available?(connection).should be_true
