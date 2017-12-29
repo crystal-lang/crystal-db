@@ -1,3 +1,7 @@
+## v0.5.0 (2017-12-29)
+
+* Fix compatibility issues for crystal 0.24.0. No changes in the api.
+
 ## v0.4.4 (2017-12-29)
 
 * Allow query results to be read as named tuples directly (see [#56](https://github.com/crystal-lang/crystal-db/pull/56), thanks @Nephos)
