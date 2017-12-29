@@ -88,6 +88,21 @@ module DB
       end
     end
 
+    # Executes a *query* that expects a single row and returns it
+    # as a named tuple of the given *types* (the keys of the named tuple
+    # are not necessarily the column names).
+    #
+    # Raises `DB::Error` if there were no rows, or if there were more than one row.
+    #
+    # ```
+    # db.query_one "select name, age from contacts where id = ?", 1, as: {name: String, age: Int32}
+    # ```
+    def query_one(query, *args, as types : NamedTuple)
+      query_one(query, *args) do |rs|
+        rs.read(**types)
+      end
+    end
+
     # Executes a *query* that expects a single row
     # and returns the first column's value as the given *type*.
     #
@@ -141,6 +156,24 @@ module DB
       end
     end
 
+    # Executes a *query* that expects a single row and returns it
+    # as a named tuple of the given *types* (the keys of the named tuple
+    # are not necessarily the column names).
+    #
+    # Returns `nil` if there were no rows.
+    #
+    # Raises `DB::Error` if there were more than one row.
+    #
+    # ```
+    # result = db.query_one? "select name, age from contacts where id = ?", 1, as: {age: String, name: Int32}
+    # typeof(result) # => NamedTuple(age: String, name: Int32) | Nil
+    # ```
+    def query_one?(query, *args, as types : NamedTuple)
+      query_one(query, *args) do |rs|
+        rs.read(**types)
+      end
+    end
+
     # Executes a *query* that expects a single row
     # and returns the first column's value as the given *type*.
     #
@@ -181,6 +214,19 @@ module DB
     def query_all(query, *args, as types : Tuple)
       query_all(query, *args) do |rs|
         rs.read(*types)
+      end
+    end
+
+    # Executes a *query* and returns an array where each row is
+    # read as a named tuple of the given *types* (the keys of the named tuple
+    # are not necessarily the column names).
+    #
+    # ```
+    # contacts = db.query_all "select name, age from contacts", as: {name: String, age: Int32}
+    # ```
+    def query_all(query, *args, as types : NamedTuple)
+      query_all(query, *args) do |rs|
+        rs.read(**types)
       end
     end
 

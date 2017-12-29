@@ -89,11 +89,26 @@ module DB
       internal_read(*types)
     end
 
+    # Reads the next columns and returns a named tuple of the values.
+    def read(**types : Class)
+      internal_read(**types)
+    end
+
     private def internal_read(*types : *T) forall T
       {% begin %}
         Tuple.new(
           {% for type in T %}
             read({{type.instance}}),
+          {% end %}
+        )
+      {% end %}
+    end
+
+    private def internal_read(**types : **T) forall T
+      {% begin %}
+        NamedTuple.new(
+          {% for name, type in T %}
+            {{ name }}: read({{type.instance}}),
           {% end %}
         )
       {% end %}
