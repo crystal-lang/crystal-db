@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta id="repository-name" content="github.com/crystal-lang/crystal-db">
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="../js/doc.js"></script>
+  <title>DB::SessionMethods(Session, Stmt) - github.com/crystal-lang/crystal-db</title>
+</head>
+<body>
+
+<div id="types-list">
+  <div id="search-box">
+    <input type="search" id="search-input" placeholder="Search...">
+  </div>
+
+  <ul>
+    <li><a href="../index.html">README</a></li>
+  </ul>
+
+  <ul>
+  
+  <li class="parent open current" data-id="github.com/crystal-lang/crystal-db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="../DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/DriverSpecs" data-name="db::driverspecs(dbanytype)">
+      <a href="../DB/DriverSpecs.html">DriverSpecs</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/DriverSpecs/ColumnDef" data-name="db::driverspecs::columndef">
+      <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Pool/TimeoutHelper" data-name="db::pool::timeouthelper">
+      <a href="../DB/Pool/TimeoutHelper.html">TimeoutHelper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/QueryMethods" data-name="db::querymethods">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+</div>
+
+<div id="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> DB::SessionMethods(Session, Stmt)
+
+</h1>
+
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>Methods that are shared accross session like objects:</p>
+
+<ul><li>Database</li><li>Connection</li></ul></ul>
+
+<p>Classes that includes this module are able to execute
+queries and statements in both prepared and unprepared fashion.</p>
+
+<p>This module serves for dsl reuse over session like objects.</p>
+
+
+
+
+
+  <h2>Included Modules</h2>
+  <ul class="other-types-list">
+  
+    <li class="other-type"><a href="../DB/QueryMethods.html">DB::QueryMethods</a></li>
+  
+  </ul>
+
+
+
+
+
+
+
+  <h2>Direct including types</h2>
+  <ul class="other-types-list">
+  
+    <li class="other-type"><a href="../DB/Connection.html">DB::Connection</a></li>
+  
+    <li class="other-type"><a href="../DB/Database.html">DB::Database</a></li>
+  
+  </ul>
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L10" target="_blank">db/session_methods.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#build%28query%29%3AStmt-instance-method" class="signature"><strong>#build</strong>(query) : Stmt</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#build_unprepared_statement%28query%29%3AStmt-instance-method" class="signature"><strong>#build_unprepared_statement</strong>(query) : Stmt</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#fetch_or_build_prepared_statement%28query%29%3AStmt-instance-method" class="signature"><strong>#fetch_or_build_prepared_statement</strong>(query) : Stmt</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#prepared%28query%29-instance-method" class="signature"><strong>#prepared</strong>(query)</a>
+        
+          <div class="summary"><p>Returns a prepared <code><a href="../DB/Statement.html">Statement</a></code> that has not been executed yet.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#prepared-instance-method" class="signature"><strong>#prepared</strong></a>
+        
+          <div class="summary"><p>dsl helper to build prepared statements returns a value that includes <code><a href="../DB/QueryMethods.html">QueryMethods</a></code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#prepared_statements%3F%3ABool-instance-method" class="signature"><strong>#prepared_statements?</strong> : Bool</a>
+        
+          <div class="summary"><p>Returns whether by default the statements should be prepared or not.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unprepared%28query%29-instance-method" class="signature"><strong>#unprepared</strong>(query)</a>
+        
+          <div class="summary"><p>Returns an unprepared <code><a href="../DB/Statement.html">Statement</a></code> that has not been executed yet.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unprepared-instance-method" class="signature"><strong>#unprepared</strong></a>
+        
+          <div class="summary"><p>dsl helper to build unprepared statements returns a value that includes <code><a href="../DB/QueryMethods.html">QueryMethods</a></code></p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from module <code><a href="../DB/QueryMethods.html">DB::QueryMethods</a></code></h3>
+  
+  
+    <a href="../DB/QueryMethods.html#exec%28query%2C%2Aargs%29-instance-method" class="tooltip">
+      <span>exec(query, *args)</span>
+    exec</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query%28query%2C%2Aargs%29-instance-method" class="tooltip">
+      <span>query(query, *args)<br/>query(query, *args, &block)</span>
+    query</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_all%28query%2C%2Aargs%2Castype%3AClass%29-instance-method" class="tooltip">
+      <span>query_all(query, *args, as type : Class)<br/>query_all(query, *args, as types : NamedTuple)<br/>query_all(query, *args, &block : ResultSet -> U) : Array(U) forall U<br/>query_all(query, *args, as types : Tuple)</span>
+    query_all</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_each%28query%2C%2Aargs%2C%26block%29-instance-method" class="tooltip">
+      <span>query_each(query, *args, &block)</span>
+    query_each</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_one%28query%2C%2Aargs%2C%26block%3AResultSet-%3EU%29%3AUforallU-instance-method" class="tooltip">
+      <span>query_one(query, *args, &block : ResultSet -> U) : U forall U<br/>query_one(query, *args, as types : Tuple)<br/>query_one(query, *args, as types : NamedTuple)<br/>query_one(query, *args, as type : Class)</span>
+    query_one</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_one%3F%28query%2C%2Aargs%2Castype%3AClass%29-instance-method" class="tooltip">
+      <span>query_one?(query, *args, as type : Class)<br/>query_one?(query, *args, as types : NamedTuple)<br/>query_one?(query, *args, as types : Tuple)<br/>query_one?(query, *args, &block : ResultSet -> U) : U? forall U</span>
+    query_one?</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#scalar%28query%2C%2Aargs%29-instance-method" class="tooltip">
+      <span>scalar(query, *args)</span>
+    scalar</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="build(query):Stmt-instance-method">
+      <div class="signature">
+        
+        def <strong>build</strong>(query) : Stmt
+
+        <a class="method-permalink" href="#build%28query%29%3AStmt-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L21" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="build_unprepared_statement(query):Stmt-instance-method">
+      <div class="signature">
+        abstract 
+        def <strong>build_unprepared_statement</strong>(query) : Stmt
+
+        <a class="method-permalink" href="#build_unprepared_statement%28query%29%3AStmt-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L19" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="fetch_or_build_prepared_statement(query):Stmt-instance-method">
+      <div class="signature">
+        abstract 
+        def <strong>fetch_or_build_prepared_statement</strong>(query) : Stmt
+
+        <a class="method-permalink" href="#fetch_or_build_prepared_statement%28query%29%3AStmt-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="prepared(query)-instance-method">
+      <div class="signature">
+        
+        def <strong>prepared</strong>(query)
+
+        <a class="method-permalink" href="#prepared%28query%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns a prepared <code><a href="../DB/Statement.html">Statement</a></code> that has not been executed yet.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L36" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="prepared-instance-method">
+      <div class="signature">
+        
+        def <strong>prepared</strong>
+
+        <a class="method-permalink" href="#prepared-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>dsl helper to build prepared statements
+returns a value that includes <code><a href="../DB/QueryMethods.html">QueryMethods</a></code></p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L31" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="prepared_statements?:Bool-instance-method">
+      <div class="signature">
+        abstract 
+        def <strong>prepared_statements?</strong> : Bool
+
+        <a class="method-permalink" href="#prepared_statements%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns whether by default the statements should
+be prepared or not.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unprepared(query)-instance-method">
+      <div class="signature">
+        
+        def <strong>unprepared</strong>(query)
+
+        <a class="method-permalink" href="#unprepared%28query%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns an unprepared <code><a href="../DB/Statement.html">Statement</a></code> that has not been executed yet.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L47" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unprepared-instance-method">
+      <div class="signature">
+        
+        def <strong>unprepared</strong>
+
+        <a class="method-permalink" href="#unprepared-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>dsl helper to build unprepared statements
+returns a value that includes <code><a href="../DB/QueryMethods.html">QueryMethods</a></code></p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/790b587e3fdf7678743c7bc0e96d5878f82baebe/src/db/session_methods.cr#L42" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
