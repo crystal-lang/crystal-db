@@ -1,3 +1,8 @@
+## v0.4.4 (2017-12-29)
+
+* Allow query results to be read as named tuples directly (see [#56](https://github.com/crystal-lang/crystal-db/pull/56), thanks @Nephos)
+* Fix sqlite samples in documentation (see [#71](https://github.com/crystal-lang/crystal-db/pull/71), thanks @hinrik)
+
 ## v0.4.3 (2017-11-07)
 
 * Fix connections were not released when building invalid statements. (see [#65](https://github.com/crystal-lang/crystal-db/pull/65), thanks @crisward)
