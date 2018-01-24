@@ -264,7 +264,10 @@ module DB
     end
 
     # Performs the `query` and returns a single scalar value
+    #
+    # ```
     # puts db.scalar("SELECT MAX(name)").as(String) # => (a String)
+    # ```
     def scalar(query, *args)
       build(query).scalar(*args)
     end
