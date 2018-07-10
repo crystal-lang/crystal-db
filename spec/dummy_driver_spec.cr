@@ -190,6 +190,13 @@ describe DummyDriver do
         end
       end
 
+      it "with as, no rows" do
+        with_dummy do |db|
+          value = db.query_one?("", as: {a: Int64, b: Int64})
+          value.should be_nil
+        end
+      end
+
       it "with as, just one" do
         with_dummy do |db|
           value = db.query_one?("3", as: Int64)
