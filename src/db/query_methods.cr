@@ -169,7 +169,7 @@ module DB
     # typeof(result) # => NamedTuple(age: String, name: Int32) | Nil
     # ```
     def query_one?(query, *args, as types : NamedTuple)
-      query_one(query, *args) do |rs|
+      query_one?(query, *args) do |rs|
         rs.read(**types)
       end
     end
