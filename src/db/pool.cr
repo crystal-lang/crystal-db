@@ -49,7 +49,7 @@ module DB
     # selected, is_candidate = pool.checkout_some(candidates)
     # ```
     # `selected` be a resource from the `candidates` list and `is_candidate` == `true`
-    # or `selected` will be a new resource adn `is_candidate` == `false`
+    # or `selected` will be a new resource and `is_candidate` == `false`
     def checkout_some(candidates : Enumerable(WeakRef(T))) : {T, Bool}
       # TODO honor candidates while waiting for availables
       # this will allow us to remove `candidates.includes?(resource)`
