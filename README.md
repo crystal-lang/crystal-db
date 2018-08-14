@@ -2,7 +2,7 @@
 
 # crystal-db
 
-Common db api for crystal. You will need a specific driver to access a database.
+Common DB API for Crystal. You will need a specific driver to access a database.
 
 * [SQLite](https://github.com/crystal-lang/crystal-sqlite3)
 * [MySQL](https://github.com/crystal-lang/crystal-mysql)
@@ -10,12 +10,20 @@ Common db api for crystal. You will need a specific driver to access a database.
 
 ## Installation
 
-Add this to your application's `shard.yml`:
+Add `crystal-db` to your application's `shard.yml`:
 
 ```yaml
 dependencies:
   db:
     github: crystal-lang/crystal-db
+```
+
+Add the driver for your database, i. e. for Postgres:
+
+```yaml
+dependencies:
+  pg:
+    github: will/crystal-pg
 ```
 
 ## Documentation
@@ -24,8 +32,6 @@ dependencies:
 * [Crystal book](https://crystal-lang.org/docs/database/)
 
 ## Usage
-
-Since this is an abstract db api, it's usage is through a concrete database driver.
 
 ```crystal
 require "db"
@@ -59,7 +65,7 @@ end
 
 ## Roadmap
 
-Issues not yet addressed
+Issues not yet addressed:
 
 - [x] Support non prepared statements. [#25](https://github.com/crystal-lang/crystal-db/pull/25)
 - [x] Time data type. (implementation details depends on actual drivers)

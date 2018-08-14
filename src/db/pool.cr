@@ -148,7 +148,7 @@ module DB
 
       timeout.start
 
-      # TODO update to select keyword for crystal 0.19
+      # TODO update to select keyword for Crystal 0.19
       index, _ = Channel.select(@availability_channel.receive_select_action, timeout.receive_select_action)
       case index
       when 0
