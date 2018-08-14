@@ -4,9 +4,9 @@
 
 Common db api for crystal. You will need to a specific driver to access a database.
 
-* [sqlite](https://github.com/crystal-lang/crystal-sqlite3)
-* [mysql](https://github.com/crystal-lang/crystal-mysql)
-* [postgres](https://github.com/will/crystal-pg)
+* [SQLite](https://github.com/crystal-lang/crystal-sqlite3)
+* [MySQL](https://github.com/crystal-lang/crystal-mysql)
+* [PostgreSQL](https://github.com/will/crystal-pg)
 
 ## Installation
 
