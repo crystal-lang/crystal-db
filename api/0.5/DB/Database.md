@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.5.0/DB/Database.html
+  - /api/0.5.1/DB/Database.html
 ---

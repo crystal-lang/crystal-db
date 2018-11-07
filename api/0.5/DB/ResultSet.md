@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.5.0/DB/ResultSet.html
+  - /api/0.5.1/DB/ResultSet.html
 ---
