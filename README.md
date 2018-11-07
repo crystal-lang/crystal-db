@@ -2,7 +2,7 @@
 
 # crystal-db
 
-Common db api for crystal. You will need to a specific driver to access a database.
+Common db api for crystal. You will need to have a specific driver to access a database.
 
 * [sqlite](https://github.com/crystal-lang/crystal-sqlite3)
 * [mysql](https://github.com/crystal-lang/crystal-mysql)
