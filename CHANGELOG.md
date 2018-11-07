@@ -1,3 +1,8 @@
+## v0.5.1 (2017-11-07)
+
+* Fix `QueryMethods#query_one?` handling no rows. ([#86](https://github.com/crystal-lang/crystal-db/pull/86), thanks @robdavid)
+* Documentation improvements. ([#87](https://github.com/crystal-lang/crystal-db/pull/87), [#82](https://github.com/crystal-lang/crystal-db/pull/82), [#76](https://github.com/crystal-lang/crystal-db/pull/76), thanks @wontruefree, @Heaven31415, @vtambourine)
+
 ## v0.5.0 (2017-12-29)
 
 * Fix compatibility issues for crystal 0.24.0. No changes in the api.
