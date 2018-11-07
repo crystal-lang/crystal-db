@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.26.1">
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="js/doc.js"></script>
+<script type="text/javascript">
+  CrystalDoc.base_path = "";
+</script>
+
+  <meta id="repository-name" content="github.com/crystal-lang/crystal-db">
+  <title>DB - github.com/crystal-lang/crystal-db</title>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="repository-links">
+      <a href="index.html">README</a>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="github.com/crystal-lang/crystal-db/DB" data-name="db">
+      <a href="DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Any" data-name="db::any">
+      <a href="DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Connection" data-name="db::connection">
+      <a href="DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Database" data-name="db::database">
+      <a href="DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Disposable" data-name="db::disposable">
+      <a href="DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Driver" data-name="db::driver">
+      <a href="DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/DriverSpecs" data-name="db::driverspecs(dbanytype)">
+      <a href="DB/DriverSpecs.html">DriverSpecs</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/DriverSpecs/ColumnDef" data-name="db::driverspecs::columndef">
+      <a href="DB/DriverSpecs/ColumnDef.html">ColumnDef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Error" data-name="db::error">
+      <a href="DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ExecResult" data-name="db::execresult">
+      <a href="DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Mappable" data-name="db::mappable">
+      <a href="DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/MappingException" data-name="db::mappingexception">
+      <a href="DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/Pool" data-name="db::pool(t)">
+      <a href="DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Pool/TimeoutHelper" data-name="db::pool::timeouthelper">
+      <a href="DB/Pool/TimeoutHelper.html">TimeoutHelper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/QueryMethods" data-name="db::querymethods">
+      <a href="DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/ResultSet" data-name="db::resultset">
+      <a href="DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Rollback" data-name="db::rollback">
+      <a href="DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Statement" data-name="db::statement">
+      <a href="DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/crystal-lang/crystal-db/DB/Transaction" data-name="db::transaction">
+      <a href="DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> DB
+
+</h1>
+
+
+
+
+
+  <h2>Overview</h2>
+
+  <p>The DB module is a unified interface to database access.
+Database dialects is supported by custom database driver shards.
+Check <a href="https://github.com/crystal-lang/crystal-sqlite3" target="_blank">crystal-lang/crystal-sqlite3</a> for example.</p>
+
+<p>Drivers implementors check <code><a href="DB/Driver.html">Driver</a></code> class.</p>
+
+<p>DB manage a connection pool. The connection pool can be configured by <code>URI</code> query. See <code><a href="DB/Database.html">Database</a></code>.</p>
+
+<h3>Usage</h3>
+
+<p>Assuming <code>crystal-sqlite3</code> is included a sqlite3 database can be opened with <code><a href="DB.html#open%28uri%3AURI%7CString%29-class-method">#open</a></code>.</p>
+
+<pre><code>db <span class="o">=</span> <span class="t">DB</span>.open <span class="s">&quot;sqlite3:./path/to/db/file.db&quot;</span>
+db.close</code></pre>
+
+<p>If a block is given to <code><a href="DB.html#open%28uri%3AURI%7CString%29-class-method">#open</a></code> the database is closed automatically</p>
+
+<pre><code><span class="t">DB</span>.open <span class="s">&quot;sqlite3:./file.db&quot;</span> <span class="k">do</span> <span class="o">|</span>db<span class="o">|</span>
+  <span class="c"># work with db</span>
+<span class="k">end</span> <span class="c"># db is closed</span></code></pre>
+
+<p>In the code above <code>db</code> is a <code><a href="DB/Database.html">Database</a></code>. Methods available for querying it are described in <code><a href="DB/QueryMethods.html">QueryMethods</a></code>.</p>
+
+<p>Three kind of statements can be performed:</p>
+
+<ol><li><code>Database#exec</code> waits no response from the database.</li><li><code>Database#scalar</code> reads a single value of the response.</li><li><code>Database#query</code> returns a ResultSet that allows iteration over the rows in the response and column information.</li></ol>
+
+<p>All of the above methods allows parametrised query. Either positional or named arguments.</p>
+
+<p>Check a full working version:</p>
+
+<pre><code><span class="k">require</span> <span class="s">&quot;db&quot;</span>
+<span class="k">require</span> <span class="s">&quot;sqlite3&quot;</span>
+
+<span class="t">DB</span>.open <span class="s">&quot;sqlite3:./file.db&quot;</span> <span class="k">do</span> <span class="o">|</span>db<span class="o">|</span>
+  db.exec <span class="s">&quot;create table contacts (name text, age integer)&quot;</span>
+  db.exec <span class="s">&quot;insert into contacts values (?, ?)&quot;</span>, <span class="s">&quot;John Doe&quot;</span>, <span class="n">30</span>
+
+  args <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">DB</span><span class="t">::</span><span class="t">Any</span>
+  args <span class="o">&lt;&lt;</span> <span class="s">&quot;Sarah&quot;</span>
+  args <span class="o">&lt;&lt;</span> <span class="n">33</span>
+  db.exec <span class="s">&quot;insert into contacts values (?, ?)&quot;</span>, args
+
+  puts <span class="s">&quot;max age:&quot;</span>
+  puts db.scalar <span class="s">&quot;select max(age) from contacts&quot;</span> <span class="c"># =&gt; 33</span>
+
+  puts <span class="s">&quot;contacts:&quot;</span>
+  db.query <span class="s">&quot;select name, age from contacts order by age desc&quot;</span> <span class="k">do</span> <span class="o">|</span>rs<span class="o">|</span>
+    puts <span class="s">&quot;</span><span class="i">#{</span>rs.column_name(<span class="n">0</span>)<span class="i">}</span><span class="s"> (</span><span class="i">#{</span>rs.column_name(<span class="n">1</span>)<span class="i">}</span><span class="s">)&quot;</span>
+    <span class="c"># =&gt; name (age)</span>
+    rs.each <span class="k">do</span>
+      puts <span class="s">&quot;</span><span class="i">#{</span>rs.read(<span class="t">String</span>)<span class="i">}</span><span class="s"> (</span><span class="i">#{</span>rs.read(<span class="t">Int32</span>)<span class="i">}</span><span class="s">)&quot;</span>
+      <span class="c"># =&gt; Sarah (33)</span>
+      <span class="c"># =&gt; John Doe (30)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db.cr#L68" target="_blank">
+        db.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/pool.cr#L3" target="_blank">
+        db/pool.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/string_key_cache.cr#L1" target="_blank">
+        db/string_key_cache.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/query_methods.cr#L1" target="_blank">
+        db/query_methods.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/session_methods.cr#L1" target="_blank">
+        db/session_methods.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/disposable.cr#L1" target="_blank">
+        db/disposable.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/driver.cr#L1" target="_blank">
+        db/driver.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/statement.cr#L1" target="_blank">
+        db/statement.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/begin_transaction.cr#L1" target="_blank">
+        db/begin_transaction.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/connection_context.cr#L1" target="_blank">
+        db/connection_context.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/connection.cr#L1" target="_blank">
+        db/connection.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/transaction.cr#L1" target="_blank">
+        db/transaction.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/pool_statement.cr#L1" target="_blank">
+        db/pool_statement.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/database.cr#L4" target="_blank">
+        db/database.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/pool_prepared_statement.cr#L1" target="_blank">
+        db/pool_prepared_statement.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/pool_unprepared_statement.cr#L1" target="_blank">
+        db/pool_unprepared_statement.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/result_set.cr#L1" target="_blank">
+        db/result_set.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/error.cr#L1" target="_blank">
+        db/error.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/mapping.cr#L1" target="_blank">
+        db/mapping.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/spec.cr#L9" target="_blank">
+        spec.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/version.cr#L1" target="_blank">
+        db/version.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>Constant Summary</h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="TYPES">
+        <strong>TYPES</strong> = <code>[<span class="t">Nil</span>, <span class="t">String</span>, <span class="t">Bool</span>, <span class="t">Int32</span>, <span class="t">Int64</span>, <span class="t">Float32</span>, <span class="t">Float64</span>, <span class="t">Time</span>, <span class="t">Bytes</span>]</code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Types supported to interface with database driver.
+These can be used in any <code><a href="DB/ResultSet.html#read-instance-method">ResultSet#read</a></code> or any <code>Database#query</code> related
+method to be used as query parameters</p>
+      </dd>
+      
+    
+      <dt class="entry-const" id="VERSION">
+        <strong>VERSION</strong> = <code><span class="s">&quot;0.5.1&quot;</span></code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+
+
+  <h2>Class Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#connect%28uri%3AURI%7CString%29-class-method" class="signature"><strong>.connect</strong>(uri : URI | String)</a>
+        
+          <div class="summary"><p>Opens a connection using the specified <em>uri</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#connect%28uri%3AURI%7CString%2C%26block%29-class-method" class="signature"><strong>.connect</strong>(uri : URI | String, &block)</a>
+        
+          <div class="summary"><p>Opens a connection using the specified <em>uri</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#open%28uri%3AURI%7CString%29-class-method" class="signature"><strong>.open</strong>(uri : URI | String)</a>
+        
+          <div class="summary"><p>Opens a database using the specified <em>uri</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#open%28uri%3AURI%7CString%2C%26block%29-class-method" class="signature"><strong>.open</strong>(uri : URI | String, &block)</a>
+        
+          <div class="summary"><p>Same as <code><a href="DB.html#open%28uri%3AURI%7CString%29-class-method">#open</a></code> but the database is yielded and closed automatically.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#register_driver%28driver_name%2Cdriver_class%3ADriver.class%29-class-method" class="signature"><strong>.register_driver</strong>(driver_name, driver_class : Driver.class)</a>
+        
+          <div class="summary"><p>Registers a driver class for a given <em>driver_name</em>.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>Macro Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#mapping%28properties%2Cstrict%3Dtrue%29-macro" class="signature"><strong>mapping</strong>(properties, strict = true)</a>
+        
+          <div class="summary"><p>The <code><a href="DB.html#mapping-macro">DB.mapping</a></code> macro defines how an object is built from a DB::ResultSet.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#mapping-macro" class="signature"><strong>mapping</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+</div>
+
+
+
+
+  <h2>Class Method Detail</h2>
+  
+    <div class="entry-detail" id="connect(uri:URI|String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>connect</strong>(uri : URI | String)
+
+        <a class="method-permalink" href="#connect%28uri%3AURI%7CString%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Opens a connection using the specified <em>uri</em>.
+The scheme of the <em>uri</em> determines the driver to use.
+Returned connection must be closed by <code>Connection#close</code>.
+If a block is used the connection is yielded and closed automatically.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db.cr#L120" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="connect(uri:URI|String,&amp;block)-class-method">
+      <div class="signature">
+        
+        def self.<strong>connect</strong>(uri : URI | String, &block)
+
+        <a class="method-permalink" href="#connect%28uri%3AURI%7CString%2C%26block%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Opens a connection using the specified <em>uri</em>.
+The scheme of the <em>uri</em> determines the driver to use.
+Returned connection must be closed by <code>Connection#close</code>.
+If a block is used the connection is yielded and closed automatically.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db.cr#L125" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="open(uri:URI|String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>open</strong>(uri : URI | String)
+
+        <a class="method-permalink" href="#open%28uri%3AURI%7CString%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Opens a database using the specified <em>uri</em>.
+The scheme of the <em>uri</em> determines the driver to use.
+Returned database must be closed by <code><a href="DB/Database.html#close-instance-method">Database#close</a></code>.
+If a block is used the database is yielded and closed automatically.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db.cr#L102" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="open(uri:URI|String,&amp;block)-class-method">
+      <div class="signature">
+        
+        def self.<strong>open</strong>(uri : URI | String, &block)
+
+        <a class="method-permalink" href="#open%28uri%3AURI%7CString%2C%26block%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Same as <code><a href="DB.html#open%28uri%3AURI%7CString%29-class-method">#open</a></code> but the database is yielded and closed automatically.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db.cr#L107" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="register_driver(driver_name,driver_class:Driver.class)-class-method">
+      <div class="signature">
+        
+        def self.<strong>register_driver</strong>(driver_name, driver_class : Driver.class)
+
+        <a class="method-permalink" href="#register_driver%28driver_name%2Cdriver_class%3ADriver.class%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Registers a driver class for a given <em>driver_name</em>.
+Should be called by drivers implementors only.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db.cr#L90" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>Macro Detail</h2>
+  
+    <div class="entry-detail" id="mapping(properties,strict=true)-macro">
+      <div class="signature">
+        
+        macro <strong>mapping</strong>(properties, strict = true)
+
+        <a class="method-permalink" href="#mapping%28properties%2Cstrict%3Dtrue%29-macro">#</a>
+      </div>
+      
+        <div class="doc"><p>The <code><a href="DB.html#mapping-macro">DB.mapping</a></code> macro defines how an object is built from a DB::ResultSet.</p>
+
+<p>It takes hash literal as argument, in which attributes and types are defined.
+Once defined, <code><a href="DB/ResultSet.html#read%28type%3ADB%3A%3AMappable.class%29-instance-method">DB::ResultSet#read(t)</a></code> populates properties of the class from the
+result set.</p>
+
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;db&quot;</span>
+
+<span class="k">class</span> <span class="t">Employee</span>
+  <span class="t">DB</span>.mapping({
+    title: <span class="t">String</span>,
+    name:  <span class="t">String</span>,
+  })
+<span class="k">end</span>
+
+employees <span class="o">=</span> <span class="t">Employee</span>.from_rs(db.query(<span class="s">&quot;SELECT title, name FROM employees&quot;</span>))
+employees[<span class="n">0</span>].title <span class="c"># =&gt; &quot;Manager&quot;</span>
+employees[<span class="n">0</span>].name  <span class="c"># =&gt; &quot;John&quot;</span></code></pre>
+
+<p>Attributes not mapped with <code><a href="DB.html#mapping-macro">DB.mapping</a></code> are not defined as properties.
+Also, missing attributes raise a <code>DB::Exception</code>.</p>
+
+<p>You can also define attributes for each property.</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Employee</span>
+  <span class="t">DB</span>.mapping({
+    title: <span class="t">String</span>,
+    name:  {
+      <span class="k">type</span>:    <span class="t">String</span>,
+      nilable: <span class="n">true</span>,
+      key:     <span class="s">&quot;firstname&quot;</span>,
+    },
+  })
+<span class="k">end</span></code></pre>
+
+<p>Available attributes:</p>
+
+<ul><li><em>type</em> (required) defines its type. In the example above, <em>title: String</em> is a shortcut to <em>title: {type: String}</em>.</li><li><em>nilable</em> defines if a property can be a <code>Nil</code>.</li><li><strong>default</strong>: value to use if the property is missing in the result set, or if it's <code>null</code> and <code>nilable</code> was not set to <code>true</code>. If the default value creates a new instance of an object (for example <code>[1, 2, 3]</code> or <code>SomeObject.new</code>), a different instance will be used each time a row is parsed.</li><li><em>key</em> defines which column to read from a reusltset. It defaults to the name of the property.</li><li><em>converter</em> takes an alternate type for parsing. It requires a <code>#from_rs</code> method in that class, and returns an instance of the given type.</li></ul>
+
+<p>The mapping also automatically defines Crystal properties (getters and setters) for each
+of the keys. It doesn't define a constructor accepting those arguments, but you can provide
+an overload.</p>
+
+<p>The macro basically defines a constructor accepting a <code><a href="DB/ResultSet.html">DB::ResultSet</a></code> that reads from
+it and initializes this type's instance variables.</p>
+
+<p>This macro also declares instance variables of the types given in the mapping.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/mapping.cr#L60" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="mapping-macro">
+      <div class="signature">
+        
+        macro <strong>mapping</strong>
+
+        <a class="method-permalink" href="#mapping-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/2b7892eb3ab31908de4e88cc1c896da69f0d9ba9/src/db/mapping.cr#L151" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>
