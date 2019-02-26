@@ -26,7 +26,7 @@ dependencies:
 
 ## Usage
 
-Since this is an abstract db api, it's usage is through a concrete database driver.
+Since this is an abstract db api, its usage is through a concrete database driver.
 
 ```crystal
 require "db"
