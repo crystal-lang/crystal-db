@@ -11,6 +11,7 @@ module DB
     # maximum amount of retry attempts to reconnect to the db. See `Pool#retry`.
     @retry_attempts : Int32
     @retry_delay : Float64
+    @lock_checkout : Bool
 
     def initialize(@initial_pool_size = 1, @max_pool_size = 0, @max_idle_pool_size = 1, @checkout_timeout = 5.0,
                    @retry_attempts = 1, @retry_delay = 0.2, &@factory : -> T)
@@ -19,6 +20,7 @@ module DB
       @availability_channel = Channel(Nil).new
       @waiting_resource = 0
       @mutex = Mutex.new
+      @lock_checkout = false
     end
 
     # close all resources in the pool
@@ -30,7 +32,8 @@ module DB
 
     def checkout : T
       resource = if @available.empty?
-                   if can_increase_pool
+                   if can_increase_pool && !@lock_checkout
+                     @lock_checkout = true
                      build_resource
                    else
                      wait_for_available
@@ -127,6 +130,7 @@ module DB
       resource = @factory.call
       @total << resource
       @available << resource
+      @lock_checkout = false
       resource
     end
 
