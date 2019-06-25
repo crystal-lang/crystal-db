@@ -4,20 +4,32 @@
 
 Common db api for crystal. You will need to have a specific driver to access a database.
 
-* [sqlite](https://github.com/crystal-lang/crystal-sqlite3)
-* [mysql](https://github.com/crystal-lang/crystal-mysql)
-* [postgres](https://github.com/will/crystal-pg)
-* [cassandra](https://github.com/kaukas/crystal-cassandra)
+* [SQLite](https://github.com/crystal-lang/crystal-sqlite3)
+* [MySQL](https://github.com/crystal-lang/crystal-mysql)
+* [PostgreSQL](https://github.com/will/crystal-pg)
+* [Cassandra](https://github.com/kaukas/crystal-cassandra)
 
 ## Installation
 
-Add this to your application's `shard.yml`:
+If you are creating a shard that will work with _any_ driver, then add `crystal-db` as a dependency in `shard.yml`:
 
 ```yaml
 dependencies:
   db:
     github: crystal-lang/crystal-db
 ```
+
+If you are creating an application that will work with _some specific_ driver(s), then add them in `shard.yml`:
+
+```yaml
+dependencies:
+  sqlite3:
+    github: crystal-lang/crystal-sqlite3
+```
+
+`crystal-db` itself will be a nested dependency if drivers are included.
+
+Note: Multiple drivers can be included in the same application.
 
 ## Documentation
 
@@ -26,7 +38,9 @@ dependencies:
 
 ## Usage
 
-Since this is an abstract db api, its usage is through a concrete database driver.
+This shard only provides an abstract database API. In order to use it, a specific driver for the intended database has to be required as well:
+
+The following example uses SQLite where `?` indicates the arguments. If PostgreSQL is used `$1`, `$2`, etc. should be used. `crystal-db` does not interpret the statements.
 
 ```crystal
 require "db"
@@ -60,13 +74,14 @@ end
 
 ## Roadmap
 
-Issues not yet addressed
+Issues not yet addressed:
 
 - [x] Support non prepared statements. [#25](https://github.com/crystal-lang/crystal-db/pull/25)
 - [x] Time data type. (implementation details depends on actual drivers)
 - [x] Data type extensibility. Allow each driver to extend the data types allowed.
 - [x] Transactions & nested transactions. [#27](https://github.com/crystal-lang/crystal-db/pull/27)
 - [x] Connection pool.
+- [ ] Logging
 - [ ] Direct access to `IO` to avoid memory allocation for blobs.
 
 ## Contributing

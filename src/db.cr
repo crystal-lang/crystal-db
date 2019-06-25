@@ -1,16 +1,22 @@
 require "uri"
 
-# The DB module is a unified interface to database access.
-# Database dialects is supported by custom database driver shards.
-# Check [crystal-lang/crystal-sqlite3](https://github.com/crystal-lang/crystal-sqlite3) for example.
+# The DB module is a unified interface for database access.
+# Individual database systems are supported by specific database driver shards.
 #
-# Drivers implementors check `Driver` class.
+# Available drivers include:
+# * [crystal-lang/crystal-sqlite3](https://github.com/crystal-lang/crystal-sqlite3) for SQLite
+# * [crystal-lang/crystal-mysql](https://github.com/crystal-lang/crystal-mysql) for MySQL and MariaDB
+# * [will/crystal-pg](https://github.com/will/crystal-pg) for PostgreSQL
+# * [kaukas/crystal-cassandra](https://github.com/kaukas/crystal-cassandra) for Cassandra
 #
-# DB manage a connection pool. The connection pool can be configured by `URI` query. See `Database`.
+# For basic instructions on implementing a new database driver, check `Driver` and the existing drivers.
+#
+# DB manages a connection pool. The connection pool can be configured by query parameters to the
+# connection `URI` as described in `Database`.
 #
 # ### Usage
 #
-# Assuming `crystal-sqlite3` is included a sqlite3 database can be opened with `#open`.
+# Assuming `crystal-sqlite3` is included a SQLite3 database can be opened with `#open`.
 #
 # ```
 # db = DB.open "sqlite3:./path/to/db/file.db"
@@ -36,11 +42,14 @@ require "uri"
 #
 # Check a full working version:
 #
+# The following example uses SQLite where `?` indicates the arguments. If PostgreSQL is used `$1`, `$2`, etc. should be used. `crystal-db` does not interpret the statements.
+#
 # ```
 # require "db"
 # require "sqlite3"
 #
 # DB.open "sqlite3:./file.db" do |db|
+#   # When using the pg driver, use $1, $2, etc. instead of ?
 #   db.exec "create table contacts (name text, age integer)"
 #   db.exec "insert into contacts values (?, ?)", "John Doe", 30
 #
@@ -95,15 +104,19 @@ module DB
     @@drivers ||= {} of String => Driver.class
   end
 
-  # Opens a database using the specified *uri*.
+  # Creates a `Database` pool and opens initial connection(s) as specified in the connection *uri*.
+  # Use `DB#connect` to open a single connection.
+  #
   # The scheme of the *uri* determines the driver to use.
-  # Returned database must be closed by `Database#close`.
-  # If a block is used the database is yielded and closed automatically.
+  # Connection parameters such as hostname, user, database name, etc. are specified according
+  # to each database driver's specific format.
+  #
+  # The returned database must be closed by `Database#close`.
   def self.open(uri : URI | String)
     build_database(uri)
   end
 
-  # Same as `#open` but the database is yielded and closed automatically.
+  # Same as `#open` but the database is yielded and closed automatically at the end of the block.
   def self.open(uri : URI | String, &block)
     db = build_database(uri)
     begin
