@@ -2,11 +2,11 @@ module DB
   # Empty module used for marking a class as supporting DB:Mapping
   module Mappable; end
 
-  # The `DB.mapping` macro defines how an object is built from a DB::ResultSet.
+  # The `DB.mapping` macro defines how an object is built from a `ResultSet`.
   #
   # It takes hash literal as argument, in which attributes and types are defined.
-  # Once defined, `DB::ResultSet#read(t)` populates properties of the class from the
-  # result set.
+  # Once defined, `ResultSet#read(t)` populates properties of the class from the
+  # `ResultSet`.
   #
   # ```crystal
   # require "db"
@@ -24,7 +24,7 @@ module DB
   # ```
   #
   # Attributes not mapped with `DB.mapping` are not defined as properties.
-  # Also, missing attributes raise a `DB::Exception`.
+  # Also, missing attributes raise a `DB::MappingException`.
   #
   # You can also define attributes for each property.
   #
@@ -46,14 +46,14 @@ module DB
   # * *type* (required) defines its type. In the example above, *title: String* is a shortcut to *title: {type: String}*.
   # * *nilable* defines if a property can be a `Nil`.
   # * **default**: value to use if the property is missing in the result set, or if it's `null` and `nilable` was not set to `true`. If the default value creates a new instance of an object (for example `[1, 2, 3]` or `SomeObject.new`), a different instance will be used each time a row is parsed.
-  # * *key* defines which column to read from a ResultSet. It defaults to the name of the property.
+  # * *key* defines which column to read from a `ResultSet`. It defaults to the name of the property.
   # * *converter* takes an alternate type for parsing. It requires a `#from_rs` method in that class, and returns an instance of the given type.
   #
   # The mapping also automatically defines Crystal properties (getters and setters) for each
   # of the keys. It doesn't define a constructor accepting those arguments, but you can provide
   # an overload.
   #
-  # The macro basically defines a constructor accepting a `DB::ResultSet` that reads from
+  # The macro basically defines a constructor accepting a `ResultSet` that reads from
   # it and initializes this type's instance variables.
   #
   # This macro also declares instance variables of the types given in the mapping.
