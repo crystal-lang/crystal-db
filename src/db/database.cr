@@ -4,23 +4,29 @@ require "weak_ref"
 module DB
   # Acts as an entry point for database access.
   # Connections are managed by a pool.
-  # The connection pool can be configured from URI parameters:
-  #
-  #   - initial_pool_size (default 1)
-  #   - max_pool_size (default 0 = unlimited)
-  #   - max_idle_pool_size (default 1)
-  #   - checkout_timeout (default 5.0)
-  #   - retry_attempts (default 1)
-  #   - retry_delay (in seconds, default 1.0)
-  #
-  # When querying a database prepared statements are used by default.
-  # This can be changed from the `prepared_statements` URI parameter:
-  #
-  #   - prepared_statements = `true`|`false` (default `true`)
-  #
-  # It should be created from DB module. See `DB#open`.
+  # Use `DB#open` to create a `Database` instance.
   #
   # Refer to `QueryMethods` and `SessionMethods` for documentation about querying the database.
+  #
+  # ## Database URI
+  #
+  # Connection parameters are configured in a URI. The format is specified by the individual
+  # database drivers. See the [reference book](https://crystal-lang.org/reference/database/) for examples.
+  #
+  # The connection pool can be configured from URI parameters:
+  #
+  #   - `initial_pool_size` (default 1)
+  #   - `max_pool_size` (default 0 = unlimited)
+  #   - `max_idle_pool_size` (default 1)
+  #   - `checkout_timeout` (default 5.0)
+  #   - `retry_attempts` (default 1)
+  #   - `retry_delay` (in seconds, default 1.0)
+  #
+  # When querying a database, prepared statements are used by default.
+  # This can be changed from the `prepared_statements` URI parameter:
+  #
+  #   - `prepared_statements` (true, or false, default true)
+  #
   class Database
     include SessionMethods(Database, PoolStatement)
     include ConnectionContext
