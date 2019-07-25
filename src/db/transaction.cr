@@ -36,7 +36,7 @@ module DB
   end
 
   class TopLevelTransaction < Transaction
-    getter connection
+    getter connection : Connection
     # :nodoc:
     property savepoint_name : String? = nil
 

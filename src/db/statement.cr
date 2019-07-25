@@ -63,12 +63,12 @@ module DB
     end
 
     # See `QueryMethods#exec`
-    def exec
+    def exec : DB::ExecResult
       perform_exec_and_release(Slice(Any).empty)
     end
 
     # See `QueryMethods#exec`
-    def exec(args : Array)
+    def exec(args : Array) : DB::ExecResult
       perform_exec_and_release(args)
     end
 
@@ -79,12 +79,12 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query
+    def query : DB::ResultSet
       perform_query_with_rescue Tuple.new
     end
 
     # See `QueryMethods#query`
-    def query(args : Array)
+    def query(args : Array) : DB::ResultSet
       perform_query_with_rescue args
     end
 

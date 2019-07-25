@@ -3,7 +3,7 @@ require "./spec_helper"
 module GenericResultSet
   @index = 0
 
-  def move_next
+  def move_next : Bool
     @index = 0
     true
   end
@@ -48,11 +48,11 @@ class FooDriver < DB::Driver
   end
 
   class FooConnection < DB::Connection
-    def build_prepared_statement(query)
+    def build_prepared_statement(query) : DB::Statement
       FooStatement.new(self)
     end
 
-    def build_unprepared_statement(query)
+    def build_unprepared_statement(query) : DB::Statement
       raise "not implemented"
     end
   end
@@ -111,11 +111,11 @@ class BarDriver < DB::Driver
   end
 
   class BarConnection < DB::Connection
-    def build_prepared_statement(query)
+    def build_prepared_statement(query) : DB::Statement
       BarStatement.new(self)
     end
 
-    def build_unprepared_statement(query)
+    def build_unprepared_statement(query) : DB::Statement
       raise "not implemented"
     end
   end

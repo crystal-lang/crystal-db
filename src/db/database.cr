@@ -37,7 +37,7 @@ module DB
     getter pool
 
     # Returns the uri with the connection settings to the database
-    getter uri
+    getter uri : URI
 
     getter? prepared_statements : Bool
 
@@ -86,17 +86,17 @@ module DB
     end
 
     # :nodoc:
-    def fetch_or_build_prepared_statement(query)
+    def fetch_or_build_prepared_statement(query) : PoolStatement
       @statements_cache.fetch(query) { build_prepared_statement(query) }
     end
 
     # :nodoc:
-    def build_prepared_statement(query)
+    def build_prepared_statement(query) : PoolStatement
       PoolPreparedStatement.new(self, query)
     end
 
     # :nodoc:
-    def build_unprepared_statement(query)
+    def build_unprepared_statement(query) : PoolStatement
       PoolUnpreparedStatement.new(self, query)
     end
 
