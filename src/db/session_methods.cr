@@ -8,7 +8,7 @@ module DB
   #
   # This module serves for dsl reuse over session like objects.
   module SessionMethods(Session, Stmt)
-    include QueryMethods
+    include QueryMethods(Stmt)
 
     # Returns whether by default the statements should
     # be prepared or not.
@@ -49,7 +49,7 @@ module DB
     end
 
     struct PreparedQuery(Session, Stmt)
-      include QueryMethods
+      include QueryMethods(Stmt)
 
       def initialize(@session : Session)
       end
@@ -60,7 +60,7 @@ module DB
     end
 
     struct UnpreparedQuery(Session, Stmt)
-      include QueryMethods
+      include QueryMethods(Stmt)
 
       def initialize(@session : Session)
       end

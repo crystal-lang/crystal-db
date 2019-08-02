@@ -22,11 +22,11 @@ class DummyDriver < DB::Driver
       @@connections.try &.clear
     end
 
-    def build_prepared_statement(query)
+    def build_prepared_statement(query) : DB::Statement
       DummyStatement.new(self, query, true)
     end
 
-    def build_unprepared_statement(query)
+    def build_unprepared_statement(query) : DB::Statement
       DummyStatement.new(self, query, false)
     end
 
@@ -102,13 +102,13 @@ class DummyDriver < DB::Driver
       raise DB::Error.new(query) if query == "syntax error"
     end
 
-    protected def perform_query(args : Enumerable)
+    protected def perform_query(args : Enumerable) : DB::ResultSet
       @connection.as(DummyConnection).check
       set_params args
       DummyResultSet.new self, @query
     end
 
-    protected def perform_exec(args : Enumerable)
+    protected def perform_exec(args : Enumerable) : DB::ExecResult
       @connection.as(DummyConnection).check
       set_params args
       raise DB::Error.new("forced exception due to query") if @query == "raise"
@@ -161,16 +161,16 @@ class DummyDriver < DB::Driver
       @@last_result_set.not_nil!
     end
 
-    def move_next
+    def move_next : Bool
       @values = @top_values.shift?
       !!@values
     end
 
-    def column_count
+    def column_count : Int32
       @column_count
     end
 
-    def column_name(index)
+    def column_name(index) : String
       "c#{index}"
     end
 

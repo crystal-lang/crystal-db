@@ -36,7 +36,7 @@ module DB
     end
 
     # :nodoc:
-    def fetch_or_build_prepared_statement(query)
+    def fetch_or_build_prepared_statement(query) : Statement
       @statements_cache.fetch(query) { build_prepared_statement(query) }
     end
 
@@ -46,7 +46,7 @@ module DB
     # :nodoc:
     abstract def build_unprepared_statement(query) : Statement
 
-    def begin_transaction
+    def begin_transaction : Transaction
       raise DB::Error.new("There is an existing transaction in this connection") if @transaction
       @transaction = true
       create_transaction

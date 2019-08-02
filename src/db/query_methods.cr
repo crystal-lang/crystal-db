@@ -17,9 +17,9 @@ module DB
   #
   # Including `QueryMethods` requires a `build(query) : Statement` method that is not expected
   # to be called directly.
-  module QueryMethods
+  module QueryMethods(Stmt)
     # :nodoc:
-    abstract def build(query) : Statement
+    abstract def build(query) : Stmt
 
     # Executes a *query* and returns a `ResultSet` with the results.
     # The `ResultSet` must be closed manually.

@@ -14,7 +14,7 @@ module DB
     end
 
     # builds a statement over a real connection
-    private def build_statement
+    private def build_statement : Statement
       conn = @db.pool.checkout
       begin
         conn.unprepared.build(@query)
