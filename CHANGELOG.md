@@ -1,4 +1,12 @@
-## v0.5.1 (2017-11-07)
+## v0.6.0 (2019-08-02)
+
+* Fix compatibility issues for Crystal 0.30.0. ([#108](https://github.com/crystal-lang/crystal-db/pull/108), thanks @bcardiff)
+* Fix `BeginTransaction#transaction` rollback due to protocol error. ([#101](https://github.com/crystal-lang/crystal-db/pull/101), thanks @straight-shoota)
+* CI includes Crystal nightly. ([#106](https://github.com/crystal-lang/crystal-db/pull/106), thanks @bcardiff)
+* Add the Cassandra driver. ([#94](https://github.com/crystal-lang/crystal-db/pull/94), thanks @kaukas)
+* Several docs improvements. ([#99](https://github.com/crystal-lang/crystal-db/pull/99), [#96](https://github.com/crystal-lang/crystal-db/pull/96), [#107](https://github.com/crystal-lang/crystal-db/pull/107), thanks @nickelghost, @greenbigfrog, @MatthiasWinkelmann)
+
+## v0.5.1 (2018-11-07)
 
 * Fix `QueryMethods#query_one?` handling no rows. ([#86](https://github.com/crystal-lang/crystal-db/pull/86), thanks @robdavid)
 * Documentation improvements. ([#87](https://github.com/crystal-lang/crystal-db/pull/87), [#82](https://github.com/crystal-lang/crystal-db/pull/82), [#76](https://github.com/crystal-lang/crystal-db/pull/76), thanks @wontruefree, @Heaven31415, @vtambourine)
