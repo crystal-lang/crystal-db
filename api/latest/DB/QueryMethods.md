@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.5/DB/QueryMethods.html
+  - /api/0.6/DB/QueryMethods.html
 ---
