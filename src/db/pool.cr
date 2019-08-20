@@ -28,6 +28,15 @@ module DB
       @available.clear
     end
 
+    record Stats, open_connections : Int32
+
+    # Returns stats of the pool
+    def stats
+      Stats.new(
+        open_connections: @total.size
+      )
+    end
+
     def checkout : T
       resource = if @available.empty?
                    if can_increase_pool
