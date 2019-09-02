@@ -63,19 +63,28 @@ module DB
 
     def checkout : T
       res = sync do
-        resource = if @idle.empty?
-                     if can_increase_pool?
-                       @inflight += 1
-                       r = unsync { build_resource }
-                       @inflight -= 1
-                       r
+        resource = nil
+
+        until resource
+          resource = if @idle.empty?
+                       if can_increase_pool?
+                         @inflight += 1
+                         r = unsync { build_resource }
+                         @inflight -= 1
+                         r
+                       else
+                         unsync { wait_for_available }
+                         # The wait for available can unlock
+                         # multiple fibers waiting for a resource.
+                         # Although only one will pick it due to the lock
+                         # in the end of the unsync, the pick_available
+                         # will return nil
+                         pick_available
+                       end
                      else
-                       unsync { wait_for_available }
                        pick_available
                      end
-                   else
-                     pick_available
-                   end
+        end
 
         @idle.delete resource
 
@@ -194,7 +203,7 @@ module DB
     end
 
     private def pick_available
-      @idle.first
+      @idle.first?
     end
 
     private def wait_for_available
