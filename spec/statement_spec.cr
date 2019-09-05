@@ -43,10 +43,18 @@ describe DB::Statement do
     end
   end
 
-  it "should initialize positional params in query with array" do
+  it "accepts array as single argument" do
     with_dummy_connection do |cnn|
       stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
       stmt.query ["a", 1, nil]
+      stmt.params[0].should eq(["a", 1, nil])
+    end
+  end
+
+  it "should initialize positional params in query with array" do
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
+      stmt.query args: ["a", 1, nil]
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
       stmt.params[2].should eq(nil)
@@ -63,10 +71,18 @@ describe DB::Statement do
     end
   end
 
-  it "should initialize positional params in exec with array" do
+  it "accepts array as single argument" do
     with_dummy_connection do |cnn|
       stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
       stmt.exec ["a", 1, nil]
+      stmt.params[0].should eq(["a", 1, nil])
+    end
+  end
+
+  it "should initialize positional params in exec with array" do
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
+      stmt.exec args: ["a", 1, nil]
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
       stmt.params[2].should eq(nil)
