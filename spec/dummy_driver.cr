@@ -97,7 +97,7 @@ class DummyDriver < DB::Driver
     property params
 
     def initialize(connection, @query : String, @prepared : Bool)
-      @params = Hash(Int32 | String, DB::Any).new
+      @params = Hash(Int32 | String, DB::Any | Array(DB::Any)).new
       super(connection)
       raise DB::Error.new(query) if query == "syntax error"
     end
@@ -124,6 +124,10 @@ class DummyDriver < DB::Driver
 
     private def set_param(index, value : DB::Any)
       @params[index] = value
+    end
+
+    private def set_param(index, value : Array)
+      @params[index] = value.map(&.as(DB::Any))
     end
 
     private def set_param(index, value)

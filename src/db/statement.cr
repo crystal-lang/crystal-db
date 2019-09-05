@@ -29,14 +29,14 @@ module DB
     # See `QueryMethods#exec`
     abstract def exec(*args) : ExecResult
     # See `QueryMethods#exec`
-    abstract def exec(args : Array) : ExecResult
+    abstract def exec(*, args : Array) : ExecResult
 
     # See `QueryMethods#query`
     abstract def query : ResultSet
     # See `QueryMethods#query`
     abstract def query(*args) : ResultSet
     # See `QueryMethods#query`
-    abstract def query(args : Array) : ResultSet
+    abstract def query(*, args : Array) : ResultSet
   end
 
   # Represents a query in a `Connection`.
@@ -68,7 +68,7 @@ module DB
     end
 
     # See `QueryMethods#exec`
-    def exec(args : Array) : DB::ExecResult
+    def exec(*, args : Array) : DB::ExecResult
       perform_exec_and_release(args)
     end
 
@@ -84,7 +84,7 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(args : Array) : DB::ResultSet
+    def query(*, args : Array) : DB::ResultSet
       perform_query_with_rescue args
     end
 
