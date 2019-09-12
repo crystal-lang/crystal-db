@@ -20,8 +20,8 @@ module DB
     end
 
     # See `QueryMethods#exec`
-    def exec(args : Array) : ExecResult
-      statement_with_retry &.exec(args)
+    def exec(*, args : Array) : ExecResult
+      statement_with_retry &.exec(args: args)
     end
 
     # See `QueryMethods#query`
@@ -35,8 +35,8 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(args : Array) : ResultSet
-      statement_with_retry &.query(args)
+    def query(*, args : Array) : ResultSet
+      statement_with_retry &.query(args: args)
     end
 
     # See `QueryMethods#scalar`

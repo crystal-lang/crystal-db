@@ -227,14 +227,14 @@ describe DB do
       db.query "query", 1, "string" { }
       db.query("query", Bytes.new(4)) { }
       db.query("query", 1, "string", FooValue.new(5)) { }
-      db.query "query", [1, "string", FooValue.new(5)] { }
+      db.query "query", args: [1, "string", FooValue.new(5)] { }
 
       db.query("query").close
       db.query("query", 1).close
       db.query("query", 1, "string").close
       db.query("query", Bytes.new(4)).close
       db.query("query", 1, "string", FooValue.new(5)).close
-      db.query("query", [1, "string", FooValue.new(5)]).close
+      db.query("query", args: [1, "string", FooValue.new(5)]).close
     end
 
     DB.open("bar://host") do |db|
@@ -244,14 +244,14 @@ describe DB do
       db.query "query", 1, "string" { }
       db.query("query", Bytes.new(4)) { }
       db.query("query", 1, "string", BarValue.new(5)) { }
-      db.query "query", [1, "string", BarValue.new(5)] { }
+      db.query "query", args: [1, "string", BarValue.new(5)] { }
 
       db.query("query").close
       db.query("query", 1).close
       db.query("query", 1, "string").close
       db.query("query", Bytes.new(4)).close
       db.query("query", 1, "string", BarValue.new(5)).close
-      db.query("query", [1, "string", BarValue.new(5)]).close
+      db.query("query", args: [1, "string", BarValue.new(5)]).close
     end
   end
 
@@ -263,7 +263,7 @@ describe DB do
       db.exec("query", 1, "string")
       db.exec("query", Bytes.new(4))
       db.exec("query", 1, "string", FooValue.new(5))
-      db.exec("query", [1, "string", FooValue.new(5)])
+      db.exec("query", args: [1, "string", FooValue.new(5)])
     end
 
     DB.open("bar://host") do |db|
@@ -273,20 +273,20 @@ describe DB do
       db.exec("query", 1, "string")
       db.exec("query", Bytes.new(4))
       db.exec("query", 1, "string", BarValue.new(5))
-      db.exec("query", [1, "string", BarValue.new(5)])
+      db.exec("query", args: [1, "string", BarValue.new(5)])
     end
   end
 
   it "Foo and Bar drivers should not implement each other params" do
     DB.open("foo://host") do |db|
       expect_raises Exception, "FooDriver::FooStatement does not support BarValue params" do
-        db.exec("query", [BarValue.new(5)])
+        db.exec("query", args: [BarValue.new(5)])
       end
     end
 
     DB.open("bar://host") do |db|
       expect_raises Exception, "BarDriver::BarStatement does not support FooValue params" do
-        db.exec("query", [FooValue.new(5)])
+        db.exec("query", args: [FooValue.new(5)])
       end
     end
   end
