@@ -1,3 +1,10 @@
+## v0.7.0 (2019-09-20)
+
+* **(breaking-change)** `#exec`, `#query`, `#scalar` methods require named argument for array values ([#110](https://github.com/crystal-lang/crystal-db/pull/110), thanks @straight-shoota)
+* Fix pool issues when creating simultaneous connections. ([#109](https://github.com/crystal-lang/crystal-db/pull/109), thanks @bcardiff)
+* Fix compatibility issues for upcoming Crystal 0.31.0. ([#111](https://github.com/crystal-lang/crystal-db/pull/111), thanks @bcardiff)
+* Added `DB::Pool#stats`. ([#109](https://github.com/crystal-lang/crystal-db/pull/109), thanks @bcardiff)
+
 ## v0.6.0 (2019-08-02)
 
 * Fix compatibility issues for Crystal 0.30.0. ([#108](https://github.com/crystal-lang/crystal-db/pull/108), thanks @bcardiff)
