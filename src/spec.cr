@@ -123,7 +123,6 @@ module DB
     getter its = [] of SpecIt
 
     def it(description = "assert", prepared = :default, file = __FILE__, line = __LINE__, end_line = __END_LINE__, &block : DB::Database ->)
-      return unless Spec.matches?(description, file, line, end_line)
       @its << SpecIt.new(description, prepared, file, line, end_line, block)
     end
 
