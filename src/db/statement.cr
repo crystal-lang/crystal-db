@@ -8,8 +8,8 @@ module DB
     end
 
     # See `QueryMethods#scalar`
-    def scalar(*args)
-      query(*args) do |rs|
+    def scalar(*t_args, args : Array? = nil)
+      query(*t_args, args: args) do |rs|
         rs.each do
           return rs.read
         end
@@ -19,24 +19,20 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*args)
-      rs = query(*args)
+    def query(*t_args, args : Array? = nil)
+      rs = query(*t_args, args: args)
       yield rs ensure rs.close
     end
 
     # See `QueryMethods#exec`
     abstract def exec : ExecResult
     # See `QueryMethods#exec`
-    abstract def exec(*args) : ExecResult
-    # See `QueryMethods#exec`
-    abstract def exec(*, args : Array) : ExecResult
+    abstract def exec(*t_args, args : Array? = nil) : ExecResult
 
     # See `QueryMethods#query`
     abstract def query : ResultSet
     # See `QueryMethods#query`
-    abstract def query(*args) : ResultSet
-    # See `QueryMethods#query`
-    abstract def query(*, args : Array) : ResultSet
+    abstract def query(*t_args, args : Array? = nil) : ResultSet
   end
 
   # Represents a query in a `Connection`.
@@ -68,14 +64,8 @@ module DB
     end
 
     # See `QueryMethods#exec`
-    def exec(*, args : Array) : DB::ExecResult
-      perform_exec_and_release(args)
-    end
-
-    # See `QueryMethods#exec`
-    def exec(*args)
-      # TODO better way to do it
-      perform_exec_and_release(args)
+    def exec(*t_args, args : Array? = nil) : DB::ExecResult
+      perform_exec_and_release(args || t_args)
     end
 
     # See `QueryMethods#query`
@@ -84,13 +74,8 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*, args : Array) : DB::ResultSet
-      perform_query_with_rescue args
-    end
-
-    # See `QueryMethods#query`
-    def query(*args)
-      perform_query_with_rescue args
+    def query(*t_args, args : Array? = nil) : DB::ResultSet
+      perform_query_with_rescue(args || t_args)
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult
