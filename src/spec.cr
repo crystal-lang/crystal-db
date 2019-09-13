@@ -154,7 +154,7 @@ module DB
         end
 
         it "executes with bind #{value_desc} as array" do |db|
-          db.scalar(select_scalar(param(1), sql_type), [value]).should eq(value)
+          db.scalar(select_scalar(param(1), sql_type), args: [value]).should eq(value)
         end
 
         it "select #{value_desc} as literal" do |db|
