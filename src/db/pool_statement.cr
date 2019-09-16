@@ -15,8 +15,8 @@ module DB
     end
 
     # See `QueryMethods#exec`
-    def exec(*t_args, args : Array? = nil) : ExecResult
-      statement_with_retry &.exec(*t_args, args: args)
+    def exec(*args_, args : Array? = nil) : ExecResult
+      statement_with_retry &.exec(*args_, args: args)
     end
 
     # See `QueryMethods#query`
@@ -25,8 +25,8 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*t_args, args : Array? = nil) : ResultSet
-      statement_with_retry &.query(*t_args, args: args)
+    def query(*args_, args : Array? = nil) : ResultSet
+      statement_with_retry &.query(*args_, args: args)
     end
 
     # See `QueryMethods#scalar`
