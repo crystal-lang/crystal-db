@@ -51,6 +51,25 @@ describe DB::Statement do
     end
   end
 
+  it "allows no arguments" do
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
+      stmt.query
+      stmt.params.should be_empty
+    end
+  end
+
+  it "concatenate arguments" do
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
+      stmt.query 1, 2, args: ["a", [1, nil]]
+      stmt.params[0].should eq(1)
+      stmt.params[1].should eq(2)
+      stmt.params[2].should eq("a")
+      stmt.params[3].should eq([1, nil])
+    end
+  end
+
   it "should initialize positional params in query with array" do
     with_dummy_connection do |cnn|
       stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
@@ -86,6 +105,25 @@ describe DB::Statement do
       stmt.params[0].should eq("a")
       stmt.params[1].should eq(1)
       stmt.params[2].should eq(nil)
+    end
+  end
+
+  it "allows no arguments" do
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
+      stmt.exec
+      stmt.params.should be_empty
+    end
+  end
+
+  it "concatenate arguments" do
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
+      stmt.exec 1, 2, args: ["a", [1, nil]]
+      stmt.params[0].should eq(1)
+      stmt.params[1].should eq(2)
+      stmt.params[2].should eq("a")
+      stmt.params[3].should eq([1, nil])
     end
   end
 
