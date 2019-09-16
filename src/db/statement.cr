@@ -65,7 +65,7 @@ module DB
 
     # See `QueryMethods#exec`
     def exec(*t_args, args : Array? = nil) : DB::ExecResult
-      perform_exec_and_release(args || t_args)
+      perform_exec_and_release(EnumerableConcat.build(t_args, args))
     end
 
     # See `QueryMethods#query`
@@ -75,7 +75,7 @@ module DB
 
     # See `QueryMethods#query`
     def query(*t_args, args : Array? = nil) : DB::ResultSet
-      perform_query_with_rescue(args || t_args)
+      perform_query_with_rescue(EnumerableConcat.build(t_args, args))
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult

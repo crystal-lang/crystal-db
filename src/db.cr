@@ -181,6 +181,7 @@ end
 
 require "./db/pool"
 require "./db/string_key_cache"
+require "./db/enumerable_concat"
 require "./db/query_methods"
 require "./db/session_methods"
 require "./db/disposable"
