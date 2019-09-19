@@ -30,8 +30,8 @@ module DB
     end
 
     # See `QueryMethods#scalar`
-    def scalar(*args)
-      statement_with_retry &.scalar(*args)
+    def scalar(*args_, args : Array? = nil)
+      statement_with_retry &.scalar(*args_, args: args)
     end
 
     # builds a statement over a real connection
