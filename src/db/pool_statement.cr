@@ -15,13 +15,8 @@ module DB
     end
 
     # See `QueryMethods#exec`
-    def exec(*args) : ExecResult
-      statement_with_retry &.exec(*args)
-    end
-
-    # See `QueryMethods#exec`
-    def exec(args : Array) : ExecResult
-      statement_with_retry &.exec(args)
+    def exec(*args_, args : Array? = nil) : ExecResult
+      statement_with_retry &.exec(*args_, args: args)
     end
 
     # See `QueryMethods#query`
@@ -30,18 +25,13 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*args) : ResultSet
-      statement_with_retry &.query(*args)
-    end
-
-    # See `QueryMethods#query`
-    def query(args : Array) : ResultSet
-      statement_with_retry &.query(args)
+    def query(*args_, args : Array? = nil) : ResultSet
+      statement_with_retry &.query(*args_, args: args)
     end
 
     # See `QueryMethods#scalar`
-    def scalar(*args)
-      statement_with_retry &.scalar(*args)
+    def scalar(*args_, args : Array? = nil)
+      statement_with_retry &.scalar(*args_, args: args)
     end
 
     # builds a statement over a real connection
