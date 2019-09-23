@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.6/DB/Statement.html
+  - /api/0.7/DB/Statement.html
 ---
