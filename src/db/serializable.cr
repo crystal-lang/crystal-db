@@ -2,10 +2,68 @@ module DB
   annotation Field
   end
 
+  # The `DB::Serialization` module automatically generates methods for DB serialization when included.
+  #
+  # Once included, `ResultSet#read(t)` populates properties of the class from the
+  # `ResultSet`.
+  #
+  # ### Example
+  #
+  # ```crystal
+  # require "db"
+  #
+  # class Employee
+  #   include DB::Serializable
+  #
+  #   property title : String
+  #   property name : String
+  # end
+  #
+  # employees = Employee.from_rs(db.query("SELECT title, name FROM employees"))
+  # employees[0].title # => "Manager"
+  # employees[0].name  # => "John"
+  # ```
+  #
+  # ### Usage
+  #
+  # `DB::Serializable` was designed in analogue with `JSON::Serializable`, so usage is identical.
+  #  However, like `DB.mapping`, `DB::Serializable` is **strict by default**, so extra columns will raise `DB::MappingException`s.
+  #
+  # Similar to `JSON::Field`, there is an annotation `DB::Field` that can be used to set serialization behavior
+  # on individual instance variables.
+  #
+  # ```crystal
+  # class Employee
+  #   include DB::Serializable
+  #
+  #   property title : String
+  #
+  #   @[DB::Field(key: "firstname")]
+  #   property name : String?
+  # end
+  # ```
+  #
   # `DB::Field` properties:
   # * **ignore**: if `true`, skip this field in serialization and deserialization (`false` by default)
   # * **key**: defines which column to read from a `ResultSet` (name of the instance variable by default)
-  # * **converter**: defines an alternate type for parsing results. The given class must define `from_rs(DB::ResultSet)` and return an instance of the included type.
+  # * **converter**: defines an alternate type for parsing results. The given type must define `#from_rs(DB::ResultSet)` and return an instance of the included type.
+  #
+  # ### `DB::Serializable::NonStrict`
+  #
+  # Including this module is functionally identical to passing `{strict: false}` to `DB.mapping`: extra columns will not raise.
+  #
+  # ```crystal
+  # class Employee
+  #   include DB::Serializable
+  #   include DB::Serializable::NonStrict
+  #
+  #   property title : String
+  #   property name : String
+  # end
+  #
+  # # does not raise!
+  # employees = Employee.from_rs(db.query("SELECT title, name, age FROM employees"))
+  # ```
   module Serializable
     macro included
       include ::DB::Mappable
