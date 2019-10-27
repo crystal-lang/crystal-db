@@ -109,11 +109,11 @@ module DB
           {% unless ann && ann[:ignore] %}
             {%
               properties[ivar.id] = {
-                type: ivar.type,
-                key: ((ann && ann[:key]) || ivar).id.stringify,
-                default: ivar.default_value,
-                nilable: ivar.type.nilable?,
-                converter: ann && ann[:converter]
+                type:      ivar.type,
+                key:       ((ann && ann[:key]) || ivar).id.stringify,
+                default:   ivar.default_value,
+                nilable:   ivar.type.nilable?,
+                converter: ann && ann[:converter],
               }
             %}
           {% end %}
