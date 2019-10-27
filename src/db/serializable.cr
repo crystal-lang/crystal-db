@@ -8,7 +8,10 @@ module DB
   # * **converter**: defines an alternate type for parsing results. The given class must define `from_rs(DB::ResultSet)` and return an instance of the included type.
   module Serializable
     macro included
-      # Define a `new` directly in the type, like JSON::Serializable
+      include ::DB::Mappable
+
+      # Define a `new` and `from_rs` directly in the type, like JSON::Serializable
+      # For proper overload resolution
 
       def self.new(rs : ::DB::ResultSet)
         instance = allocate
@@ -17,10 +20,24 @@ module DB
         instance
       end
 
-      # Inject the `new` into subclasses as well
+      def self.from_rs(rs : ::DB::ResultSet)
+        objs = Array(self).new
+        rs.each do
+          objs << self.new(rs)
+        end
+        objs
+      ensure
+        rs.close
+      end
+
+      # Inject the class methods into subclasses as well
 
       macro inherited
         def self.new(rs : ::DB::ResultSet)
+          super
+        end
+
+        def self.from_rs(rs : ::DB::Result_set)
           super
         end
       end
@@ -64,6 +81,7 @@ module DB
                   {% end %}
             {% end %}
           else
+            rs.read # Advance set, but discard result
             on_unknown_db_column(col_name)
           end
         end
@@ -93,11 +111,11 @@ module DB
     end
 
     protected def on_unknown_db_column(col_name)
+      raise ::DB::MappingException.new("unknown result set attribute: #{col_name}")
     end
 
-    module Strict
+    module NonStrict
       protected def on_unknown_db_column(col_name)
-        raise ::DB::MappingException.new("unknown result set attribute: #{col_name}")
       end
     end
   end
