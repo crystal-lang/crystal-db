@@ -1,5 +1,6 @@
 require "./spec_helper"
 require "base64"
+require "json"
 
 class SimpleModel
   include DB::Serializable
@@ -57,6 +58,26 @@ class ModelWithConverter
 
   @[DB::Field(converter: ModelWithConverter::Base64Converter)]
   property c0 : Slice(UInt8)
+  property c1 : String
+end
+
+class ModelWithInitialize
+  include DB::Serializable
+
+  property c0 : Int32
+  property c1 : String
+
+  def_equals c0, c1
+
+  def initialize(@c0, @c1)
+  end
+end
+
+class ModelWithJSON
+  include JSON::Serializable
+  include DB::Serializable
+
+  property c0 : Int32
   property c1 : String
 end
 
@@ -139,6 +160,16 @@ describe "DB::Serializable" do
 
   it "should initialize a model with a value converter" do
     expect_model("Zm9v,a", ModelWithConverter, {c0: "foo".to_slice, c1: "a"})
+  end
+
+  it "should initialize a model with an initialize" do
+    obj1 = from_dummy("1,a", ModelWithInitialize)
+    obj2 = ModelWithInitialize.new(1, "a")
+    obj1.should eq obj2
+  end
+
+  it "should initialize a model with JSON serialization also defined" do
+    expect_model("1,a", ModelWithJSON, {c0: 1, c1: "a"})
   end
 
   it "should initialize multiple instances from a single resultset" do
