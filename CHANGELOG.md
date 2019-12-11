@@ -1,3 +1,9 @@
+## v0.8.0 (2019-12-11)
+
+* Add `DB::Serializable`. ([#115](https://github.com/crystal-lang/crystal-db/pull/115), thanks @nickbclifford)
+
+This release requires Crystal 0.25.0 or later.
+
 ## v0.7.0 (2019-09-20)
 
 * **(breaking-change)** `#exec`, `#query`, `#scalar` methods require named argument for array values ([#110](https://github.com/crystal-lang/crystal-db/pull/110), thanks @straight-shoota)
