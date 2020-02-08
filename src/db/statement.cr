@@ -15,7 +15,7 @@ module DB
         end
       end
 
-      raise "no results"
+      raise NoResultsError.new("no results")
     end
 
     # See `QueryMethods#query`

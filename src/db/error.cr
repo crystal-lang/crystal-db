@@ -29,4 +29,8 @@ module DB
 
   class Rollback < Error
   end
+
+  # Raised when a scalar query returns no results.
+  class NoResultsError < Error
+  end
 end
