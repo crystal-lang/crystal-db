@@ -208,4 +208,13 @@ describe DB::Statement do
       db.pool.is_available?(DummyDriver::DummyConnection.connections.first)
     end
   end
+
+  it "raises NoResultsError for scalar" do
+    with_dummy_connection do |cnn|
+      stmt = cnn.prepared ""
+      expect_raises DB::NoResultsError do
+        stmt.scalar "SELECT LIMIT 0"
+      end
+    end
+  end
 end
