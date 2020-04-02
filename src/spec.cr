@@ -505,6 +505,8 @@ module DB
                 end
               end
             end
+          else
+            raise "Invalid prepared value. Allowed values are :both and :default"
           end
         end
       end

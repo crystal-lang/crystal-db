@@ -246,6 +246,8 @@ describe DummyDriver do
               rs.read(Int64, Int64).should eq({3i64, 4i64})
             when 1
               rs.read(Int64, Int64).should eq({1i64, 2i64})
+            else
+              raise "unreachable"
             end
             i += 1
           end
