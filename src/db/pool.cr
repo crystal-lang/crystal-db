@@ -206,25 +206,38 @@ module DB
       @idle.first?
     end
 
-    private def wait_for_available
-      timeout = TimeoutHelper.new(@checkout_timeout.to_f64)
-      sync_inc_waiting_resource
+    {% if compare_versions(Crystal::VERSION, "0.34.0-0") > 0 %}
+      private def wait_for_available
+        sync_inc_waiting_resource
 
-      timeout.start
-
-      # TODO update to select keyword for crystal 0.19
-      index, _ = Channel.select(@availability_channel.receive_select_action, timeout.receive_select_action)
-      case index
-      when 0
-        timeout.cancel
-        sync_dec_waiting_resource
-      when 1
-        sync_dec_waiting_resource
-        raise DB::PoolTimeout.new
-      else
-        raise DB::Error.new
+        select
+        when @availability_channel.receive
+          sync_dec_waiting_resource
+        when timeout(@checkout_timeout.seconds)
+          sync_dec_waiting_resource
+          raise DB::PoolTimeout.new
+        end
       end
-    end
+    {% else %}
+      private def wait_for_available
+        timeout = TimeoutHelper.new(@checkout_timeout.to_f64)
+        sync_inc_waiting_resource
+
+        timeout.start
+
+        index, _ = Channel.select(@availability_channel.receive_select_action, timeout.receive_select_action)
+        case index
+        when 0
+          timeout.cancel
+          sync_dec_waiting_resource
+        when 1
+          sync_dec_waiting_resource
+          raise DB::PoolTimeout.new
+        else
+          raise DB::Error.new
+        end
+      end
+    {% end %}
 
     private def sync_inc_waiting_resource
       sync { @waiting_resource += 1 }
