@@ -67,14 +67,15 @@ module DB
     #
     # The given block must not invoke `move_next` on the yielded result set.
     #
-    # Raises `DB::Error` if there were no rows, or if there were more than one row.
+    # Raises `DB::NoResultsError` if there were no rows.
+    # Raises `DB::Error` if there were more than one row.
     #
     # ```
     # name = db.query_one "select name from contacts where id = ?", 18, &.read(String)
     # ```
     def query_one(query, *args_, args : Array? = nil, &block : ResultSet -> U) : U forall U
       query(query, *args_, args: args) do |rs|
-        raise DB::Error.new("no rows") unless rs.move_next
+        raise DB::NoResultsError.new("no results") unless rs.move_next
 
         value = yield rs
         raise DB::Error.new("more than one row") if rs.move_next
@@ -85,7 +86,8 @@ module DB
     # Executes a *query* that expects a single row and returns it
     # as a tuple of the given *types*.
     #
-    # Raises `DB::Error` if there were no rows, or if there were more than one row.
+    # Raises `DB::NoResultsError` if there were no rows.
+    # Raises `DB::Error` if there were more than one row.
     #
     # ```
     # db.query_one "select name, age from contacts where id = ?", 1, as: {String, Int32}
@@ -100,7 +102,8 @@ module DB
     # as a named tuple of the given *types* (the keys of the named tuple
     # are not necessarily the column names).
     #
-    # Raises `DB::Error` if there were no rows, or if there were more than one row.
+    # Raises `DB::NoResultsError` if there were no rows.
+    # Raises `DB::Error` if there were more than one row.
     #
     # ```
     # db.query_one "select name, age from contacts where id = ?", 1, as: {name: String, age: Int32}
@@ -114,7 +117,8 @@ module DB
     # Executes a *query* that expects a single row
     # and returns the first column's value as the given *type*.
     #
-    # Raises `DB::Error` if there were no rows, or if there were more than one row.
+    # Raises `DB::NoResultsError` if there were no rows.
+    # Raises `DB::Error` if there were more than one row.
     #
     # ```
     # db.query_one "select name from contacts where id = ?", 1, as: String

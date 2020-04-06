@@ -126,7 +126,7 @@ describe DummyDriver do
 
       it "raises if no rows" do
         with_dummy do |db|
-          expect_raises(DB::Error, "no rows") do
+          expect_raises(DB::NoResultsError) do
             db.query_one("") { }
           end
         end
