@@ -1,3 +1,9 @@
+## v0.9.0 (2019-04-06)
+
+* Fix compatibility issues for Crystal 0.34.0. ([#124](https://github.com/crystal-lang/crystal-db/pull/124), thanks @bcardiff)
+* Fix readme sample. ([#117](https://github.com/crystal-lang/crystal-db/pull/117), thanks @bcardiff)
+* Raise `DB::NoResultsError` when trying to get data from an empty result ([#121](https://github.com/crystal-lang/crystal-db/pull/121), [#125](https://github.com/crystal-lang/crystal-db/pull/125), thanks @jwoertink, @bcardiff)
+
 ## v0.8.0 (2019-12-11)
 
 * Add `DB::Serializable`. ([#115](https://github.com/crystal-lang/crystal-db/pull/115), thanks @nickbclifford)
