@@ -117,7 +117,7 @@ module DB
           {% end %}
           else
             {% if strict %}
-              raise ::DB::MappingException.new("unknown result set attribute: #{col_name}")
+              raise ::DB::MappingException.new("unknown result set attribute: #{col_name}", self.class.to_s)
             {% else %}
               %rs.read
             {% end %}
@@ -127,7 +127,7 @@ module DB
       {% for key, value in properties %}
         {% unless value[:nilable] || value[:default] != nil %}
           if %var{key.id}.is_a?(Nil) && !%found{key.id}
-            raise ::DB::MappingException.new("missing result set attribute: {{(value[:key] || key).id}}")
+            raise ::DB::MappingException.new("missing result set attribute: {{(value[:key] || key).id}}", self.class.to_s)
           end
         {% end %}
       {% end %}

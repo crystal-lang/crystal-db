@@ -105,19 +105,19 @@ describe "DB::Serializable" do
   end
 
   it "should fail to initialize a simple model if types do not match" do
-    expect_raises ArgumentError do
+    expect_raises DB::MappingException, "Invalid Int32: b\n  deserializing SimpleModel#c0" do
       from_dummy("b,a", SimpleModel)
     end
   end
 
   it "should fail to initialize a simple model if there is a missing column" do
-    expect_raises DB::MappingException do
+    expect_raises DB::MappingException, "Missing column c1\n  deserializing SimpleModel#c1" do
       from_dummy("1", SimpleModel)
     end
   end
 
   it "should fail to initialize a simple model if there is an unexpected column" do
-    expect_raises DB::MappingException do
+    expect_raises DB::MappingException, "Unknown column: c2\n  deserializing SimpleModel" do
       from_dummy("1,a,b", SimpleModel)
     end
   end
