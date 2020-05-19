@@ -89,7 +89,7 @@ module DB
   record ExecResult, rows_affected : Int64, last_insert_id : Int64
 
   # :nodoc:
-  def self.driver_class(driver_name) : Driver.class
+  def self.driver_class(driver_name : String) : Driver.class
     drivers[driver_name]? ||
       raise(ArgumentError.new(%(no driver was registered for the schema "#{driver_name}", did you maybe forget to require the database driver?)))
   end
@@ -161,7 +161,7 @@ module DB
   end
 
   private def self.build_driver(uri : URI)
-    driver_class(uri.scheme).new
+    driver_class(uri.scheme.not_nil!).new
   end
 
   # :nodoc:
