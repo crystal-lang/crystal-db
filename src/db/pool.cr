@@ -235,7 +235,7 @@ module DB
           sync_dec_waiting_resource
         when timeout(@checkout_timeout.seconds)
           sync_dec_waiting_resource
-          raise PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
+          raise DB::PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
         end
       end
     {% else %}
