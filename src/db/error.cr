@@ -14,10 +14,10 @@ module DB
   # Raised when an established connection is lost
   # probably due to socket/network issues.
   # It is used by the connection pool retry logic.
-  class ConnectionLost < Error
-    getter connection : Connection
+  class ConnectionLost(T) < Error
+    getter connection
 
-    def initialize(@connection)
+    def initialize(@connection : T)
     end
   end
 
