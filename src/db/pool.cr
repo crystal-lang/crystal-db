@@ -108,9 +108,12 @@ module DB
 
     def checkout(&block : T ->)
       connection = checkout
-      yield connection
-    ensure
-      release connection if connection
+
+      begin
+        yield connection
+      ensure
+        release connection
+      end
     end
 
     # ```
