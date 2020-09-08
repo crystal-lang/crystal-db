@@ -56,6 +56,11 @@ module DB
       TopLevelTransaction.new(self)
     end
 
+    # Raises a connection lost of *self*
+    def raise_connection_lost
+      raise ConnectionLost(Connection).new(self)
+    end
+
     protected def do_close
       @statements_cache.each_value &.close
       @statements_cache.clear

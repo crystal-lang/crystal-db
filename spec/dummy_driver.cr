@@ -35,7 +35,7 @@ class DummyDriver < DB::Driver
     end
 
     def check
-      raise DB::ConnectionLost.new(self) unless @connected
+      raise_connection_lost unless @connected
     end
 
     def disconnect!
