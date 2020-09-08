@@ -176,7 +176,7 @@ module DB
         begin
           sleep @retry_delay if i >= current_available
           return yield
-        rescue e : ConnectionLost
+        rescue e : ConnectionLost(T)
           # if the connection is lost close it to release resources
           # and remove it from the known pool.
           sync { delete(e.connection) }
