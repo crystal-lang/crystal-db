@@ -176,12 +176,12 @@ module DB
         begin
           sleep @retry_delay if i >= current_available
           return yield
-        rescue e : ConnectionLost(T)
+        rescue e : PoolResourceLost(T)
           # if the connection is lost close it to release resources
           # and remove it from the known pool.
-          sync { delete(e.connection) }
-          e.connection.close
-        rescue e : ConnectionRefused
+          sync { delete(e.resource) }
+          e.resource.close
+        rescue e : PoolResourceRefused
           # a ConnectionRefused means a new connection
           # was intended to be created
           # nothing to due but to retry soon
