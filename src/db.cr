@@ -1,4 +1,5 @@
 require "uri"
+require "log"
 
 # The DB module is a unified interface for database access.
 # Individual database systems are supported by specific database driver shards.
@@ -75,6 +76,8 @@ require "uri"
 # ```
 #
 module DB
+  Log = ::Log.for(self)
+
   # Types supported to interface with database driver.
   # These can be used in any `ResultSet#read` or any `Database#query` related
   # method to be used as query parameters

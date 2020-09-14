@@ -96,22 +96,22 @@ class DummyDriver < DB::Driver
   class DummyStatement < DB::Statement
     property params
 
-    def initialize(connection, @query : String, @prepared : Bool)
+    def initialize(connection, command : String, @prepared : Bool)
       @params = Hash(Int32 | String, DB::Any | Array(DB::Any)).new
-      super(connection)
-      raise DB::Error.new(query) if query == "syntax error"
+      super(connection, command)
+      raise DB::Error.new(command) if command == "syntax error"
     end
 
     protected def perform_query(args : Enumerable) : DB::ResultSet
       @connection.as(DummyConnection).check
       set_params args
-      DummyResultSet.new self, @query
+      DummyResultSet.new self, command
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
       @connection.as(DummyConnection).check
       set_params args
-      raise DB::Error.new("forced exception due to query") if @query == "raise"
+      raise DB::Error.new("forced exception due to query") if command == "raise"
       DB::ExecResult.new 0i64, 0_i64
     end
 
@@ -149,9 +149,9 @@ class DummyDriver < DB::Driver
 
     @@last_result_set : self?
 
-    def initialize(statement, query)
+    def initialize(statement, command)
       super(statement)
-      @top_values = query.split.map { |r| r.split(',') }.to_a
+      @top_values = command.split.map { |r| r.split(',') }.to_a
       @column_count = @top_values.size > 0 ? @top_values[0].size : 2
 
       @@last_result_set = self
