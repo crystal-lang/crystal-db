@@ -1,5 +1,7 @@
 require "weak_ref"
 
+require "./error"
+
 module DB
   class Pool(T)
     # Pool configuration
@@ -52,12 +54,19 @@ module DB
       @idle.clear
     end
 
-    record Stats, open_connections : Int32
+    record Stats,
+      open_connections : Int32,
+      idle_connections : Int32,
+      in_flight_connections : Int32,
+      max_connections : Int32
 
     # Returns stats of the pool
     def stats
       Stats.new(
-        open_connections: @total.size
+        open_connections: @total.size,
+        idle_connections: @idle.size,
+        in_flight_connections: @inflight,
+        max_connections: @max_pool_size,
       )
     end
 
@@ -91,8 +100,20 @@ module DB
         resource
       end
 
-      res.before_checkout
+      if res.responds_to?(:before_checkout)
+        res.before_checkout
+      end
       res
+    end
+
+    def checkout(&block : T ->)
+      connection = checkout
+
+      begin
+        yield connection
+      ensure
+        release connection
+      end
     end
 
     # ```
@@ -122,7 +143,9 @@ module DB
       sync do
         if can_increase_idle_pool
           @idle << resource
-          resource.after_release
+          if resource.responds_to?(:after_release)
+            resource.after_release
+          end
           idle_pushed = true
         else
           resource.close
@@ -153,12 +176,12 @@ module DB
         begin
           sleep @retry_delay if i >= current_available
           return yield
-        rescue e : ConnectionLost
+        rescue e : PoolResourceLost(T)
           # if the connection is lost close it to release resources
           # and remove it from the known pool.
-          sync { delete(e.connection) }
-          e.connection.close
-        rescue e : ConnectionRefused
+          sync { delete(e.resource) }
+          e.resource.close
+        rescue e : PoolResourceRefused
           # a ConnectionRefused means a new connection
           # was intended to be created
           # nothing to due but to retry soon
@@ -215,7 +238,7 @@ module DB
           sync_dec_waiting_resource
         when timeout(@checkout_timeout.seconds)
           sync_dec_waiting_resource
-          raise DB::PoolTimeout.new
+          raise DB::PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
         end
       end
     {% else %}
@@ -232,7 +255,7 @@ module DB
           sync_dec_waiting_resource
         when 1
           sync_dec_waiting_resource
-          raise DB::PoolTimeout.new
+          raise DB::PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
         else
           raise DB::Error.new
         end
