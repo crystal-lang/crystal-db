@@ -8,6 +8,7 @@ describe DB::Database do
 
       db.setup_connection do |cnn|
         cnn_setup += 1
+        cnn.scalar("1").should eq "1"
       end
 
       cnn_setup.should eq(2)

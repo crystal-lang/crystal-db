@@ -55,6 +55,7 @@ module DB
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
       @pool = Pool.new(**pool_options) {
         conn = @driver.build_connection(self).as(Connection)
+        conn.auto_release = false
         @setup_connection.call conn
         conn
       }
