@@ -111,26 +111,48 @@ module DB
     end
 
     protected def emit_log(args : Enumerable)
-      Log.debug &.emit("Executing query", query: command, args: arg_to_log(args))
+      Log.debug &.emit("Executing query", query: command, args: MetadataValueConverter.arg_to_log(args))
     end
+  end
 
-    private def arg_to_log(arg) : ::Log::Metadata::Value
+  # This module converts DB supported values to `::Log::Metadata::Value`
+  #
+  # ### Note to implementors
+  #
+  # If the driver defines custom types to be used as arguments the default behavior
+  # will be converting the value via `#to_s`. Otherwise you can define overloads to
+  # change this behaviour.
+  #
+  # ```
+  # module DB::MetadataValueConverter
+  #   def self.arg_to_log(arg : PG::Geo::Point)
+  #     ::Log::Metadata::Value.new("(#{arg.x}, #{arg.y})::point")
+  #   end
+  # end
+  # ```
+  module MetadataValueConverter
+    # Returns *arg* encoded as a `::Log::Metadata::Value`.
+    def self.arg_to_log(arg) : ::Log::Metadata::Value
       ::Log::Metadata::Value.new(arg.to_s)
     end
 
-    private def arg_to_log(arg : Enumerable) : ::Log::Metadata::Value
+    # :ditto:
+    def self.arg_to_log(arg : Enumerable) : ::Log::Metadata::Value
       ::Log::Metadata::Value.new(arg.to_a.map { |a| arg_to_log(a).as(::Log::Metadata::Value) })
     end
 
-    private def arg_to_log(arg : Int) : ::Log::Metadata::Value
+    # :ditto:
+    def self.arg_to_log(arg : Int) : ::Log::Metadata::Value
       ::Log::Metadata::Value.new(arg.to_i64)
     end
 
-    private def arg_to_log(arg : UInt64) : ::Log::Metadata::Value
+    # :ditto:
+    def self.arg_to_log(arg : UInt64) : ::Log::Metadata::Value
       ::Log::Metadata::Value.new(arg.to_s)
     end
 
-    private def arg_to_log(arg : Nil | Bool | Int32 | Int64 | Float32 | Float64 | String | Time) : ::Log::Metadata::Value
+    # :ditto:
+    def self.arg_to_log(arg : Nil | Bool | Int32 | Int64 | Float32 | Float64 | String | Time) : ::Log::Metadata::Value
       ::Log::Metadata::Value.new(arg)
     end
   end

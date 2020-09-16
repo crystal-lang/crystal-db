@@ -137,7 +137,7 @@ module DB
     build_connection(uri)
   end
 
-  # ditto
+  # :ditto:
   def self.connect(uri : URI | String, &block)
     cnn = build_connection(uri)
     begin
