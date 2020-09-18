@@ -81,33 +81,64 @@ module DB
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult
-      before_query_or_exec(args)
-      return perform_exec(args)
+      around_query_or_exec(args) do
+        perform_exec(args)
+      end
     ensure
-      after_query_or_exec(args)
       release_connection
     end
 
     private def perform_query_with_rescue(args : Enumerable) : ResultSet
-      before_query_or_exec(args)
-      return perform_query(args)
+      around_query_or_exec(args) do
+        perform_query(args)
+      end
     rescue e : Exception
       # Release connection only when an exception occurs during the query
       # execution since we need the connection open while the ResultSet is open
       release_connection
       raise e
-    ensure
-      after_query_or_exec(args)
     end
 
     protected abstract def perform_query(args : Enumerable) : ResultSet
     protected abstract def perform_exec(args : Enumerable) : ExecResult
 
-    protected def before_query_or_exec(args : Enumerable)
-      emit_log(args)
+    # This method is called when executing the statement. Although it can be
+    # redefined, it is recommended to use the `def_around_query_or_exec` macro
+    # to be able to add new behaviors without loosing prior existing ones.
+    protected def around_query_or_exec(args : Enumerable)
+      yield
     end
 
-    protected def after_query_or_exec(args : Enumerable)
+    # This macro allows injecting code to be run before and after the execution
+    # of the request. It should return the yielded value. It must be called with 1
+    # block argument that will be used to pass the `args : Enumerable`.
+    #
+    # ```
+    # class DB::Statement
+    #   def_around_query_or_exec do |args|
+    #     # do something before query or exec
+    #     res = yield
+    #     # do something after query or exec
+    #     res
+    #   end
+    # end
+    # ```
+    macro def_around_query_or_exec(&block)
+      protected def around_query_or_exec(%args : Enumerable)
+        previous_def do
+          {% if block.args.size != 1 %}
+            {% raise "Wrong number of block arguments (given #{block.args.size}, expected: 1)" %}
+          {% end %}
+
+          {{ block.args.first.id }} = %args
+          {{ block.body }}
+        end
+      end
+    end
+
+    def_around_query_or_exec do |args|
+      emit_log(args)
+      yield
     end
 
     protected def emit_log(args : Enumerable)
