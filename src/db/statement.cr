@@ -51,7 +51,9 @@ module DB
     # :nodoc:
     getter connection
 
-    def initialize(@connection : Connection)
+    getter command : String
+
+    def initialize(@connection : Connection, @command : String)
     end
 
     def release_connection
@@ -79,13 +81,17 @@ module DB
     end
 
     private def perform_exec_and_release(args : Enumerable) : ExecResult
-      return perform_exec(args)
+      around_query_or_exec(args) do
+        perform_exec(args)
+      end
     ensure
       release_connection
     end
 
     private def perform_query_with_rescue(args : Enumerable) : ResultSet
-      return perform_query(args)
+      around_query_or_exec(args) do
+        perform_query(args)
+      end
     rescue e : Exception
       # Release connection only when an exception occurs during the query
       # execution since we need the connection open while the ResultSet is open
@@ -95,5 +101,90 @@ module DB
 
     protected abstract def perform_query(args : Enumerable) : ResultSet
     protected abstract def perform_exec(args : Enumerable) : ExecResult
+
+    # This method is called when executing the statement. Although it can be
+    # redefined, it is recommended to use the `def_around_query_or_exec` macro
+    # to be able to add new behaviors without loosing prior existing ones.
+    protected def around_query_or_exec(args : Enumerable)
+      yield
+    end
+
+    # This macro allows injecting code to be run before and after the execution
+    # of the request. It should return the yielded value. It must be called with 1
+    # block argument that will be used to pass the `args : Enumerable`.
+    #
+    # ```
+    # class DB::Statement
+    #   def_around_query_or_exec do |args|
+    #     # do something before query or exec
+    #     res = yield
+    #     # do something after query or exec
+    #     res
+    #   end
+    # end
+    # ```
+    macro def_around_query_or_exec(&block)
+      protected def around_query_or_exec(%args : Enumerable)
+        previous_def do
+          {% if block.args.size != 1 %}
+            {% raise "Wrong number of block arguments (given #{block.args.size}, expected: 1)" %}
+          {% end %}
+
+          {{ block.args.first.id }} = %args
+          {{ block.body }}
+        end
+      end
+    end
+
+    def_around_query_or_exec do |args|
+      emit_log(args)
+      yield
+    end
+
+    protected def emit_log(args : Enumerable)
+      Log.debug &.emit("Executing query", query: command, args: MetadataValueConverter.arg_to_log(args))
+    end
+  end
+
+  # This module converts DB supported values to `::Log::Metadata::Value`
+  #
+  # ### Note to implementors
+  #
+  # If the driver defines custom types to be used as arguments the default behavior
+  # will be converting the value via `#to_s`. Otherwise you can define overloads to
+  # change this behaviour.
+  #
+  # ```
+  # module DB::MetadataValueConverter
+  #   def self.arg_to_log(arg : PG::Geo::Point)
+  #     ::Log::Metadata::Value.new("(#{arg.x}, #{arg.y})::point")
+  #   end
+  # end
+  # ```
+  module MetadataValueConverter
+    # Returns *arg* encoded as a `::Log::Metadata::Value`.
+    def self.arg_to_log(arg) : ::Log::Metadata::Value
+      ::Log::Metadata::Value.new(arg.to_s)
+    end
+
+    # :ditto:
+    def self.arg_to_log(arg : Enumerable) : ::Log::Metadata::Value
+      ::Log::Metadata::Value.new(arg.to_a.map { |a| arg_to_log(a).as(::Log::Metadata::Value) })
+    end
+
+    # :ditto:
+    def self.arg_to_log(arg : Int) : ::Log::Metadata::Value
+      ::Log::Metadata::Value.new(arg.to_i64)
+    end
+
+    # :ditto:
+    def self.arg_to_log(arg : UInt64) : ::Log::Metadata::Value
+      ::Log::Metadata::Value.new(arg.to_s)
+    end
+
+    # :ditto:
+    def self.arg_to_log(arg : Nil | Bool | Int32 | Int64 | Float32 | Float64 | String | Time) : ::Log::Metadata::Value
+      ::Log::Metadata::Value.new(arg)
+    end
   end
 end

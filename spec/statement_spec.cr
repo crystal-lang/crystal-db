@@ -1,4 +1,5 @@
 require "./spec_helper"
+require "log/spec"
 
 describe DB::Statement do
   it "should build prepared statements" do
@@ -214,6 +215,42 @@ describe DB::Statement do
       stmt = cnn.prepared ""
       expect_raises DB::NoResultsError do
         stmt.scalar "SELECT LIMIT 0"
+      end
+    end
+  end
+
+  describe "logging" do
+    it "exec with no arguments" do
+      Log.capture(DB::Log.source) do |logs|
+        with_dummy do |db|
+          db.exec "42"
+        end
+
+        entry = logs.check(:debug, /Executing query/i).entry
+        entry.data[:query].should eq("42")
+        entry.data[:args].as_a.should be_empty
+      end
+    end
+
+    it "query with arguments" do
+      Log.capture(DB::Log.source) do |logs|
+        with_dummy do |db|
+          db.exec "1, ?", args: ["a"]
+          db.exec "2, ?", "a"
+          db.exec "3, ?", ["a"]
+        end
+
+        entry = logs.check(:debug, /Executing query/i).entry
+        entry.data[:query].should eq("1, ?")
+        entry.data[:args][0].as_s.should eq("a")
+
+        entry = logs.check(:debug, /Executing query/i).entry
+        entry.data[:query].should eq("2, ?")
+        entry.data[:args][0].as_s.should eq("a")
+
+        entry = logs.check(:debug, /Executing query/i).entry
+        entry.data[:query].should eq("3, ?")
+        entry.data[:args][0][0].as_s.should eq("a")
       end
     end
   end

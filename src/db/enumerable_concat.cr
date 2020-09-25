@@ -20,7 +20,7 @@ module DB
     end
 
     # returns given `e1 : T` an `Enumerable(T')` and `e2 : U` an `Enumerable(U') | Nil`
-    # it retuns and `Enumerable(T' | U')` that enumerates the elements of `e1`
+    # it returns an `Enumerable(T' | U')` that enumerates the elements of `e1`
     # and, later, the elements of `e2`.
     def self.build(e1 : T, e2 : U)
       return e1 if e2.nil? || e2.empty?
