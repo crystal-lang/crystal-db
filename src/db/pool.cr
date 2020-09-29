@@ -229,38 +229,17 @@ module DB
       @idle.first?
     end
 
-    {% if compare_versions(Crystal::VERSION, "0.34.0-0") > 0 %}
-      private def wait_for_available
-        sync_inc_waiting_resource
+    private def wait_for_available
+      sync_inc_waiting_resource
 
-        select
-        when @availability_channel.receive
-          sync_dec_waiting_resource
-        when timeout(@checkout_timeout.seconds)
-          sync_dec_waiting_resource
-          raise DB::PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
-        end
+      select
+      when @availability_channel.receive
+        sync_dec_waiting_resource
+      when timeout(@checkout_timeout.seconds)
+        sync_dec_waiting_resource
+        raise DB::PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
       end
-    {% else %}
-      private def wait_for_available
-        timeout = TimeoutHelper.new(@checkout_timeout.to_f64)
-        sync_inc_waiting_resource
-
-        timeout.start
-
-        index, _ = Channel.select(@availability_channel.receive_select_action, timeout.receive_select_action)
-        case index
-        when 0
-          timeout.cancel
-          sync_dec_waiting_resource
-        when 1
-          sync_dec_waiting_resource
-          raise DB::PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
-        else
-          raise DB::Error.new
-        end
-      end
-    {% end %}
+    end
 
     private def sync_inc_waiting_resource
       sync { @waiting_resource += 1 }
@@ -289,30 +268,6 @@ module DB
         yield
       ensure
         @mutex.lock
-      end
-    end
-
-    class TimeoutHelper
-      def initialize(@timeout : Float64)
-        @abort_timeout = false
-        @timeout_channel = Channel(Nil).new
-      end
-
-      def receive_select_action
-        @timeout_channel.receive_select_action
-      end
-
-      def start
-        spawn do
-          sleep @timeout
-          unless @abort_timeout
-            @timeout_channel.send nil
-          end
-        end
-      end
-
-      def cancel
-        @abort_timeout = true
       end
     end
   end
