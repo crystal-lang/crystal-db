@@ -1,4 +1,12 @@
-## v0.9.0 (2019-04-06)
+## v0.10.0 (2020-09-30)
+
+* Fix mutex deadlock in setup_connection. ([#128](https://github.com/crystal-lang/crystal-db/pull/128), thanks @straight-shoota)
+* Add logging for executing queries. ([#134](https://github.com/crystal-lang/crystal-db/pull/134), thanks @bcardiff)
+* Allow `DB::Pool` to be used a generic connection pool. ([#131](https://github.com/crystal-lang/crystal-db/pull/131), thanks @jgaskins)
+
+This release requires Crystal 0.35.0 or later.
+
+## v0.9.0 (2020-04-06)
 
 * Fix compatibility issues for Crystal 0.34.0. ([#124](https://github.com/crystal-lang/crystal-db/pull/124), thanks @bcardiff)
 * Fix readme sample. ([#117](https://github.com/crystal-lang/crystal-db/pull/117), thanks @bcardiff)
