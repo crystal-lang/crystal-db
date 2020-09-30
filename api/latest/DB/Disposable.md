@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.8/DB/Disposable.html
+  - /api/0.9/DB/Disposable.html
 ---

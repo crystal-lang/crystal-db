@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.8/DB/ConnectionContext.html
+  - /api/0.9/DB/ConnectionContext.html
 ---
