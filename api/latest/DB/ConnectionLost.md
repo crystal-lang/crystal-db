@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.9/DB/ConnectionLost.html
+  - /api/0.10/DB/ConnectionLost.html
 ---

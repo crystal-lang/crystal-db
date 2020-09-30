@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.9/DB/BeginTransaction.html
+  - /api/0.10/DB/BeginTransaction.html
 ---
