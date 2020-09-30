@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.34.0">
+<meta name="crystal_docs.project_version" content="0.9.0">
+<meta name="crystal_docs.project_name" content="db">
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="db">
+  <title>DB::DriverSpecs(DBAnyType) - db 0.9.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          db
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.9.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="../DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="db/DB/DriverSpecs" data-name="db::driverspecs(dbanytype)">
+      <a href="../DB/DriverSpecs.html">DriverSpecs</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/DriverSpecs/ColumnDef" data-name="db::driverspecs::columndef">
+      <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Field" data-name="db::field">
+      <a href="../DB/Field.html">Field</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/NoResultsError" data-name="db::noresultserror">
+      <a href="../DB/NoResultsError.html">NoResultsError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Pool/Stats" data-name="db::pool::stats">
+      <a href="../DB/Pool/Stats.html">Stats</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Pool/TimeoutHelper" data-name="db::pool::timeouthelper">
+      <a href="../DB/Pool/TimeoutHelper.html">TimeoutHelper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/QueryMethods" data-name="db::querymethods(stmt)">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Serializable" data-name="db::serializable">
+      <a href="../DB/Serializable.html">Serializable</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Serializable/NonStrict" data-name="db::serializable::nonstrict">
+      <a href="../DB/Serializable/NonStrict.html">NonStrict</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> DB::DriverSpecs(DBAnyType)
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../DB/DriverSpecs.html">DB::DriverSpecs(DBAnyType)</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Helper class to ensure behaviour of custom drivers</p>
+
+<pre><code><span class="k">require</span> <span class="s">&quot;db/spec&quot;</span>
+
+<span class="t">DB</span><span class="t">::</span><span class="t">DriverSpecs</span>(<span class="t">DB</span><span class="t">::</span><span class="t">Any</span>).run <span class="k">do</span>
+  <span class="c"># How to connect to database</span>
+  connection_string <span class="s">&quot;scheme://database_url&quot;</span>
+
+  <span class="c"># Clean up database if needed using before/after callbacks</span>
+  before <span class="k">do</span>
+    <span class="c"># ...</span>
+  <span class="k">end</span>
+
+  after <span class="k">do</span>
+    <span class="c"># ...</span>
+  <span class="k">end</span>
+
+  <span class="c"># Sample values that will be stored, retrieved across many specs</span>
+  sample_value <span class="s">&quot;hello&quot;</span>, <span class="s">&quot;varchar(25)&quot;</span>, <span class="s">&quot;&#39;hello&#39;&quot;</span>
+
+  it <span class="s">&quot;custom spec with a db initialized&quot;</span> <span class="k">do</span> <span class="o">|</span>db<span class="o">|</span>
+    <span class="c"># assert something using *db*</span>
+  <span class="k">end</span>
+
+  <span class="c"># Configure the appropiate syntax for different commands needed to run the specs</span>
+  binding_syntax <span class="k">do</span> <span class="o">|</span>index<span class="o">|</span>
+    <span class="s">&quot;?&quot;</span>
+  <span class="k">end</span>
+
+  create_table_1column_syntax <span class="k">do</span> <span class="o">|</span>table_name, col1<span class="o">|</span>
+    <span class="s">&quot;create table </span><span class="i">#{</span>table_name<span class="i">}</span><span class="s"> (</span><span class="i">#{</span>col1.name<span class="i">}</span><span class="s"> </span><span class="i">#{</span>col1.sql_type<span class="i">}</span><span class="s"> </span><span class="i">#{</span>col1.null ? <span class="s">&quot;NULL&quot;</span> : <span class="s">&quot;NOT NULL&quot;</span><span class="i">}</span><span class="s">)&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>The following methods needs to be called to configure the appropiate syntax
+for different commands and allow all the specs to run: <code><a href="../DB/DriverSpecs.html#binding_syntax(&binding_syntax:Proc(Int32,String))-instance-method">#binding_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#create_table_1column_syntax(&create_table_1column_syntax:Proc(String,ColumnDef,String))-instance-method">#create_table_1column_syntax</a></code>,
+<code><a href="../DB/DriverSpecs.html#create_table_2columns_syntax(&create_table_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method">#create_table_2columns_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#select_1column_syntax(&select_1column_syntax:Proc(String,ColumnDef,String))-instance-method">#select_1column_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#select_2columns_syntax(&select_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method">#select_2columns_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#select_count_syntax(&select_count_syntax:Proc(String,String))-instance-method">#select_count_syntax</a></code>,
+<code><a href="../DB/DriverSpecs.html#select_scalar_syntax(&select_scalar_syntax:Proc(String,String?,String))-instance-method">#select_scalar_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#insert_1column_syntax(&insert_1column_syntax:Proc(String,ColumnDef,String,String))-instance-method">#insert_1column_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#insert_2columns_syntax(&insert_2columns_syntax:Proc(String,ColumnDef,String,ColumnDef,String,String))-instance-method">#insert_2columns_syntax</a></code>, <code><a href="../DB/DriverSpecs.html#drop_table_if_exists_syntax(&drop_table_if_exists_syntax:Proc(String,String))-instance-method">#drop_table_if_exists_syntax</a></code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+
+
+
+
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#run(description=&quot;asadb&quot;,&)-class-method" class="signature"><strong>.run</strong>(description = <span class="s">&quot;as a db&quot;</span>, &)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#after(&after:-%3ENil)-instance-method" class="signature"><strong>#after</strong>(&after :  -> Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#before(&before:-%3ENil)-instance-method" class="signature"><strong>#before</strong>(&before :  -> Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#binding_syntax(&binding_syntax:Proc(Int32,String))-instance-method" class="signature"><strong>#binding_syntax</strong>(&binding_syntax : Proc(Int32, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#connection_string(connection_string:String)-instance-method" class="signature"><strong>#connection_string</strong>(connection_string : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#create_table_1column_syntax(&create_table_1column_syntax:Proc(String,ColumnDef,String))-instance-method" class="signature"><strong>#create_table_1column_syntax</strong>(&create_table_1column_syntax : Proc(String, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#create_table_2columns_syntax(&create_table_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method" class="signature"><strong>#create_table_2columns_syntax</strong>(&create_table_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#drop_table_if_exists_syntax(&drop_table_if_exists_syntax:Proc(String,String))-instance-method" class="signature"><strong>#drop_table_if_exists_syntax</strong>(&drop_table_if_exists_syntax : Proc(String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#encode_null(encode_null:String)-instance-method" class="signature"><strong>#encode_null</strong>(encode_null : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#insert_1column_syntax(&insert_1column_syntax:Proc(String,ColumnDef,String,String))-instance-method" class="signature"><strong>#insert_1column_syntax</strong>(&insert_1column_syntax : Proc(String, ColumnDef, String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#insert_2columns_syntax(&insert_2columns_syntax:Proc(String,ColumnDef,String,ColumnDef,String,String))-instance-method" class="signature"><strong>#insert_2columns_syntax</strong>(&insert_2columns_syntax : Proc(String, ColumnDef, String, ColumnDef, String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#it(description=&quot;assert&quot;,prepared=:default,file=__FILE__,line=__LINE__,end_line=__END_LINE__,&block:DB::Database-%3E)-instance-method" class="signature"><strong>#it</strong>(description = <span class="s">&quot;assert&quot;</span>, prepared = <span class="n">:default</span>, file = __FILE__, line = __LINE__, end_line = __END_LINE__, &block : DB::Database -> )</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#its-instance-method" class="signature"><strong>#its</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#sample_value(value,sql_type,value_encoded,*,type_safe_value=true)-instance-method" class="signature"><strong>#sample_value</strong>(value, sql_type, value_encoded, *, type_safe_value = <span class="n">true</span>)</a>
+        
+          <div class="summary"><p>Use <em>value</em> as sample value that should be stored in columns of type <em>sql_type</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_1column_syntax(&select_1column_syntax:Proc(String,ColumnDef,String))-instance-method" class="signature"><strong>#select_1column_syntax</strong>(&select_1column_syntax : Proc(String, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_2columns_syntax(&select_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method" class="signature"><strong>#select_2columns_syntax</strong>(&select_2columns_syntax : Proc(String, ColumnDef, ColumnDef, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_count_syntax(&select_count_syntax:Proc(String,String))-instance-method" class="signature"><strong>#select_count_syntax</strong>(&select_count_syntax : Proc(String, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#select_scalar_syntax(&select_scalar_syntax:Proc(String,String?,String))-instance-method" class="signature"><strong>#select_scalar_syntax</strong>(&select_scalar_syntax : Proc(String, String?, String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#support_prepared(support_prepared:Bool)-instance-method" class="signature"><strong>#support_prepared</strong>(support_prepared : Bool)</a>
+        
+          <div class="summary"><p>Allow specs that uses prepared statements (default <code>true</code>)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#support_unprepared(support_unprepared:Bool)-instance-method" class="signature"><strong>#support_unprepared</strong>(support_unprepared : Bool)</a>
+        
+          <div class="summary"><p>Allow specs that uses unprepared statements (default <code>true</code>)</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="run(description=&quot;asadb&quot;,&)-class-method">
+      <div class="signature">
+        
+        def self.<strong>run</strong>(description = <span class="s">&quot;as a db&quot;</span>, &)
+
+        <a class="method-permalink" href="#run(description=&quot;asadb&quot;,&)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="after(&after:->Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>after</strong>(&after :  -> Nil)
+
+        <a class="method-permalink" href="#after(&after:-%3ENil)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="before(&before:->Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>before</strong>(&before :  -> Nil)
+
+        <a class="method-permalink" href="#before(&before:-%3ENil)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="binding_syntax(&binding_syntax:Proc(Int32,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>binding_syntax</strong>(&binding_syntax : Proc(Int32, String))
+
+        <a class="method-permalink" href="#binding_syntax(&binding_syntax:Proc(Int32,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="connection_string(connection_string:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>connection_string</strong>(connection_string : String)
+
+        <a class="method-permalink" href="#connection_string(connection_string:String)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="create_table_1column_syntax(&create_table_1column_syntax:Proc(String,ColumnDef,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>create_table_1column_syntax</strong>(&create_table_1column_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#create_table_1column_syntax(&create_table_1column_syntax:Proc(String,ColumnDef,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="create_table_2columns_syntax(&create_table_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>create_table_2columns_syntax</strong>(&create_table_2columns_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#create_table_2columns_syntax(&create_table_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="drop_table_if_exists_syntax(&drop_table_if_exists_syntax:Proc(String,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>drop_table_if_exists_syntax</strong>(&drop_table_if_exists_syntax : Proc(String, String))
+
+        <a class="method-permalink" href="#drop_table_if_exists_syntax(&drop_table_if_exists_syntax:Proc(String,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="encode_null(encode_null:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>encode_null</strong>(encode_null : String)
+
+        <a class="method-permalink" href="#encode_null(encode_null:String)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="insert_1column_syntax(&insert_1column_syntax:Proc(String,ColumnDef,String,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>insert_1column_syntax</strong>(&insert_1column_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String, String))
+
+        <a class="method-permalink" href="#insert_1column_syntax(&insert_1column_syntax:Proc(String,ColumnDef,String,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="insert_2columns_syntax(&insert_2columns_syntax:Proc(String,ColumnDef,String,ColumnDef,String,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>insert_2columns_syntax</strong>(&insert_2columns_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String, String))
+
+        <a class="method-permalink" href="#insert_2columns_syntax(&insert_2columns_syntax:Proc(String,ColumnDef,String,ColumnDef,String,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="it(description=&quot;assert&quot;,prepared=:default,file=__FILE__,line=__LINE__,end_line=__END_LINE__,&block:DB::Database->)-instance-method">
+      <div class="signature">
+        
+        def <strong>it</strong>(description = <span class="s">&quot;assert&quot;</span>, prepared = <span class="n">:default</span>, file = __FILE__, line = __LINE__, end_line = __END_LINE__, &block : <a href="../DB/Database.html">DB::Database</a> -> )
+
+        <a class="method-permalink" href="#it(description=&quot;assert&quot;,prepared=:default,file=__FILE__,line=__LINE__,end_line=__END_LINE__,&block:DB::Database-%3E)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="its-instance-method">
+      <div class="signature">
+        
+        def <strong>its</strong>
+
+        <a class="method-permalink" href="#its-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="sample_value(value,sql_type,value_encoded,*,type_safe_value=true)-instance-method">
+      <div class="signature">
+        
+        def <strong>sample_value</strong>(value, sql_type, value_encoded, *, type_safe_value = <span class="n">true</span>)
+
+        <a class="method-permalink" href="#sample_value(value,sql_type,value_encoded,*,type_safe_value=true)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Use <em>value</em> as sample value that should be stored in columns of type <em>sql_type</em>.
+<em>value_encoded</em> is driver specific expression that should generate that value in the database.
+<em>type_safe_value</em> indicates whether <em>value_encoded</em> is expected to generate the <em>value</em> even without
+been stored in a table (default <code>true</code>).</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_1column_syntax(&select_1column_syntax:Proc(String,ColumnDef,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>select_1column_syntax</strong>(&select_1column_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#select_1column_syntax(&select_1column_syntax:Proc(String,ColumnDef,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_2columns_syntax(&select_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>select_2columns_syntax</strong>(&select_2columns_syntax : Proc(String, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>, String))
+
+        <a class="method-permalink" href="#select_2columns_syntax(&select_2columns_syntax:Proc(String,ColumnDef,ColumnDef,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_count_syntax(&select_count_syntax:Proc(String,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>select_count_syntax</strong>(&select_count_syntax : Proc(String, String))
+
+        <a class="method-permalink" href="#select_count_syntax(&select_count_syntax:Proc(String,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="select_scalar_syntax(&select_scalar_syntax:Proc(String,String?,String))-instance-method">
+      <div class="signature">
+        
+        def <strong>select_scalar_syntax</strong>(&select_scalar_syntax : Proc(String, String?, String))
+
+        <a class="method-permalink" href="#select_scalar_syntax(&select_scalar_syntax:Proc(String,String?,String))-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="support_prepared(support_prepared:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>support_prepared</strong>(support_prepared : Bool)
+
+        <a class="method-permalink" href="#support_prepared(support_prepared:Bool)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Allow specs that uses prepared statements (default <code>true</code>)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="support_unprepared(support_unprepared:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>support_unprepared</strong>(support_unprepared : Bool)
+
+        <a class="method-permalink" href="#support_unprepared(support_unprepared:Bool)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Allow specs that uses unprepared statements (default <code>true</code>)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
