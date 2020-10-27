@@ -61,6 +61,15 @@ module DB
       }
     end
 
+    # Run the specified block every time a new connection is established, yielding the new connection
+    # to the block.
+    #
+    # ```
+    # db = DB.open(DB_URL)
+    # db.setup_connection do |connection|
+    #   connection.exec "SET TIME ZONE 'America/New_York'"
+    # end
+    # ```
     def setup_connection(&proc : Connection -> Nil)
       @setup_connection = proc
       @pool.each_resource do |conn|
