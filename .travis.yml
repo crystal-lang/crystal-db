@@ -7,5 +7,5 @@ crystal:
   - latest
   - nightly
 
-  script:
+script:
   - docker build -t crystal_db . && docker run crystal_db
