@@ -1,7 +1,11 @@
 language: crystal
+
+services:
+  - docker
+
 crystal:
   - latest
   - nightly
-script:
-  - crystal spec
-  - crystal tool format --check
+
+  script:
+  - docker build -t crystal_db . && docker run crystal_db
