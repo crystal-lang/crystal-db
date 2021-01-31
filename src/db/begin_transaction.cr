@@ -14,7 +14,7 @@ module DB
     def transaction
       tx = begin_transaction
       begin
-        yield tx
+        result = yield tx
       rescue DB::Rollback
         tx.rollback unless tx.closed?
       rescue e
@@ -27,6 +27,7 @@ module DB
         raise e
       else
         tx.commit unless tx.closed?
+        result
       end
     end
   end
