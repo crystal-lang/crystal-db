@@ -175,14 +175,4 @@ describe DB::Transaction do
       db.pool.is_available?(cnn).should be_true
     end
   end
-
-  it "transaction with block returns result of block" do
-    with_dummy_connection do |cnn|
-      result = cnn.transaction do |_tx|
-        "RESULT"
-      end
-
-      result.should eq "RESULT"
-    end
-  end
 end

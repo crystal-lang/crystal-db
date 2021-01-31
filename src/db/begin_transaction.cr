@@ -11,10 +11,10 @@ module DB
     # The exception thrown is bubbled unless it is a `DB::Rollback`.
     # From the yielded object `Transaction#commit` or `Transaction#rollback`
     # can be called explicitly.
-    def transaction
+    def transaction : Nil
       tx = begin_transaction
       begin
-        result = yield tx
+        yield tx
       rescue DB::Rollback
         tx.rollback unless tx.closed?
       rescue e
@@ -27,7 +27,6 @@ module DB
         raise e
       else
         tx.commit unless tx.closed?
-        result
       end
     end
   end
