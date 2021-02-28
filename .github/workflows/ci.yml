@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '0 6 * * 1'  # Every monday 6 AM
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        crystal: [latest, nightly]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Install Crystal
+        uses: oprypin/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal }}
+
+      - name: Download source
+        uses: actions/checkout@v2
+
+      - name: Run specs
+        run: crystal spec
+
+      - name: Check formatting
+        run: crystal tool format; git diff --exit-code
+        if: matrix.crystal != 'nightly' && matrix.os == 'ubuntu-latest'
