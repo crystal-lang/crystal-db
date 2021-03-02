@@ -5,6 +5,7 @@ require "log"
 # Individual database systems are supported by specific database driver shards.
 #
 # Available drivers include:
+#
 # * [crystal-lang/crystal-sqlite3](https://github.com/crystal-lang/crystal-sqlite3) for SQLite
 # * [crystal-lang/crystal-mysql](https://github.com/crystal-lang/crystal-mysql) for MySQL and MariaDB
 # * [will/crystal-pg](https://github.com/will/crystal-pg) for PostgreSQL
@@ -88,7 +89,7 @@ module DB
     alias Any = Union({{*TYPES}})
   {% end %}
 
-  # Result of a `#exec` statement.
+  # Result of a `QueryMethods#exec` statement.
   record ExecResult, rows_affected : Int64, last_insert_id : Int64
 
   # :nodoc:
