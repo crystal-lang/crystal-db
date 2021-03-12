@@ -7,6 +7,7 @@ module DB
   class PoolPreparedStatement < PoolStatement
     # connections where the statement was prepared
     @connections = Set(WeakRef(Connection)).new
+    @mutex = Mutex.new
 
     def initialize(db : Database, query : String)
       super
@@ -25,21 +26,27 @@ module DB
 
       # WHAT-IF the connection is busy? Should each statement be able to
       # deallocate itself when the connection is free.
-      @connections.clear
+      @mutex.synchronize do
+        @connections.clear
+      end
     end
 
     # builds a statement over a real connection
     # the connection is registered in `@connections`
     private def build_statement : Statement
       clean_connections
-      conn, existing = @db.checkout_some(@connections)
+      conn = uninitialized Connection
+      existing = false
+      @mutex.synchronize do
+        conn, existing = @db.checkout_some(@connections)
+      end
       begin
         stmt = conn.prepared.build(@query)
       rescue ex
         conn.release
         raise ex
       end
-      @connections << WeakRef.new(conn) unless existing
+      @mutex.synchronize { @connections << WeakRef.new(conn) } unless existing
       stmt
     end
 
