@@ -1,3 +1,7 @@
+## v0.10.1 (2021-03-22)
+
+* Add docs for `DB::Database#setup_connection` ([#139](https://github.com/crystal-lang/crystal-db/pull/139), thanks @jgaskins)
+
 ## v0.10.0 (2020-09-30)
 
 * Fix mutex deadlock in setup_connection. ([#128](https://github.com/crystal-lang/crystal-db/pull/128), thanks @straight-shoota)

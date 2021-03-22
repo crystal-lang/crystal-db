@@ -9,7 +9,7 @@ module DB
   #
   # ### Example
   #
-  # ```crystal
+  # ```
   # require "db"
   #
   # class Employee
@@ -32,7 +32,7 @@ module DB
   # Similar to `JSON::Field`, there is an annotation `DB::Field` that can be used to set serialization behavior
   # on individual instance variables.
   #
-  # ```crystal
+  # ```
   # class Employee
   #   include DB::Serializable
   #
@@ -52,7 +52,7 @@ module DB
   #
   # Including this module is functionally identical to passing `{strict: false}` to `DB.mapping`: extra columns will not raise.
   #
-  # ```crystal
+  # ```
   # class Employee
   #   include DB::Serializable
   #   include DB::Serializable::NonStrict
