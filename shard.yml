@@ -1,9 +1,9 @@
 name: db
-version: 0.10.0
+version: 0.10.1
 
 authors:
   - Brian J. Cardiff <bcardiff@manas.tech>
 
-crystal: 0.35.0
+crystal: ">= 0.35.0, < 2.0.0"
 
 license: MIT
