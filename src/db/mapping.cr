@@ -8,7 +8,7 @@ module DB
   # Once defined, `ResultSet#read(t)` populates properties of the class from the
   # `ResultSet`.
   #
-  # ```crystal
+  # ```
   # require "db"
   #
   # class Employee
@@ -28,7 +28,7 @@ module DB
   #
   # You can also define attributes for each property.
   #
-  # ```crystal
+  # ```
   # class Employee
   #   DB.mapping({
   #     title: String,
