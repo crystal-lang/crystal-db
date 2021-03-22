@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.10.0/DB/DriverSpecs/ColumnDef.html
+  - /api/0.10.1/DB/DriverSpecs/ColumnDef.html
 ---

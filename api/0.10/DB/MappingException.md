@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.10.0/DB/MappingException.html
+  - /api/0.10.1/DB/MappingException.html
 ---
