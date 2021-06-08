@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/crystal-lang/crystal-db.svg?branch=master)](https://travis-ci.org/crystal-lang/crystal-db)
+[![Build Status](https://github.com/crystal-lang/crystal-db/workflows/CI/badge.svg)](https://github.com/crystal-lang/crystal-db/actions?query=workflow%3ACI+event%3Apush+branch%3Amaster)
 
 # crystal-db
 
