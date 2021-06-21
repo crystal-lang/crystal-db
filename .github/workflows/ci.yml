@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        crystal: [latest, nightly]
+        crystal: [1.0.0, latest, nightly]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -30,4 +30,4 @@ jobs:
 
       - name: Check formatting
         run: crystal tool format; git diff --exit-code
-        if: matrix.crystal != 'nightly' && matrix.os == 'ubuntu-latest'
+        if: matrix.crystal == 'latest' && matrix.os == 'ubuntu-latest'
