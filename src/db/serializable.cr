@@ -95,7 +95,7 @@ module DB
           super
         end
 
-        def self.from_rs(rs : ::DB::Result_set)
+        def self.from_rs(rs : ::DB::ResultSet)
           super
         end
       end
