@@ -123,6 +123,7 @@ module DB
       begin
         yield connection
       ensure
+        raise ConnectionLost.new(connection) if connection.closed?
         connection.release
       end
     end
