@@ -141,7 +141,7 @@ module DB
       idle_pushed = false
 
       sync do
-        if resource.closed?
+        if resource.responds_to?(:closed?) && resource.closed?
           @total.delete(resource)
         elsif can_increase_idle_pool
           @idle << resource
