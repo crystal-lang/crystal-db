@@ -199,7 +199,7 @@ describe DB::Pool do
     resource2 = pool.checkout
     resource1.should eq resource2
 
-    # it should no return a closed resource to the pool
+    # it should not return a closed resource to the pool
     resource2.close
     pool.release resource2
 
