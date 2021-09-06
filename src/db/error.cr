@@ -18,6 +18,7 @@ module DB
     getter resource : T
 
     def initialize(@resource : T)
+      @resource.close
     end
   end
 
