@@ -190,6 +190,23 @@ describe DB::Pool do
     all[2].closed?.should be_false
   end
 
+  it "should not return closed resources to the pool" do
+    pool = DB::Pool.new(max_pool_size: 1, max_idle_pool_size: 1) { Closable.new }
+
+    # pool size 1 should be reusing the one resource
+    resource1 = pool.checkout
+    pool.release resource1
+    resource2 = pool.checkout
+    resource1.should eq resource2
+
+    # it should not return a closed resource to the pool
+    resource2.close
+    pool.release resource2
+
+    resource2 = pool.checkout
+    resource1.should_not eq resource2
+  end
+
   it "should create resource after max_pool was reached if idle forced some close up" do
     all = [] of Closable
     pool = DB::Pool.new(max_pool_size: 3, max_idle_pool_size: 1) { Closable.new.tap { |c| all << c } }
