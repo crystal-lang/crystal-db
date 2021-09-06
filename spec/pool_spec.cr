@@ -193,7 +193,7 @@ describe DB::Pool do
   it "should not return closed resources to the pool" do
     pool = DB::Pool.new(max_pool_size: 1, max_idle_pool_size: 1) { Closable.new }
 
-    # pool size 1 should be reusing the one resource 
+    # pool size 1 should be reusing the one resource
     resource1 = pool.checkout
     pool.release resource1
     resource2 = pool.checkout
