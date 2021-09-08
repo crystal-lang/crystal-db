@@ -182,7 +182,7 @@ module DB
           # if the connection is lost it will be closed by
           # the exception to release resources
           # we still need to remove it from the known pool.
-          # Closed connection will be evicted from statemetn cache
+          # Closed connection will be evicted from statement cache
           # in PoolPreparedStatement#clean_connections
           sync { delete(e.resource) }
         rescue e : PoolResourceRefused
