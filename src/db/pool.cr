@@ -179,10 +179,12 @@ module DB
           sleep @retry_delay if i >= current_available
           return yield
         rescue e : PoolResourceLost(T)
-          # if the connection is lost close it to release resources
-          # and remove it from the known pool.
+          # if the connection is lost it will be closed by
+          # the exception to release resources
+          # we still need to remove it from the known pool.
+          # Closed connection will be evicted from statement cache
+          # in PoolPreparedStatement#clean_connections
           sync { delete(e.resource) }
-          e.resource.close
         rescue e : PoolResourceRefused
           # a ConnectionRefused means a new connection
           # was intended to be created

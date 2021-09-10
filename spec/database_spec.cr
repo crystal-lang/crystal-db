@@ -172,6 +172,21 @@ describe DB::Database do
     end
   end
 
+  it "should close connection on ConnectionLost" do
+    DummyDriver::DummyConnection.clear_connections
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&retry_attempts=1" do |db|
+      db.exec("stmt1")
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+      connection = DummyDriver::DummyConnection.connections.first
+      connection.disconnect!
+      connection.closed?.should be_false
+      db.exec("stmt1")
+      # A new connection was used for the last statement
+      DummyDriver::DummyConnection.connections.size.should eq(2)
+      connection.closed?.should be_true
+    end
+  end
+
   describe "prepared_statements connection option" do
     it "defaults to true" do
       with_dummy "dummy://localhost:1027" do |db|
