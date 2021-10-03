@@ -46,4 +46,9 @@ module DB
   # Raised when a scalar query returns no results.
   class NoResultsError < Error
   end
+
+  # Raised when the type returned for the column value
+  # does not match the type expected.
+  class ColumnTypeMismatchError < Error
+  end
 end

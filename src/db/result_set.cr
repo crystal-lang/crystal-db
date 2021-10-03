@@ -80,7 +80,7 @@ module DB
       if value.is_a?(T)
         value
       else
-        raise "#{self.class}#read returned a #{value.class}. A #{T} was expected."
+        raise DB::ColumnTypeMismatchError.new("#{self.class}#read returned a #{value.class}. A #{T} was expected.")
       end
     end
 
