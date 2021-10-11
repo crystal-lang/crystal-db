@@ -289,6 +289,28 @@ module DB
         ages.should eq([10, 20, 30])
       end
 
+      it "next_column_index" do |db|
+        db.exec sql_create_table_person
+        db.exec sql_insert_person, "foo", 10
+        db.exec sql_insert_person, "bar", 20
+
+        db.query sql_select_person do |rs|
+          rs.move_next
+          rs.next_column_index.should eq(0)
+          rs.read(String)
+          rs.next_column_index.should eq(1)
+          rs.read(Int32)
+          rs.next_column_index.should eq(2)
+
+          rs.move_next
+          rs.next_column_index.should eq(0)
+          rs.read(String)
+          rs.next_column_index.should eq(1)
+          rs.read(Int32)
+          rs.next_column_index.should eq(2)
+        end
+      end
+
       # describe "transactions" do
       it "transactions: can read inside transaction and rollback after" do |db|
         db.exec sql_create_table_person
