@@ -81,11 +81,18 @@ module DB
 
     # Reads the next column value as a **type**
     def read(type : T.class) : T forall T
+      col_index = next_column_index
       value = read
       if value.is_a?(T)
         value
       else
-        raise DB::ColumnTypeMismatchError.new("#{self.class}#read returned a #{value.class}. A #{T} was expected.")
+        raise DB::ColumnTypeMismatchError.new(
+          context: "#{self.class}#read",
+          column_index: col_index,
+          column_name: column_name(col_index),
+          column_type: value.class.to_s,
+          expected_type: T.to_s
+        )
       end
     end
 
