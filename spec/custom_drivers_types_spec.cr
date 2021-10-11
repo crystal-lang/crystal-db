@@ -20,6 +20,10 @@ module GenericResultSet
     @index += 1
     @row[@index - 1]
   end
+
+  def next_column_index : Int32
+    @index
+  end
 end
 
 class FooValue

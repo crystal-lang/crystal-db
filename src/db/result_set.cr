@@ -69,6 +69,11 @@ module DB
     # Reads the next column value
     abstract def read
 
+    # Returns the column index that corresponds to the next `#read`.
+    #
+    # If the last column of the current row has been read, it must return `#column_count`.
+    abstract def next_column_index : Int32
+
     # Reads the next columns and maps them to a class
     def read(type : DB::Mappable.class)
       type.new(self)
