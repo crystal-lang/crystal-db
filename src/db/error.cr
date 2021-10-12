@@ -6,6 +6,19 @@ module DB
   end
 
   class MappingException < Error
+    getter klass
+    getter property
+
+    def initialize(message, @klass : String, @property : String? = nil, cause : Exception? = nil)
+      message = String.build do |io|
+        io << message
+        io << "\n  deserializing " << @klass
+        if property = @property
+          io << "#" << property
+        end
+      end
+      super(message, cause: cause)
+    end
   end
 
   class PoolTimeout < Error
