@@ -20,6 +20,10 @@ module GenericResultSet
     @index += 1
     @row[@index - 1]
   end
+
+  def next_column_index : Int32
+    @index
+  end
 end
 
 class FooValue
@@ -197,7 +201,7 @@ describe DB do
         FooDriver.fake_row = [1] of FooDriver::Any
         db.query "query" do |rs|
           rs.move_next
-          expect_raises(Exception, "FooResultSet#read returned a Int32. A BarValue was expected.") do
+          expect_raises(DB::ColumnTypeMismatchError, "In FooDriver::FooResultSet#read the column 0 returned a Int32 but a BarValue was expected.") do
             w.check
             rs.read(BarValue)
           end
@@ -210,7 +214,7 @@ describe DB do
         BarDriver.fake_row = [1] of BarDriver::Any
         db.query "query" do |rs|
           rs.move_next
-          expect_raises(Exception, "BarResultSet#read returned a Int32. A FooValue was expected.") do
+          expect_raises(DB::ColumnTypeMismatchError, "In BarDriver::BarResultSet#read the column 0 returned a Int32 but a FooValue was expected.") do
             w.check
             rs.read(FooValue)
           end

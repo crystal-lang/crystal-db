@@ -190,6 +190,10 @@ class DummyDriver < DB::Driver
       return n
     end
 
+    def next_column_index : Int32
+      @column_count - @values.not_nil!.size
+    end
+
     def read(t : String.class)
       read.to_s
     end
