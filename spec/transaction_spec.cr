@@ -175,4 +175,39 @@ describe DB::Transaction do
       db.pool.is_available?(cnn).should be_true
     end
   end
+
+  it "returns block value when sucess" do
+    with_dummy_connection do |cnn|
+      res = cnn.transaction do |tx|
+        42
+      end
+
+      res.should eq(42)
+      typeof(res).should eq(Int32 | Nil)
+    end
+  end
+
+  it "returns value on rollback via method" do
+    with_dummy_connection do |cnn|
+      res = cnn.transaction do |tx|
+        tx.rollback
+        42
+      end
+
+      res.should eq(42)
+      typeof(res).should eq(Int32 | Nil)
+    end
+  end
+
+  it "returns nil on rollback via exception" do
+    with_dummy_connection do |cnn|
+      res = cnn.transaction do |tx|
+        raise DB::Rollback.new
+        42
+      end
+
+      res.should be_nil
+      typeof(res).should eq(Int32 | Nil)
+    end
+  end
 end
