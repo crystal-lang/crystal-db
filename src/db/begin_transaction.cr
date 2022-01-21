@@ -11,7 +11,7 @@ module DB
     # The exception thrown is bubbled unless it is a `DB::Rollback`.
     # From the yielded object `Transaction#commit` or `Transaction#rollback`
     # can be called explicitly.
-    # Returns the value of the block when no exception was raised.
+    # Returns the value of the block.
     def transaction(& : Transaction -> T) : T? forall T
       tx = begin_transaction
       begin
