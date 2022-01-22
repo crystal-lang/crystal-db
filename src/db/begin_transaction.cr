@@ -13,7 +13,9 @@ module DB
     # can be called explicitly.
     # Returns the value of the block.
     def transaction(& : Transaction -> T) : T? forall T
-      tx = begin_transaction
+      # Cast to workaround crystal-lang/crystal#9483
+      # begin_transaction returns a Tx where Tx < Transaction
+      tx = begin_transaction.as(Transaction)
       begin
         res = yield tx
       rescue DB::Rollback
