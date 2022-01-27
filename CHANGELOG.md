@@ -1,5 +1,6 @@
-## v0.11.0 (2021-10-??)
+## v0.11.0 (2022-01-27)
 
+* Fix `Connection#transaction` method to return the block value as the result. ([#159](https://github.com/crystal-lang/crystal-db/pull/159), [#160](https://github.com/crystal-lang/crystal-db/pull/160), thanks @bcardiff)
 * Add `DB::ColumnTypeMismatchError` error with column and type information. ([#156](https://github.com/crystal-lang/crystal-db/pull/156), thanks @jwoertink, @bcardiff)
 * Improve `DB::MappingException` error. ([#129](https://github.com/crystal-lang/crystal-db/pull/129), thanks @straight-shoota)
 * Close connection resource when connection is lost. ([#155](https://github.com/crystal-lang/crystal-db/pull/155), thanks @stakach, @bcardiff)
