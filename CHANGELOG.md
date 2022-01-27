@@ -1,3 +1,17 @@
+## v0.11.0 (2022-01-27)
+
+* Fix `Connection#transaction` method to return the block value as the result. ([#159](https://github.com/crystal-lang/crystal-db/pull/159), [#160](https://github.com/crystal-lang/crystal-db/pull/160), thanks @bcardiff)
+* Add `DB::ColumnTypeMismatchError` error with column and type information. ([#156](https://github.com/crystal-lang/crystal-db/pull/156), thanks @jwoertink, @bcardiff)
+* Improve `DB::MappingException` error. ([#129](https://github.com/crystal-lang/crystal-db/pull/129), thanks @straight-shoota)
+* Close connection resource when connection is lost. ([#155](https://github.com/crystal-lang/crystal-db/pull/155), thanks @stakach, @bcardiff)
+* Discard closed connections in the pool when they are returned. ([#154](https://github.com/crystal-lang/crystal-db/pull/154), thanks @stakach)
+* Fix typo in `Mode.from_rs` argument type. ([#142](https://github.com/crystal-lang/crystal-db/pull/142), thanks @dukeraphaelng)
+* Migrate CI to GitHub Actions. ([#147](https://github.com/crystal-lang/crystal-db/pull/147), [#152](https://github.com/crystal-lang/crystal-db/pull/152), thanks @oprypin, thanks @straight-shoota)
+
+This release requires Crystal 1.0.0 or later.
+
+Note: For drivers implementations [#156](https://github.com/crystal-lang/crystal-db/pull/156) adds a `abstract def next_column_index : Int32` to `ResultSet` so there is a breaking-change that does not affect consumers of the library.
+
 ## v0.10.1 (2021-03-22)
 
 * Add docs for `DB::Database#setup_connection` ([#139](https://github.com/crystal-lang/crystal-db/pull/139), thanks @jgaskins)
