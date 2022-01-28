@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.10/DB/Error.html
+  - /api/0.11/DB/Error.html
 ---

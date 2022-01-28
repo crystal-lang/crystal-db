@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.10
+  - /api/0.11
 ---
