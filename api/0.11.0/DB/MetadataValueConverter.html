@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.2.2">
+<meta name="crystal_docs.project_version" content="0.11.0">
+<meta name="crystal_docs.project_name" content="db">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="db">
+  <title>DB::MetadataValueConverter - db 0.11.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          db
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.11.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ColumnTypeMismatchError" data-name="db::columntypemismatcherror">
+      <a href="../DB/ColumnTypeMismatchError.html">ColumnTypeMismatchError</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="../DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/DriverSpecs" data-name="db::driverspecs(dbanytype)">
+      <a href="../DB/DriverSpecs.html">DriverSpecs</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/DriverSpecs/ColumnDef" data-name="db::driverspecs::columndef">
+      <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Field" data-name="db::field">
+      <a href="../DB/Field.html">Field</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class=" current" data-id="db/DB/MetadataValueConverter" data-name="db::metadatavalueconverter">
+      <a href="../DB/MetadataValueConverter.html">MetadataValueConverter</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/NoResultsError" data-name="db::noresultserror">
+      <a href="../DB/NoResultsError.html">NoResultsError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Pool/Stats" data-name="db::pool::stats">
+      <a href="../DB/Pool/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolResourceLost" data-name="db::poolresourcelost(t)">
+      <a href="../DB/PoolResourceLost.html">PoolResourceLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolResourceRefused" data-name="db::poolresourcerefused">
+      <a href="../DB/PoolResourceRefused.html">PoolResourceRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/QueryMethods" data-name="db::querymethods(stmt)">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Serializable" data-name="db::serializable">
+      <a href="../DB/Serializable.html">Serializable</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Serializable/NonStrict" data-name="db::serializable::nonstrict">
+      <a href="../DB/Serializable/NonStrict.html">NonStrict</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> DB::MetadataValueConverter
+
+</h1>
+
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>This module converts DB supported values to <code>::Log::Metadata::Value</code></p>
+<h3><a id="note-to-implementors" class="anchor" href="#note-to-implementors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Note to implementors</h3>
+<p>If the driver defines custom types to be used as arguments the default behavior
+will be converting the value via <code>#to_s</code>. Otherwise you can define overloads to
+change this behaviour.</p>
+<pre><code class="language-crystal"><span class="k">module</span> <span class="t">DB</span><span class="t">::</span><span class="t">MetadataValueConverter</span>
+  <span class="k">def</span> <span class="m">self</span>.arg_to_log(arg : <span class="t">PG</span><span class="t">::</span><span class="t">Geo</span><span class="t">::</span><span class="t">Point</span>)
+    <span class="t">::</span><span class="t">Log</span><span class="t">::</span><span class="t">Metadata</span><span class="t">::</span><span class="t">Value</span>.<span class="k">new</span>(<span class="s">&quot;(</span><span class="i">#{</span>arg.x<span class="i">}</span><span class="s">, </span><span class="i">#{</span>arg.y<span class="i">}</span><span class="s">)::point&quot;</span>)
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/v0.11.0/src/db/statement.cr#L164" target="_blank">
+        db/statement.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#arg_to_log%28arg%3AEnumerable%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method" class="signature"><strong>.arg_to_log</strong>(arg : Enumerable) : ::Log::Metadata::Value</a>
+        
+          <div class="summary"><p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#arg_to_log%28arg%3AUInt64%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method" class="signature"><strong>.arg_to_log</strong>(arg : UInt64) : ::Log::Metadata::Value</a>
+        
+          <div class="summary"><p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#arg_to_log%28arg%3AInt%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method" class="signature"><strong>.arg_to_log</strong>(arg : Int) : ::Log::Metadata::Value</a>
+        
+          <div class="summary"><p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#arg_to_log%28arg%3ANil%7CBool%7CInt32%7CInt64%7CFloat32%7CFloat64%7CString%7CTime%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method" class="signature"><strong>.arg_to_log</strong>(arg : Nil | Bool | Int32 | Int64 | Float32 | Float64 | String | Time) : ::Log::Metadata::Value</a>
+        
+          <div class="summary"><p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#arg_to_log%28arg%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method" class="signature"><strong>.arg_to_log</strong>(arg) : ::Log::Metadata::Value</a>
+        
+          <div class="summary"><p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+
+
+<div class="methods-inherited">
+  
+</div>
+
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="arg_to_log(arg:Enumerable):::Log::Metadata::Value-class-method">
+      <div class="signature">
+        
+        def self.<strong>arg_to_log</strong>(arg : Enumerable) : ::Log::Metadata::Value
+
+        <a class="method-permalink" href="#arg_to_log%28arg%3AEnumerable%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.11.0/src/db/statement.cr#L171" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="arg_to_log(arg:UInt64):::Log::Metadata::Value-class-method">
+      <div class="signature">
+        
+        def self.<strong>arg_to_log</strong>(arg : UInt64) : ::Log::Metadata::Value
+
+        <a class="method-permalink" href="#arg_to_log%28arg%3AUInt64%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.11.0/src/db/statement.cr#L181" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="arg_to_log(arg:Int):::Log::Metadata::Value-class-method">
+      <div class="signature">
+        
+        def self.<strong>arg_to_log</strong>(arg : Int) : ::Log::Metadata::Value
+
+        <a class="method-permalink" href="#arg_to_log%28arg%3AInt%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.11.0/src/db/statement.cr#L176" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="arg_to_log(arg:Nil|Bool|Int32|Int64|Float32|Float64|String|Time):::Log::Metadata::Value-class-method">
+      <div class="signature">
+        
+        def self.<strong>arg_to_log</strong>(arg : Nil | Bool | Int32 | Int64 | Float32 | Float64 | String | Time) : ::Log::Metadata::Value
+
+        <a class="method-permalink" href="#arg_to_log%28arg%3ANil%7CBool%7CInt32%7CInt64%7CFloat32%7CFloat64%7CString%7CTime%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.11.0/src/db/statement.cr#L186" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="arg_to_log(arg):::Log::Metadata::Value-class-method">
+      <div class="signature">
+        
+        def self.<strong>arg_to_log</strong>(arg) : ::Log::Metadata::Value
+
+        <a class="method-permalink" href="#arg_to_log%28arg%29%3A%3A%3ALog%3A%3AMetadata%3A%3AValue-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <em>arg</em> encoded as a <code>::Log::Metadata::Value</code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.11.0/src/db/statement.cr#L166" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+
+</div>
+
+</body>
+</html>
