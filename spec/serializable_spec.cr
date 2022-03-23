@@ -105,7 +105,7 @@ describe "DB::Serializable" do
   end
 
   it "should fail to initialize a simple model if types do not match" do
-    expect_raises DB::MappingException, "Invalid Int32: b\n  deserializing SimpleModel#c0" do
+    expect_raises DB::MappingException, /Invalid Int32: "?b"?\n  deserializing SimpleModel#c0/ do
       from_dummy("b,a", SimpleModel)
     end
   end
