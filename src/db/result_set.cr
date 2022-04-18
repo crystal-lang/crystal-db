@@ -159,9 +159,9 @@ struct Enum
 
     case value = rs.read
     when String
-      result = parse value
+      parse value
     when Int
-      result = from_value value
+      from_value value
     else
       raise DB::ColumnTypeMismatchError.new(
         context: "#{self}#new(rs : DB::ResultSet)",
@@ -171,7 +171,5 @@ struct Enum
         expected_type: "String | Int",
       )
     end
-
-    result
   end
 end
