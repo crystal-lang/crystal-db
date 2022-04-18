@@ -96,6 +96,23 @@ module DB
       end
     end
 
+    # Read the value based on the given `enum` type, supporting both string and
+    # numeric column types.
+    #
+    # ```
+    # enum Status
+    #   Pending
+    #   Complete
+    # end
+    #
+    # db.query "SELECT 'complete'" do |rs|
+    #   rs.read Status # => Status::Complete
+    # end
+    # ```
+    def read(type : Enum.class)
+      type.new(self)
+    end
+
     # Reads the next columns and returns a tuple of the values.
     def read(*types : Class)
       internal_read(*types)
@@ -133,5 +150,28 @@ module DB
     # def read_text
     #   yield ... io ....
     # end
+  end
+end
+
+struct Enum
+  def self.new(rs : DB::ResultSet) : self
+    index = rs.next_column_index
+
+    case value = rs.read
+    when String
+      result = parse value
+    when Int
+      result = from_value value
+    else
+      raise DB::ColumnTypeMismatchError.new(
+        context: "#{self}#new(rs : DB::ResultSet)",
+        column_index: index,
+        column_name: rs.column_name(index),
+        column_type: to_s,
+        expected_type: "String | Int",
+      )
+    end
+
+    result
   end
 end

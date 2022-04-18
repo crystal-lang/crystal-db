@@ -81,6 +81,29 @@ class ModelWithJSON
   property c1 : String
 end
 
+struct ModelWithEnum
+  include DB::Serializable
+
+  getter c0 : Int32
+  getter c1 : MyEnum
+  # Ensure multiple enum types work together
+  getter c2 : MyOtherEnum
+
+  enum MyEnum
+    Foo
+    Bar
+    Baz
+    Quux
+  end
+
+  enum MyOtherEnum
+    OMG
+    LOL
+    WTF
+    BBQ
+  end
+end
+
 macro from_dummy(query, type)
   with_dummy do |db|
     rs = db.query({{ query }})
@@ -170,6 +193,17 @@ describe "DB::Serializable" do
 
   it "should initialize a model with JSON serialization also defined" do
     expect_model("1,a", ModelWithJSON, {c0: 1, c1: "a"})
+  end
+
+  it "should initialize a model with an enum property" do
+    expect_model("1,Baz,LOL", ModelWithEnum, {
+      c0: 1,
+      c1: ModelWithEnum::MyEnum::Baz,
+      c2: ModelWithEnum::MyOtherEnum::LOL,
+    })
+    expect_raises DB::MappingException, "Unknown enum ModelWithEnum::MyEnum value: adsf" do
+      from_dummy("1,adsf,BBQ", ModelWithEnum)
+    end
   end
 
   it "should initialize multiple instances from a single resultset" do
