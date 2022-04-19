@@ -167,7 +167,7 @@ struct Enum
         context: "#{self}#new(rs : DB::ResultSet)",
         column_index: index,
         column_name: rs.column_name(index),
-        column_type: to_s,
+        column_type: value.class.to_s,
         expected_type: "String | Int",
       )
     end
