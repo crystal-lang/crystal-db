@@ -164,7 +164,7 @@ struct Enum
       from_value value
     else
       raise DB::ColumnTypeMismatchError.new(
-        context: "#{self}#new(rs : DB::ResultSet)",
+        context: "#{self}.new(rs : DB::ResultSet)",
         column_index: index,
         column_name: rs.column_name(index),
         column_type: value.class.to_s,
