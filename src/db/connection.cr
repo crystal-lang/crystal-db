@@ -31,7 +31,11 @@ module DB
     # :nodoc:
     property auto_release : Bool = true
 
+    @created_at : Time
+    getter created_at
+
     def initialize(@context : ConnectionContext)
+      @created_at = Time.utc
       @prepared_statements = @context.prepared_statements?
     end
 
@@ -50,6 +54,9 @@ module DB
       raise DB::Error.new("There is an existing transaction in this connection") if @transaction
       @transaction = true
       create_transaction
+    end
+
+    protected def check
     end
 
     protected def create_transaction : Transaction

@@ -36,6 +36,8 @@ module DB
         checkout_timeout:   params.fetch("checkout_timeout", 5.0).to_f,
         retry_attempts:     params.fetch("retry_attempts", 1).to_i,
         retry_delay:        params.fetch("retry_delay", 1.0).to_f,
+        reaping_frequency:  params.fetch("reaping_frequency", 60.0).to_f,
+        reaping_delay:      params.fetch("reaping_delay", 60.0).to_f,
       }
     end
   end

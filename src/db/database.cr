@@ -59,6 +59,7 @@ module DB
         @setup_connection.call conn
         conn
       }
+      @pool.start_reaper!
     end
 
     # Run the specified block every time a new connection is established, yielding the new connection

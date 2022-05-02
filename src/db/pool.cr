@@ -18,6 +18,10 @@ module DB
     @retry_attempts : Int32
     # seconds to wait before a retry attempt
     @retry_delay : Float64
+    # time to wait before beginning connection pool health checks
+    @reaping_delay : Float64
+    # amount of time in between pool health checks
+    @reaping_frequency : Float64
 
     # Pool state
 
@@ -37,14 +41,73 @@ module DB
     # global pool mutex
     @mutex : Mutex
 
-    def initialize(@initial_pool_size = 1, @max_pool_size = 0, @max_idle_pool_size = 1, @checkout_timeout = 5.0,
-                   @retry_attempts = 1, @retry_delay = 0.2, &@factory : -> T)
+    def initialize(
+      @initial_pool_size = 1,
+      @max_pool_size = 0,
+      @max_idle_pool_size = 1,
+      @checkout_timeout = 5.0,
+      @retry_attempts = 1,
+      @retry_delay = 0.2,
+      @reaping_delay = 60.0,
+      @reaping_frequency = 60.0,
+      &@factory : -> T
+    )
       @availability_channel = Channel(Nil).new
       @waiting_resource = 0
       @inflight = 0
       @mutex = Mutex.new
 
       @initial_pool_size.times { build_resource }
+    end
+
+    def reap_connection!(connection : T, delay : Float64)
+      return unless connection.responds_to?(:check)
+
+      sleep delay
+
+      sync do
+        connection_idle = @idle.includes? connection
+        return unless connection_idle # let the next reaping attempt get it
+
+        delete connection
+      end
+
+      connection.check
+
+      sync do
+        @total << connection
+        @idle << connection
+      end
+    rescue exc : DB::ConnectionLost
+      connection.close
+
+      sync do
+        add_resource! if can_increase_pool?
+      end
+    end
+
+    def add_resource!
+      @inflight += 1
+      r = unsync { build_resource }
+    ensure # prevent inflight from incrementing if build_resource fails
+      @inflight -= 1
+      r
+    end
+
+    def start_reaper!
+      spawn do
+        sleep @reaping_delay
+
+        loop do
+          sync do
+            @idle.each_with_index do |connection, i|
+              spawn reap_connection!(connection, i * 0.1)
+            end
+          end
+
+          sleep @reaping_frequency
+        end
+      end
     end
 
     # close all resources in the pool
@@ -77,10 +140,7 @@ module DB
         until resource
           resource = if @idle.empty?
                        if can_increase_pool?
-                         @inflight += 1
-                         r = unsync { build_resource }
-                         @inflight -= 1
-                         r
+                         add_resource!
                        else
                          unsync { wait_for_available }
                          # The wait for available can unlock
@@ -206,6 +266,11 @@ module DB
     # :nodoc:
     def is_available?(resource : T)
       @idle.includes?(resource)
+    end
+
+    # :nodoc:
+    def is_in_pool?(resource : T)
+      @total.includes?(resource)
     end
 
     # :nodoc:
