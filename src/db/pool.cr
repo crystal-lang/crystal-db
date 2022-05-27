@@ -38,6 +38,8 @@ module DB
     @availability_channel : Channel(Nil)
     # signal how many existing connections are waited for
     @waiting_resource : Int32
+    # communicate when the pool is closed, to kill the Connection Reaper
+    @close_channel : Channel(Nil)
     # global pool mutex
     @mutex : Mutex
 
@@ -53,6 +55,7 @@ module DB
       &@factory : -> T
     )
       @availability_channel = Channel(Nil).new
+      @close_channel = Channel(Nil).new
       @waiting_resource = 0
       @inflight = 0
       @mutex = Mutex.new
@@ -60,14 +63,9 @@ module DB
       @initial_pool_size.times { build_resource }
     end
 
-    def reap_connection!(connection : T, delay : Float64)
-      return unless connection.responds_to?(:check)
-
-      sleep delay
-
+    def reap_connection!(connection : T)
       sync do
-        connection_idle = @idle.includes? connection
-        return unless connection_idle # let the next reaping attempt get it
+        return unless @idle.includes? connection
 
         delete connection
       end
@@ -78,34 +76,29 @@ module DB
         @total << connection
         @idle << connection
       end
-    rescue exc : DB::ConnectionLost
+    rescue exc : PoolResourceLost(T)
       connection.close
-
-      sync do
-        add_resource! if can_increase_pool?
-      end
+      sync { add_resource! if can_increase_pool? }
     end
 
-    def add_resource!
+    def add_resource! : T
       @inflight += 1
-      r = unsync { build_resource }
+      unsync { build_resource }
     ensure # prevent inflight from incrementing if build_resource fails
       @inflight -= 1
-      r
     end
 
     def start_reaper!
-      spawn do
+      spawn(name: "connection_reaper") do
         sleep @reaping_delay
 
         loop do
-          sync do
-            @idle.each_with_index do |connection, i|
-              spawn reap_connection!(connection, i * 0.1)
-            end
+          select
+          when @close_channel.receive?
+            break
+          when timeout @reaping_frequency.seconds
+            @idle.each { |connection| reap_connection! connection }
           end
-
-          sleep @reaping_frequency
         end
       end
     end
@@ -115,6 +108,7 @@ module DB
       @total.each &.close
       @total.clear
       @idle.clear
+      @close_channel.close
     end
 
     record Stats,
