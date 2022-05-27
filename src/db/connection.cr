@@ -31,11 +31,7 @@ module DB
     # :nodoc:
     property auto_release : Bool = true
 
-    @created_at : Time
-    getter created_at
-
     def initialize(@context : ConnectionContext)
-      @created_at = Time.utc
       @prepared_statements = @context.prepared_statements?
     end
 
