@@ -223,14 +223,14 @@ describe DB::Pool do
 
   it "should close idle resources after a health check fails" do
     DummyDriver::DummyConnection.clear_connections
-    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&reaping_delay=0.0&reaping_frequency=0.05" do |db|
+    DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&reaping_delay=0.0&reaping_frequency=0.01" do |db|
       cnn = db.checkout.as(DummyDriver::DummyConnection)
       cnn.closed?.should be_false
       cnn.release
       db.pool.is_available?(cnn).should be_true
       db.pool.is_in_pool?(cnn).should be_true
       cnn.disconnect!
-      sleep(0.1)
+      sleep(0.02)
       db.pool.is_available?(cnn).should be_false
       db.pool.is_in_pool?(cnn).should be_false
     end
@@ -272,7 +272,7 @@ describe DB::Pool do
       db.pool.is_in_pool?(cnn).should be_true
       db.pool.is_available?(cnn2).should be_false
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.05)
+      sleep(0.02)
       db.pool.is_available?(cnn).should be_false
       db.pool.is_in_pool?(cnn).should be_false
       db.pool.is_available?(cnn2).should be_false
