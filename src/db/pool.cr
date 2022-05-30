@@ -107,10 +107,10 @@ module DB
 
     # close all resources in the pool
     def close : Nil
+      @close_channel.close
       @total.each &.close
       @total.clear
       @idle.clear
-      @close_channel.close
     end
 
     record Stats,
