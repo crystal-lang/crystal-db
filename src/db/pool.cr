@@ -63,16 +63,43 @@ module DB
       @initial_pool_size.times { build_resource }
     end
 
+    def reap_connection!(connection : T, reap_counter : Int32)
+      sleep reap_counter * 0.1
+
+      sync do
+        return unless @idle.includes? connection
+
+        delete connection
+      end
+
+      connection.check
+
+      sync do
+        @total << connection
+        @idle << connection
+      end
+    rescue exc : PoolResourceLost(T)
+      connection.close
+      sync { add_resource! if can_increase_pool? }
+    end
+
+    def add_resource! : T
+      @inflight += 1
+      unsync { build_resource }
+    ensure # prevent inflight from incrementing if build_resource fails
+      @inflight -= 1
+    end
+
     def start_reaper!
       spawn(name: "connection_reaper") do
+        sleep @reaping_delay
+
         loop do
           select
           when @close_channel.receive?
             break
           when timeout @reaping_frequency.seconds
-            sync do
-              @idle.each_with_index { |conn, i| reap_connection! conn, i }
-            end
+            @idle.each_with_index { |conn, i| reap_connection! conn, i }
           end
         end
       end
@@ -307,31 +334,6 @@ module DB
       ensure
         @mutex.lock
       end
-    end
-
-    # reap_connection introduces a 50ms delay between health checks to avoid
-    # exhausting all @idle connections at once.
-    private def reap_connection!(connection : T, counter : Int32)
-      sleep counter * 0.05
-
-      return unless @idle.includes? connection
-
-      delete connection
-
-      unsync { connection.check }
-
-      @total << connection
-      @idle << connection
-    rescue exc : PoolResourceLost(T)
-      connection.close
-      add_resource! if can_increase_pool?
-    end
-
-    private def add_resource! : T
-      @inflight += 1
-      unsync { build_resource }
-    ensure # prevent inflight from incrementing if build_resource fails
-      @inflight -= 1
     end
   end
 end
