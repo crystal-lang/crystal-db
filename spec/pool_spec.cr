@@ -255,6 +255,9 @@ describe DB::Pool do
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
       sleep(0.02)
+      db.pool.is_available?(cnn2).should be_true
+      db.pool.is_in_pool?(cnn2).should be_true
+      sleep(0.11) # 100ms + some padding
       db.pool.is_available?(cnn2).should be_false
       db.pool.is_in_pool?(cnn2).should be_false
     end
