@@ -7,6 +7,9 @@ class DummyDriver < DB::Driver
   end
 
   class DummyConnection < DB::Connection
+    @simulated_health_check_delay = 0.0
+    property simulated_health_check_delay : Float64
+
     def initialize(context)
       super(context)
       @connected = true
@@ -35,6 +38,7 @@ class DummyDriver < DB::Driver
     end
 
     def check
+      sleep @simulated_health_check_delay
       raise DB::ConnectionLost.new(self) unless @connected
     end
 

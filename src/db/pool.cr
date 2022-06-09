@@ -67,10 +67,6 @@ module DB
       sync do
         return unless @idle.includes? connection
 
-        puts "\nReaping Connection  : #{connection.object_id}"
-        puts "Reaper Count        : #{@reaper_count}"
-        puts "Time                : #{Time.utc.to_unix_ms}"
-
         delete connection
       end
 
@@ -92,13 +88,6 @@ module DB
       @inflight -= 1
     end
 
-    # reaper count, for debugging
-    @reaper_count = 0
-
-    def reaper_count
-      @reaper_count
-    end
-
     def start_reaper!
       spawn(name: "connection_reaper") do
         sleep @reaping_delay
@@ -108,13 +97,8 @@ module DB
           when @close_channel.receive?
             break
           when timeout @reaping_frequency.seconds
-            @idle.each_with_index do |conn, i|
-              sleep i * 0.1
-              reap_connection! conn
-            end
+            @idle.each_with_index { |conn| reap_connection! conn }
           end
-
-          @reaper_count += 1
         end
       end
     end

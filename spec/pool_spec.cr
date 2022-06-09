@@ -236,10 +236,11 @@ describe DB::Pool do
     end
   end
 
-  it "should introduce a small delay between health checks" do
+  it "should run health checks consecutively" do
     DummyDriver::DummyConnection.clear_connections
     DB.open "dummy://localhost:1027?initial_pool_size=2&max_pool_size=3&max_idle_pool_size=3&reaping_delay=0.0&reaping_frequency=0.01" do |db|
       cnn = db.checkout.as(DummyDriver::DummyConnection)
+      cnn.simulated_health_check_delay = 0.07
       cnn2 = db.checkout.as(DummyDriver::DummyConnection)
       cnn.release
       cnn2.release
@@ -249,15 +250,15 @@ describe DB::Pool do
       db.pool.is_in_pool?(cnn).should be_true
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.02)
+      sleep(0.025)
       db.pool.is_available?(cnn).should be_false
       db.pool.is_in_pool?(cnn).should be_false
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.02)
+      sleep(0.025)
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.11) # 100ms + some padding
+      sleep(0.05)
       db.pool.is_available?(cnn2).should be_false
       db.pool.is_in_pool?(cnn2).should be_false
     end
