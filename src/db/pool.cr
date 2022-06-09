@@ -63,9 +63,7 @@ module DB
       @initial_pool_size.times { build_resource }
     end
 
-    def reap_connection!(connection : T, reap_counter : Int32)
-      sleep reap_counter * 0.1
-
+    def reap_connection!(connection : T)
       sync do
         return unless @idle.includes? connection
 
@@ -99,7 +97,10 @@ module DB
           when @close_channel.receive?
             break
           when timeout @reaping_frequency.seconds
-            @idle.each_with_index { |conn, i| reap_connection! conn, i }
+            @idle.each_with_index do |conn, i|
+              sleep i * 0.1
+              reap_connection! conn
+            end
           end
         end
       end
