@@ -258,7 +258,7 @@ describe DB::Pool do
     DummyDriver::DummyConnection.clear_connections
     DB.open "dummy://localhost:1027?initial_pool_size=2&max_pool_size=2&max_idle_pool_size=2&reaping_delay=0.0&reaping_frequency=0.01" do |db|
       cnn = db.checkout.as(DummyDriver::DummyConnection)
-      cnn.simulated_health_check_delay = 0.075
+      cnn.simulated_health_check_delay = 0.1
       cnn2 = db.checkout.as(DummyDriver::DummyConnection)
       cnn.release
       cnn2.release
@@ -276,7 +276,7 @@ describe DB::Pool do
       sleep(0.02)
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.15)
+      sleep(0.2)
       db.pool.is_available?(cnn2).should be_false
       db.pool.is_in_pool?(cnn2).should be_false
     end
