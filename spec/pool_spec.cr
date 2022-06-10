@@ -245,10 +245,10 @@ describe DB::Pool do
       db.pool.is_available?(cnn).should be_true
       db.pool.is_in_pool?(cnn).should be_true
       cnn.disconnect!
-      sleep(0.02)
+      sleep(0.025)
       db.pool.is_available?(cnn).should be_true
       db.pool.is_in_pool?(cnn).should be_true
-      sleep(0.075)
+      sleep(0.125)
       db.pool.is_available?(cnn).should be_false
       db.pool.is_in_pool?(cnn).should be_false
     end
@@ -256,9 +256,9 @@ describe DB::Pool do
 
   it "should run health checks consecutively" do
     DummyDriver::DummyConnection.clear_connections
-    DB.open "dummy://localhost:1027?initial_pool_size=2&max_pool_size=3&max_idle_pool_size=3&reaping_delay=0.0&reaping_frequency=0.01" do |db|
+    DB.open "dummy://localhost:1027?initial_pool_size=2&max_pool_size=2&max_idle_pool_size=2&reaping_delay=0.0&reaping_frequency=0.01" do |db|
       cnn = db.checkout.as(DummyDriver::DummyConnection)
-      cnn.simulated_health_check_delay = 0.10
+      cnn.simulated_health_check_delay = 0.075
       cnn2 = db.checkout.as(DummyDriver::DummyConnection)
       cnn.release
       cnn2.release
@@ -268,15 +268,15 @@ describe DB::Pool do
       db.pool.is_in_pool?(cnn).should be_true
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.025)
+      sleep(0.02)
       db.pool.is_available?(cnn).should be_false
       db.pool.is_in_pool?(cnn).should be_false
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.025)
+      sleep(0.02)
       db.pool.is_available?(cnn2).should be_true
       db.pool.is_in_pool?(cnn2).should be_true
-      sleep(0.1)
+      sleep(0.15)
       db.pool.is_available?(cnn2).should be_false
       db.pool.is_in_pool?(cnn2).should be_false
     end
