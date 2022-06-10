@@ -7,8 +7,7 @@ class DummyDriver < DB::Driver
   end
 
   class DummyConnection < DB::Connection
-    @simulated_health_check_delay = 0.0
-    property simulated_health_check_delay : Float64
+    property simulated_health_check_delay : Float64 = 0.0
 
     def initialize(context)
       super(context)
