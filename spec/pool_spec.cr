@@ -248,7 +248,7 @@ describe DB::Pool do
       sleep(0.025)
       db.pool.is_available?(cnn).should be_true
       db.pool.is_in_pool?(cnn).should be_true
-      sleep(0.125)
+      sleep(0.15)
       db.pool.is_available?(cnn).should be_false
       db.pool.is_in_pool?(cnn).should be_false
     end
