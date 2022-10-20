@@ -52,11 +52,11 @@ class FooDriver < DB::Driver
   end
 
   class FooConnection < DB::Connection
-    def build_prepared_statement(command) : DB::Statement
-      FooStatement.new(self, command)
+    def build_prepared_statement(query) : DB::Statement
+      FooStatement.new(self, query)
     end
 
-    def build_unprepared_statement(command) : DB::Statement
+    def build_unprepared_statement(query) : DB::Statement
       raise "not implemented"
     end
   end
