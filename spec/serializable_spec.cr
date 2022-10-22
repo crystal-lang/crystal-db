@@ -90,10 +90,10 @@ struct ModelWithEnum
   getter c2 : MyOtherEnum
 
   enum MyEnum
-    Foo
-    Bar
-    Baz
-    Quux
+    Foo  = 0
+    Bar  = 1
+    Baz  = 2
+    Quux = 3
   end
 
   enum MyOtherEnum
@@ -196,7 +196,7 @@ describe "DB::Serializable" do
   end
 
   it "should initialize a model with an enum property" do
-    expect_model("1,Baz,LOL", ModelWithEnum, {
+    expect_model("1,2,LOL", ModelWithEnum, {
       c0: 1,
       c1: ModelWithEnum::MyEnum::Baz,
       c2: ModelWithEnum::MyOtherEnum::LOL,

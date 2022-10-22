@@ -187,7 +187,7 @@ class DummyDriver < DB::Driver
         return (@statement.as(DummyStatement)).params[0]
       end
 
-      return n
+      n.to_i64? || n
     end
 
     def next_column_index : Int32
