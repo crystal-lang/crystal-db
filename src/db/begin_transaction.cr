@@ -13,25 +13,26 @@ module DB
     # can be called explicitly.
     # Returns the value of the block.
     def transaction(& : Transaction -> T) : T? forall T
+      rollback = false
       # TODO: Cast to workaround crystal-lang/crystal#9483
       # begin_transaction returns a Tx where Tx < Transaction
       tx = begin_transaction.as(Transaction)
       begin
         res = yield tx
       rescue DB::Rollback
-        tx.rollback unless tx.closed?
+        rollback = true
         res
       rescue e
-        unless tx.closed?
-          # Ignore error in rollback.
-          # It would only be a secondary error to the original one, caused by
-          # corrupted connection state.
-          tx.rollback rescue nil
-        end
+        rollback = true
         raise e
-      else
-        tx.commit unless tx.closed?
-        res
+      ensure
+        unless tx.closed?
+          if rollback
+            tx.rollback
+          else
+            tx.commit
+          end
+        end
       end
     end
   end
