@@ -9,6 +9,7 @@ Common db api for crystal. You will need to have a specific driver to access a d
 * [PostgreSQL](https://github.com/will/crystal-pg)
 * [ODBC](https://github.com/naqvis/crystal-odbc)
 * [Cassandra](https://github.com/kaukas/crystal-cassandra)
+* [DuckDB](https://github.com/amauryt/crystal-duckdb)
 
 ## Installation
 
