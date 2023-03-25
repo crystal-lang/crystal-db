@@ -1,21 +1,28 @@
 module DB
   class StringKeyCache(T)
     @cache = {} of String => T
+    @mutex = Mutex.new
 
     def fetch(key : String) : T
-      value = @cache.fetch(key, nil)
-      value = @cache[key] = yield unless value
-      value
+      @mutex.synchronize do
+        value = @cache.fetch(key, nil)
+        value = @cache[key] = yield unless value
+        value
+      end
     end
 
     def each_value
-      @cache.each do |_, value|
-        yield value
+      @mutex.synchronize do
+        @cache.each do |_, value|
+          yield value
+        end
       end
     end
 
     def clear
-      @cache.clear
+      @mutex.synchronize do
+        @cache.clear
+      end
     end
   end
 end

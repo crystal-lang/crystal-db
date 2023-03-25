@@ -7,6 +7,7 @@ module DB
   class PoolPreparedStatement < PoolStatement
     # connections where the statement was prepared
     @connections = Set(WeakRef(Connection)).new
+    @mutex = Mutex.new
 
     def initialize(db : Database, query : String)
       super
@@ -20,12 +21,14 @@ module DB
     end
 
     protected def do_close
-      # TODO close all statements on all connections.
-      # currently statements are closed when the connection is closed.
+      @mutex.synchronize do
+        # TODO close all statements on all connections.
+        # currently statements are closed when the connection is closed.
 
-      # WHAT-IF the connection is busy? Should each statement be able to
-      # deallocate itself when the connection is free.
-      @connections.clear
+        # WHAT-IF the connection is busy? Should each statement be able to
+        # deallocate itself when the connection is free.
+        @connections.clear
+      end
     end
 
     # builds a statement over a real connection
@@ -39,16 +42,22 @@ module DB
         conn.release
         raise ex
       end
-      @connections << WeakRef.new(conn) unless existing
+      unless existing
+        @mutex.synchronize do
+          @connections << WeakRef.new(conn)
+        end
+      end
       stmt
     end
 
     private def clean_connections
-      # remove disposed or closed connections
-      @connections.each do |ref|
-        conn = ref.value
-        if !conn || conn.closed?
-          @connections.delete ref
+      @mutex.synchronize do
+        # remove disposed or closed connections
+        @connections.each do |ref|
+          conn = ref.value
+          if !conn || conn.closed?
+            @connections.delete ref
+          end
         end
       end
     end

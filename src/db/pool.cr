@@ -216,8 +216,10 @@ module DB
 
     private def build_resource : T
       resource = @factory.call
-      @total << resource
-      @idle << resource
+      sync do
+        @total << resource
+        @idle << resource
+      end
       resource
     end
 
