@@ -25,7 +25,6 @@ module DB
 
     # :nodoc:
     getter context
-    @statements_cache = StringKeyCache(Statement).new
     @transaction = false
     getter? prepared_statements : Bool
     # :nodoc:
@@ -37,7 +36,7 @@ module DB
 
     # :nodoc:
     def fetch_or_build_prepared_statement(query) : Statement
-      @statements_cache.fetch(query) { build_prepared_statement(query) }
+      build_prepared_statement(query)
     end
 
     # :nodoc:
@@ -57,8 +56,6 @@ module DB
     end
 
     protected def do_close
-      @statements_cache.each_value &.close
-      @statements_cache.clear
       @context.discard self
     end
 
