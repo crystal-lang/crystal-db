@@ -29,9 +29,11 @@ module DB
     def initialize(@uri : URI, @io_provider : IOProvider?)
       params = HTTP::Params.parse(uri.query || "")
       @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
+      @io_provider.try &.setup
     end
 
     def discard(connection : Connection)
+      @io_provider.try &.teardown
     end
 
     def release(connection : Connection)

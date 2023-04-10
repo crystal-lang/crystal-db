@@ -54,6 +54,8 @@ module DB
       @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
       pool_options = @driver.connection_pool_options(params)
 
+      @io_provider.try &.setup
+
       @setup_connection = ->(conn : Connection) {}
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
       @pool = Pool.new(**pool_options) {
@@ -86,6 +88,8 @@ module DB
       @statements_cache.clear
 
       @pool.close
+
+      @io_provider.try &.teardown
     end
 
     # :nodoc:
