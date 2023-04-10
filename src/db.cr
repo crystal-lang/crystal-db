@@ -115,13 +115,13 @@ module DB
   # to each database driver's specific format.
   #
   # The returned database must be closed by `Database#close`.
-  def self.open(uri : URI | String)
-    build_database(uri)
+  def self.open(uri : URI | String, *, io_provider : IOProvider? = nil)
+    build_database(uri, io_provider: io_provider)
   end
 
   # Same as `#open` but the database is yielded and closed automatically at the end of the block.
-  def self.open(uri : URI | String, &block)
-    db = build_database(uri)
+  def self.open(uri : URI | String, *, io_provider : IOProvider? = nil, &block)
+    db = build_database(uri, io_provider: io_provider)
     begin
       yield db
     ensure
@@ -133,13 +133,13 @@ module DB
   # The scheme of the *uri* determines the driver to use.
   # Returned connection must be closed by `Connection#close`.
   # If a block is used the connection is yielded and closed automatically.
-  def self.connect(uri : URI | String)
-    build_connection(uri)
+  def self.connect(uri : URI | String, *, io_provider : IOProvider? = nil)
+    build_connection(uri, io_provider: io_provider)
   end
 
   # :ditto:
-  def self.connect(uri : URI | String, &block)
-    cnn = build_connection(uri)
+  def self.connect(uri : URI | String, *, io_provider : IOProvider? = nil, &block)
+    cnn = build_connection(uri, io_provider: io_provider)
     begin
       yield cnn
     ensure
@@ -147,20 +147,20 @@ module DB
     end
   end
 
-  private def self.build_database(connection_string : String)
-    build_database(URI.parse(connection_string))
+  private def self.build_database(connection_string : String, *, io_provider : IOProvider?)
+    build_database(URI.parse(connection_string), io_provider: io_provider)
   end
 
-  private def self.build_database(uri : URI)
-    Database.new(build_driver(uri), uri)
+  private def self.build_database(uri : URI, *, io_provider : IOProvider?)
+    Database.new(build_driver(uri), uri, io_provider)
   end
 
-  private def self.build_connection(connection_string : String)
-    build_connection(URI.parse(connection_string))
+  private def self.build_connection(connection_string : String, *, io_provider : IOProvider?)
+    build_connection(URI.parse(connection_string), io_provider: io_provider)
   end
 
-  private def self.build_connection(uri : URI)
-    build_driver(uri).build_connection(SingleConnectionContext.new(uri)).as(Connection)
+  private def self.build_connection(uri : URI, *, io_provider : IOProvider?)
+    build_driver(uri).build_connection(SingleConnectionContext.new(uri, io_provider)).as(Connection)
   end
 
   private def self.build_driver(uri : URI)
@@ -182,6 +182,7 @@ module DB
   end
 end
 
+require "./db/io_provider"
 require "./db/pool"
 require "./db/string_key_cache"
 require "./db/enumerable_concat"

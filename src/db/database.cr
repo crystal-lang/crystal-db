@@ -39,6 +39,9 @@ module DB
     # Returns the uri with the connection settings to the database
     getter uri : URI
 
+    # :nodoc:
+    getter io_provider : IOProvider?
+
     getter? prepared_statements : Bool
 
     @pool : Pool(Connection)
@@ -46,7 +49,7 @@ module DB
     @statements_cache = StringKeyCache(PoolPreparedStatement).new
 
     # :nodoc:
-    def initialize(@driver : Driver, @uri : URI)
+    def initialize(@driver : Driver, @uri : URI, @io_provider : IOProvider?)
       params = HTTP::Params.parse(uri.query || "")
       @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
       pool_options = @driver.connection_pool_options(params)

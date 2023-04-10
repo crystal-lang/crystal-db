@@ -3,6 +3,9 @@ module DB
     # Returns the uri with the connection settings to the database
     abstract def uri : URI
 
+    # Returns the io_provider to use
+    abstract def io_provider : IOProvider?
+
     # Return whether the statements should be prepared by default
     abstract def prepared_statements? : Bool
 
@@ -20,9 +23,10 @@ module DB
     include ConnectionContext
 
     getter uri : URI
+    getter io_provider : IOProvider?
     getter? prepared_statements : Bool
 
-    def initialize(@uri : URI)
+    def initialize(@uri : URI, @io_provider : IOProvider?)
       params = HTTP::Params.parse(uri.query || "")
       @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
     end
