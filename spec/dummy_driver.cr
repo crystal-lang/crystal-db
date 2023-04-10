@@ -9,6 +9,7 @@ class DummyDriver < DB::Driver
   class DummyConnection < DB::Connection
     def initialize(context)
       super(context)
+      context.io_provider.try &.build_io
       @connected = true
       @@connections ||= [] of DummyConnection
       @@connections.not_nil! << self
