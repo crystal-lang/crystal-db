@@ -35,7 +35,11 @@ module DB
     # the connection is registered in `@connections`
     private def build_statement : Statement
       clean_connections
-      conn, existing = @db.checkout_some(@connections)
+
+      conn, existing = @mutex.synchronize do
+        @db.checkout_some(@connections)
+      end
+
       begin
         stmt = conn.prepared.build(@query)
       rescue ex
