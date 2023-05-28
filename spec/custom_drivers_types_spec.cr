@@ -47,8 +47,8 @@ class FooDriver < DB::Driver
     @@row
   end
 
-  def build_connection(context : DB::ConnectionContext) : DB::Connection
-    FooConnection.new
+  def connection_builder(uri : URI) : Proc(DB::Connection)
+    -> { FooConnection.new.as(DB::Connection) }
   end
 
   class FooConnection < DB::Connection
@@ -110,8 +110,8 @@ class BarDriver < DB::Driver
     @@row
   end
 
-  def build_connection(context : DB::ConnectionContext) : DB::Connection
-    BarConnection.new
+  def connection_builder(uri : URI) : Proc(DB::Connection)
+    -> { BarConnection.new.as(DB::Connection) }
   end
 
   class BarConnection < DB::Connection

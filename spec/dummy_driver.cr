@@ -2,8 +2,8 @@ require "spec"
 require "../src/db"
 
 class DummyDriver < DB::Driver
-  def build_connection(context : DB::ConnectionContext) : DB::Connection
-    DummyConnection.new
+  def connection_builder(uri : URI) : Proc(DB::Connection)
+    -> { DummyConnection.new.as(DB::Connection) }
   end
 
   class DummyConnection < DB::Connection

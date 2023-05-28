@@ -26,7 +26,11 @@ module DB
   # Refer to `Connection`, `Statement` and `ResultSet` for further
   # driver implementation instructions.
   abstract class Driver
-    abstract def build_connection(context : ConnectionContext) : Connection
+    # Returns a new connection factory.
+    #
+    # NOTE: For implementors *uri* should be parsed once. If all the options
+    # are sound a factory Proc is returned.
+    abstract def connection_builder(uri : URI) : Proc(Connection)
 
     def connection_pool_options(params : HTTP::Params)
       {

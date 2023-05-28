@@ -161,7 +161,7 @@ module DB
 
   private def self.build_connection(uri : URI)
     # PENDING: parse connection options from uri and set the right connection context
-    build_driver(uri).build_connection(SingleConnectionContext.default).as(Connection)
+    build_driver(uri).connection_builder(uri).call
   end
 
   private def self.build_driver(uri : URI)
