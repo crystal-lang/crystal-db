@@ -56,6 +56,7 @@ module DB
       @pool = Pool.new(**pool_options) {
         conn = @driver.build_connection(self).as(Connection)
         conn.auto_release = false
+        conn.context = self
         @setup_connection.call conn
         conn
       }

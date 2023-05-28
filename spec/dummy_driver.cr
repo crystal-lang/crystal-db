@@ -3,12 +3,11 @@ require "../src/db"
 
 class DummyDriver < DB::Driver
   def build_connection(context : DB::ConnectionContext) : DB::Connection
-    DummyConnection.new(context)
+    DummyConnection.new
   end
 
   class DummyConnection < DB::Connection
-    def initialize(context)
-      super(context)
+    def initialize
       @connected = true
       @@connections ||= [] of DummyConnection
       @@connections.not_nil! << self

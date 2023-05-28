@@ -1,8 +1,5 @@
 module DB
   module ConnectionContext
-    # Returns the uri with the connection settings to the database
-    abstract def uri : URI
-
     # Return whether the statements should be prepared by default
     abstract def prepared_statements? : Bool
 
@@ -19,12 +16,11 @@ module DB
   class SingleConnectionContext
     include ConnectionContext
 
-    getter uri : URI
+    class_getter default : SingleConnectionContext = SingleConnectionContext.new(true)
+
     getter? prepared_statements : Bool
 
-    def initialize(@uri : URI)
-      params = HTTP::Params.parse(uri.query || "")
-      @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
+    def initialize(@prepared_statements : Bool)
     end
 
     def discard(connection : Connection)
