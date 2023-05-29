@@ -152,7 +152,12 @@ module DB
   end
 
   private def self.build_database(uri : URI)
-    Database.new(build_driver(uri), uri)
+    driver = build_driver(uri)
+    params = HTTP::Params.parse(uri.query || "")
+    connection_options = driver.connection_options(params)
+    pool_options = driver.pool_options(params)
+    factory = driver.connection_builder(uri)
+    Database.new(connection_options, pool_options, &factory)
   end
 
   private def self.build_connection(connection_string : String)

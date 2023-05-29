@@ -39,15 +39,6 @@ module DB
     @setup_connection : Connection -> Nil
     @statements_cache = StringKeyCache(PoolPreparedStatement).new
 
-    # :nodoc:
-    def initialize(driver : Driver, uri : URI)
-      params = HTTP::Params.parse(uri.query || "")
-      connection_options = driver.connection_options(params)
-      pool_options = driver.pool_options(params)
-      factory = driver.connection_builder(uri)
-      initialize(connection_options, pool_options, &factory)
-    end
-
     # Initialize a database with the specified options and connection factory.
     # This covers more advanced use cases that might not be supported by an URI connection string such as tunneling connection.
     def initialize(connection_options : Connection::Options, pool_options : Pool::Options, &factory : -> Connection)
