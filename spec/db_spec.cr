@@ -9,12 +9,9 @@ describe DB do
     DB.driver_class("dummy").should eq(DummyDriver)
   end
 
-  it "should instantiate driver with connection uri" do
+  it "should create dummy connection" do
     db = DB.open "dummy://localhost:1027"
-    db.driver.should be_a(DummyDriver)
-    db.uri.scheme.should eq("dummy")
-    db.uri.host.should eq("localhost")
-    db.uri.port.should eq(1027)
+    db.checkout.should be_a(DummyDriver::DummyConnection)
   end
 
   it "should create a connection and close it" do

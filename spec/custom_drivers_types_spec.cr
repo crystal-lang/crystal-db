@@ -160,8 +160,8 @@ DB.register_driver "bar", BarDriver
 
 describe DB do
   it "should be able to register multiple drivers" do
-    DB.open("foo://host").driver.should be_a(FooDriver)
-    DB.open("bar://host").driver.should be_a(BarDriver)
+    DB.open("foo://host").checkout.should be_a(FooDriver::FooConnection)
+    DB.open("bar://host").checkout.should be_a(BarDriver::BarConnection)
   end
 
   it "Foo and Bar drivers should return fake_row" do

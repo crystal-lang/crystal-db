@@ -32,8 +32,6 @@ module DB
     include ConnectionContext
 
     # :nodoc:
-    getter driver
-    # :nodoc:
     getter pool
 
     # Returns the uri with the connection settings to the database
@@ -45,13 +43,13 @@ module DB
     @statements_cache = StringKeyCache(PoolPreparedStatement).new
 
     # :nodoc:
-    def initialize(@driver : Driver, @uri : URI)
+    def initialize(driver : Driver, @uri : URI)
       params = HTTP::Params.parse(uri.query || "")
-      @connection_options = @driver.connection_options(params)
-      pool_options = @driver.pool_options(params)
+      @connection_options = driver.connection_options(params)
+      pool_options = driver.pool_options(params)
 
       @setup_connection = ->(conn : Connection) {}
-      factory = @driver.connection_builder(@uri)
+      factory = driver.connection_builder(@uri)
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
       @pool = Pool.new(pool_options) {
         conn = factory.call
