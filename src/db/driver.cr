@@ -36,7 +36,7 @@ module DB
       Connection::Options.from_http_params(params)
     end
 
-    def connection_pool_options(params : HTTP::Params) : Pool::Options
+    def pool_options(params : HTTP::Params) : Pool::Options
       Pool::Options.from_http_params(params)
     end
   end

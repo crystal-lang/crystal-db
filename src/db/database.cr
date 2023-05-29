@@ -48,7 +48,7 @@ module DB
     def initialize(@driver : Driver, @uri : URI)
       params = HTTP::Params.parse(uri.query || "")
       @connection_options = @driver.connection_options(params)
-      pool_options = @driver.connection_pool_options(params)
+      pool_options = @driver.pool_options(params)
 
       @setup_connection = ->(conn : Connection) {}
       factory = @driver.connection_builder(@uri)
