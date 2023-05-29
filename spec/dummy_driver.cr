@@ -3,11 +3,14 @@ require "../src/db"
 
 class DummyDriver < DB::Driver
   def connection_builder(uri : URI) : Proc(DB::Connection)
-    -> { DummyConnection.new.as(DB::Connection) }
+    params = HTTP::Params.parse(uri.query || "")
+    options = DB::Connection::Options.from_http_params(params)
+    ->{ DummyConnection.new(options).as(DB::Connection) }
   end
 
   class DummyConnection < DB::Connection
-    def initialize
+    def initialize(options : DB::Connection::Options)
+      super(options)
       @connected = true
       @@connections ||= [] of DummyConnection
       @@connections.not_nil! << self

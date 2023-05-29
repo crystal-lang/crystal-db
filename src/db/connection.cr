@@ -23,6 +23,16 @@ module DB
     include SessionMethods(Connection, Statement)
     include BeginTransaction
 
+    record Options,
+      # Return whether the statements should be prepared by default
+      prepared_statements : Bool = true do
+      def self.from_http_params(params : HTTP::Params, default = Options.new)
+        Options.new(
+          prepared_statements: DB.fetch_bool(params, "prepared_statements", default.prepared_statements)
+        )
+      end
+    end
+
     # :nodoc:
     property context : ConnectionContext = SingleConnectionContext.default
     @statements_cache = StringKeyCache(Statement).new
@@ -30,8 +40,11 @@ module DB
     # :nodoc:
     property auto_release : Bool = true
 
+    def initialize(@options : Options)
+    end
+
     def prepared_statements? : Bool
-      context.prepared_statements?
+      @options.prepared_statements
     end
 
     # :nodoc:

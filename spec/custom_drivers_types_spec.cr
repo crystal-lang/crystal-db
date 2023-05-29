@@ -48,7 +48,9 @@ class FooDriver < DB::Driver
   end
 
   def connection_builder(uri : URI) : Proc(DB::Connection)
-    -> { FooConnection.new.as(DB::Connection) }
+    params = HTTP::Params.parse(uri.query || "")
+    options = DB::Connection::Options.from_http_params(params)
+    ->{ FooConnection.new(options).as(DB::Connection) }
   end
 
   class FooConnection < DB::Connection
@@ -111,7 +113,9 @@ class BarDriver < DB::Driver
   end
 
   def connection_builder(uri : URI) : Proc(DB::Connection)
-    -> { BarConnection.new.as(DB::Connection) }
+    params = HTTP::Params.parse(uri.query || "")
+    options = DB::Connection::Options.from_http_params(params)
+    ->{ BarConnection.new(options).as(DB::Connection) }
   end
 
   class BarConnection < DB::Connection

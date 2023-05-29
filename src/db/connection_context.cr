@@ -1,8 +1,5 @@
 module DB
   module ConnectionContext
-    # Return whether the statements should be prepared by default
-    abstract def prepared_statements? : Bool
-
     # Indicates that the *connection* was permanently closed
     # and should not be used in the future.
     abstract def discard(connection : Connection)
@@ -16,12 +13,7 @@ module DB
   class SingleConnectionContext
     include ConnectionContext
 
-    class_getter default : SingleConnectionContext = SingleConnectionContext.new(true)
-
-    getter? prepared_statements : Bool
-
-    def initialize(@prepared_statements : Bool)
-    end
+    class_getter default : SingleConnectionContext = SingleConnectionContext.new
 
     def discard(connection : Connection)
     end
