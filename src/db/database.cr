@@ -42,11 +42,17 @@ module DB
     # :nodoc:
     def initialize(driver : Driver, uri : URI)
       params = HTTP::Params.parse(uri.query || "")
-      @connection_options = driver.connection_options(params)
+      connection_options = driver.connection_options(params)
       pool_options = driver.pool_options(params)
-
-      @setup_connection = ->(conn : Connection) {}
       factory = driver.connection_builder(uri)
+      initialize(connection_options, pool_options, &factory)
+    end
+
+    # Initialize a database with the specified options and connection factory.
+    # This covers more advanced use cases that might not be supported by an URI connection string such as tunneling connection.
+    def initialize(connection_options : Connection::Options, pool_options : Pool::Options, &factory : -> Connection)
+      @connection_options = connection_options
+      @setup_connection = ->(conn : Connection) {}
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
       @pool = Pool.new(pool_options) {
         conn = factory.call
