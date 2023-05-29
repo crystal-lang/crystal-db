@@ -32,6 +32,10 @@ module DB
     # are sound a factory Proc is returned.
     abstract def connection_builder(uri : URI) : Proc(Connection)
 
+    def connection_options(params : HTTP::Params) : Connection::Options
+      Connection::Options.from_http_params(params)
+    end
+
     def connection_pool_options(params : HTTP::Params)
       {
         initial_pool_size:  params.fetch("initial_pool_size", 1).to_i,

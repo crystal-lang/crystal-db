@@ -4,7 +4,7 @@ require "../src/db"
 class DummyDriver < DB::Driver
   def connection_builder(uri : URI) : Proc(DB::Connection)
     params = HTTP::Params.parse(uri.query || "")
-    options = DB::Connection::Options.from_http_params(params)
+    options = connection_options(params)
     ->{ DummyConnection.new(options).as(DB::Connection) }
   end
 

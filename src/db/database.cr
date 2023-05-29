@@ -39,8 +39,7 @@ module DB
     # Returns the uri with the connection settings to the database
     getter uri : URI
 
-    getter? prepared_statements : Bool
-
+    @connection_options : Connection::Options
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
     @statements_cache = StringKeyCache(PoolPreparedStatement).new
@@ -48,7 +47,7 @@ module DB
     # :nodoc:
     def initialize(@driver : Driver, @uri : URI)
       params = HTTP::Params.parse(uri.query || "")
-      @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
+      @connection_options = @driver.connection_options(params)
       pool_options = @driver.connection_pool_options(params)
 
       @setup_connection = ->(conn : Connection) {}
@@ -61,6 +60,10 @@ module DB
         @setup_connection.call conn
         conn
       }
+    end
+
+    def prepared_statements? : Bool
+      @connection_options.prepared_statements
     end
 
     # Run the specified block every time a new connection is established, yielding the new connection
