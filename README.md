@@ -35,7 +35,7 @@ Note: Multiple drivers can be included in the same application.
 
 ## Documentation
 
-* [Latest API](http://crystal-lang.github.io/crystal-db/api/latest/)
+* [Latest API](https://crystal-lang.github.io/crystal-db/api/latest/)
 * [Crystal book](https://crystal-lang.org/docs/database/)
 
 ## Usage
