@@ -523,7 +523,7 @@ module DB
 
     def self.run(description = "as a db")
       ctx = self.new
-      with ctx yield
+      with ctx yield ctx
 
       describe description do
         ctx.include_shared_specs
