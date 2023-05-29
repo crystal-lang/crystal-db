@@ -10,8 +10,9 @@ module DB
   #
   # ## Database URI
   #
-  # Connection parameters are configured in a URI. The format is specified by the individual
-  # database drivers. See the [reference book](https://crystal-lang.org/reference/database/) for examples.
+  # Connection parameters are usually in a URI. The format is specified by the individual
+  # database drivers, yet there are some common properties names usually shared.
+  # See the [reference book](https://crystal-lang.org/reference/database/) for examples.
   #
   # The connection pool can be configured from URI parameters:
   #
