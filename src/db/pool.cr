@@ -7,7 +7,7 @@ module DB
     record Options,
       # initial number of connections in the pool
       initial_pool_size : Int32 = 1,
-      # maximum amount of connections in the pool (Idle + InUse)
+      # maximum amount of connections in the pool (Idle + InUse). 0 means no maximum.
       max_pool_size : Int32 = 0,
       # maximum amount of idle connections in the pool
       max_idle_pool_size : Int32 = 1,
