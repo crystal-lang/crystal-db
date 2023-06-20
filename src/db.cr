@@ -156,7 +156,8 @@ module DB
     params = HTTP::Params.parse(uri.query || "")
     connection_options = driver.connection_options(params)
     pool_options = driver.pool_options(params)
-    factory = driver.connection_builder(uri)
+    builder = driver.connection_builder(uri)
+    factory = ->{ builder.build }
     Database.new(connection_options, pool_options, &factory)
   end
 
@@ -165,7 +166,7 @@ module DB
   end
 
   private def self.build_connection(uri : URI)
-    build_driver(uri).connection_builder(uri).call
+    build_driver(uri).connection_builder(uri).build
   end
 
   private def self.build_driver(uri : URI)
@@ -193,6 +194,7 @@ require "./db/enumerable_concat"
 require "./db/query_methods"
 require "./db/session_methods"
 require "./db/disposable"
+require "./db/connection_builder"
 require "./db/driver"
 require "./db/statement"
 require "./db/begin_transaction"

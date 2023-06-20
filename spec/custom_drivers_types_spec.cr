@@ -36,6 +36,15 @@ class FooValue
 end
 
 class FooDriver < DB::Driver
+  class FooConnectionBuilder < DB::ConnectionBuilder
+    def initialize(@options : DB::Connection::Options)
+    end
+
+    def build : DB::Connection
+      FooConnection.new(@options)
+    end
+  end
+
   alias Any = DB::Any | FooValue
   @@row = [] of Any
 
@@ -47,10 +56,9 @@ class FooDriver < DB::Driver
     @@row
   end
 
-  def connection_builder(uri : URI) : Proc(DB::Connection)
+  def connection_builder(uri : URI) : DB::ConnectionBuilder
     params = HTTP::Params.parse(uri.query || "")
-    options = connection_options(params)
-    ->{ FooConnection.new(options).as(DB::Connection) }
+    FooConnectionBuilder.new(connection_options(params))
   end
 
   class FooConnection < DB::Connection
@@ -101,6 +109,15 @@ class BarValue
 end
 
 class BarDriver < DB::Driver
+  class BarConnectionBuilder < DB::ConnectionBuilder
+    def initialize(@options : DB::Connection::Options)
+    end
+
+    def build : DB::Connection
+      BarConnection.new(@options)
+    end
+  end
+
   alias Any = DB::Any | BarValue
   @@row = [] of Any
 
@@ -112,10 +129,9 @@ class BarDriver < DB::Driver
     @@row
   end
 
-  def connection_builder(uri : URI) : Proc(DB::Connection)
+  def connection_builder(uri : URI) : DB::ConnectionBuilder
     params = HTTP::Params.parse(uri.query || "")
-    options = connection_options(params)
-    ->{ BarConnection.new(options).as(DB::Connection) }
+    BarConnectionBuilder.new(connection_options(params))
   end
 
   class BarConnection < DB::Connection
