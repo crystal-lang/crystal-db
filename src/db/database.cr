@@ -46,7 +46,7 @@ module DB
       @connection_options = connection_options
       @setup_connection = ->(conn : Connection) {}
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
-      @pool = Pool.new(pool_options) {
+      @pool = Pool(Connection).new(pool_options) {
         conn = factory.call
         conn.auto_release = false
         conn.context = self
