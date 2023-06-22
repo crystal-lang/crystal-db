@@ -34,7 +34,7 @@ module DB
     # Returns a new connection factory.
     #
     # NOTE: For implementors *uri* should be parsed once. If all the options
-    # are sound a factory Proc is returned.
+    # are sound a ConnectionBuilder is returned.
     abstract def connection_builder(uri : URI) : ConnectionBuilder
 
     def connection_options(params : HTTP::Params) : Connection::Options
