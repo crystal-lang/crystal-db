@@ -10,8 +10,9 @@ module DB
   #
   # ## Database URI
   #
-  # Connection parameters are configured in a URI. The format is specified by the individual
-  # database drivers. See the [reference book](https://crystal-lang.org/reference/database/) for examples.
+  # Connection parameters are usually in a URI. The format is specified by the individual
+  # database drivers, yet there are some common properties names usually shared.
+  # See the [reference book](https://crystal-lang.org/reference/database/) for examples.
   #
   # The connection pool can be configured from URI parameters:
   #
@@ -32,33 +33,30 @@ module DB
     include ConnectionContext
 
     # :nodoc:
-    getter driver
-    # :nodoc:
     getter pool
 
-    # Returns the uri with the connection settings to the database
-    getter uri : URI
-
-    getter? prepared_statements : Bool
-
+    @connection_options : Connection::Options
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
     @statements_cache = StringKeyCache(PoolPreparedStatement).new
 
-    # :nodoc:
-    def initialize(@driver : Driver, @uri : URI)
-      params = HTTP::Params.parse(uri.query || "")
-      @prepared_statements = DB.fetch_bool(params, "prepared_statements", true)
-      pool_options = @driver.connection_pool_options(params)
-
+    # Initialize a database with the specified options and connection factory.
+    # This covers more advanced use cases that might not be supported by an URI connection string such as tunneling connection.
+    def initialize(connection_options : Connection::Options, pool_options : Pool::Options, &factory : -> Connection)
+      @connection_options = connection_options
       @setup_connection = ->(conn : Connection) {}
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
-      @pool = Pool.new(**pool_options) {
-        conn = @driver.build_connection(self).as(Connection)
+      @pool = Pool(Connection).new(pool_options) {
+        conn = factory.call
         conn.auto_release = false
+        conn.context = self
         @setup_connection.call conn
         conn
       }
+    end
+
+    def prepared_statements? : Bool
+      @connection_options.prepared_statements
     end
 
     # Run the specified block every time a new connection is established, yielding the new connection

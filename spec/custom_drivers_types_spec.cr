@@ -36,6 +36,15 @@ class FooValue
 end
 
 class FooDriver < DB::Driver
+  class FooConnectionBuilder < DB::ConnectionBuilder
+    def initialize(@options : DB::Connection::Options)
+    end
+
+    def build : DB::Connection
+      FooConnection.new(@options)
+    end
+  end
+
   alias Any = DB::Any | FooValue
   @@row = [] of Any
 
@@ -47,8 +56,9 @@ class FooDriver < DB::Driver
     @@row
   end
 
-  def build_connection(context : DB::ConnectionContext) : DB::Connection
-    FooConnection.new(context)
+  def connection_builder(uri : URI) : DB::ConnectionBuilder
+    params = HTTP::Params.parse(uri.query || "")
+    FooConnectionBuilder.new(connection_options(params))
   end
 
   class FooConnection < DB::Connection
@@ -99,6 +109,15 @@ class BarValue
 end
 
 class BarDriver < DB::Driver
+  class BarConnectionBuilder < DB::ConnectionBuilder
+    def initialize(@options : DB::Connection::Options)
+    end
+
+    def build : DB::Connection
+      BarConnection.new(@options)
+    end
+  end
+
   alias Any = DB::Any | BarValue
   @@row = [] of Any
 
@@ -110,8 +129,9 @@ class BarDriver < DB::Driver
     @@row
   end
 
-  def build_connection(context : DB::ConnectionContext) : DB::Connection
-    BarConnection.new(context)
+  def connection_builder(uri : URI) : DB::ConnectionBuilder
+    params = HTTP::Params.parse(uri.query || "")
+    BarConnectionBuilder.new(connection_options(params))
   end
 
   class BarConnection < DB::Connection
@@ -156,8 +176,8 @@ DB.register_driver "bar", BarDriver
 
 describe DB do
   it "should be able to register multiple drivers" do
-    DB.open("foo://host").driver.should be_a(FooDriver)
-    DB.open("bar://host").driver.should be_a(BarDriver)
+    DB.open("foo://host").checkout.should be_a(FooDriver::FooConnection)
+    DB.open("bar://host").checkout.should be_a(BarDriver::BarConnection)
   end
 
   it "Foo and Bar drivers should return fake_row" do

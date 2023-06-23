@@ -1,21 +1,23 @@
 module DB
   # Database driver implementors must subclass `Driver`,
   # register with a driver_name using `DB#register_driver` and
-  # override the factory method `#build_connection`.
+  # override the factory method `#connection_builder`.
   #
   # ```
   # require "db"
   #
   # class FakeDriver < DB::Driver
-  #   def build_connection(context : DB::ConnectionContext)
-  #     FakeConnection.new context
+  #   def connection_builder(uri : URI) : Proc(DB::Connection)
+  #     params = HTTP::Params.parse(uri.query || "")
+  #     options = connection_options(params)
+  #     ->{ FakeConnection.new(options).as(DB::Connection) }
   #   end
   # end
   #
   # DB.register_driver "fake", FakeDriver
   # ```
   #
-  # Access to this fake datbase will be available with
+  # Access to this fake database will be available with
   #
   # ```
   # DB.open "fake://..." do |db|
@@ -25,18 +27,22 @@ module DB
   #
   # Refer to `Connection`, `Statement` and `ResultSet` for further
   # driver implementation instructions.
+  #
+  # Override `#connection_options` and `#pool_options` to provide custom
+  # defaults or parsing of the connection string URI.
   abstract class Driver
-    abstract def build_connection(context : ConnectionContext) : Connection
+    # Returns a new connection factory.
+    #
+    # NOTE: For implementors *uri* should be parsed once. If all the options
+    # are sound a ConnectionBuilder is returned.
+    abstract def connection_builder(uri : URI) : ConnectionBuilder
 
-    def connection_pool_options(params : HTTP::Params)
-      {
-        initial_pool_size:  params.fetch("initial_pool_size", 1).to_i,
-        max_pool_size:      params.fetch("max_pool_size", 0).to_i,
-        max_idle_pool_size: params.fetch("max_idle_pool_size", 1).to_i,
-        checkout_timeout:   params.fetch("checkout_timeout", 5.0).to_f,
-        retry_attempts:     params.fetch("retry_attempts", 1).to_i,
-        retry_delay:        params.fetch("retry_delay", 1.0).to_f,
-      }
+    def connection_options(params : HTTP::Params) : Connection::Options
+      Connection::Options.from_http_params(params)
+    end
+
+    def pool_options(params : HTTP::Params) : Pool::Options
+      Pool::Options.from_http_params(params)
     end
   end
 end

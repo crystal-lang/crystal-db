@@ -22,10 +22,10 @@ describe DB::Pool do
       expected_per_connection = 5
       requests = fixed_pool_size * expected_per_connection
 
-      pool = DB::Pool.new(
+      pool = DB::Pool.new(DB::Pool::Options.new(
         initial_pool_size: fixed_pool_size,
         max_pool_size: fixed_pool_size,
-        max_idle_pool_size: fixed_pool_size) {
+        max_idle_pool_size: fixed_pool_size)) {
         HTTP::Client.new(URI.parse("http://127.0.0.1:#{address.port}/"))
       }
 

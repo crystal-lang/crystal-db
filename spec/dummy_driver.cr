@@ -2,13 +2,23 @@ require "spec"
 require "../src/db"
 
 class DummyDriver < DB::Driver
-  def build_connection(context : DB::ConnectionContext) : DB::Connection
-    DummyConnection.new(context)
+  class DummyConnectionBuilder < DB::ConnectionBuilder
+    def initialize(@options : DB::Connection::Options)
+    end
+
+    def build : DB::Connection
+      DummyConnection.new(@options)
+    end
+  end
+
+  def connection_builder(uri : URI) : DB::ConnectionBuilder
+    params = HTTP::Params.parse(uri.query || "")
+    DummyConnectionBuilder.new(connection_options(params))
   end
 
   class DummyConnection < DB::Connection
-    def initialize(context)
-      super(context)
+    def initialize(options : DB::Connection::Options)
+      super(options)
       @connected = true
       @@connections ||= [] of DummyConnection
       @@connections.not_nil! << self
