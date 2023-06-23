@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.5.1">
+<meta name="crystal_docs.project_version" content="0.12.0">
+<meta name="crystal_docs.project_name" content="db">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="db">
+  <title>DB::Database - db 0.12.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          db
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.12.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ColumnTypeMismatchError" data-name="db::columntypemismatcherror">
+      <a href="../DB/ColumnTypeMismatchError.html">ColumnTypeMismatchError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Connection/Options" data-name="db::connection::options">
+      <a href="../DB/Connection/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionBuilder" data-name="db::connectionbuilder">
+      <a href="../DB/ConnectionBuilder.html">ConnectionBuilder</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="../DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" current" data-id="db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/DriverSpecs" data-name="db::driverspecs(dbanytype)">
+      <a href="../DB/DriverSpecs.html">DriverSpecs</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/DriverSpecs/ColumnDef" data-name="db::driverspecs::columndef">
+      <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Field" data-name="db::field">
+      <a href="../DB/Field.html">Field</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/MetadataValueConverter" data-name="db::metadatavalueconverter">
+      <a href="../DB/MetadataValueConverter.html">MetadataValueConverter</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/NoResultsError" data-name="db::noresultserror">
+      <a href="../DB/NoResultsError.html">NoResultsError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Pool/Options" data-name="db::pool::options">
+      <a href="../DB/Pool/Options.html">Options</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Pool/Stats" data-name="db::pool::stats">
+      <a href="../DB/Pool/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolResourceLost" data-name="db::poolresourcelost(t)">
+      <a href="../DB/PoolResourceLost.html">PoolResourceLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolResourceRefused" data-name="db::poolresourcerefused">
+      <a href="../DB/PoolResourceRefused.html">PoolResourceRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/QueryMethods" data-name="db::querymethods(stmt)">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Serializable" data-name="db::serializable">
+      <a href="../DB/Serializable.html">Serializable</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Serializable/NonStrict" data-name="db::serializable::nonstrict">
+      <a href="../DB/Serializable/NonStrict.html">NonStrict</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/Enum" data-name="enum">
+      <a href="../Enum.html">Enum</a>
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> DB::Database
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../DB/Database.html">DB::Database</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Acts as an entry point for database access.
+Connections are managed by a pool.
+Use <code><a href="../DB.html#open%28uri%3AURI%7CString%29-class-method">DB#open</a></code> to create a <code><a href="../DB/Database.html">Database</a></code> instance.</p>
+<p>Refer to <code><a href="../DB/QueryMethods.html">QueryMethods</a></code> and <code><a href="../DB/SessionMethods.html">SessionMethods</a></code> for documentation about querying the database.</p>
+<h2><a id="database-uri" class="anchor" href="#database-uri">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Database URI</h2>
+<p>Connection parameters are usually in a URI. The format is specified by the individual
+database drivers, yet there are some common properties names usually shared.
+See the <a href="https://crystal-lang.org/reference/database/">reference book</a> for examples.</p>
+<p>The connection pool can be configured from URI parameters:</p>
+<ul>
+<li><code>initial_pool_size</code> (default 1)</li>
+<li><code>max_pool_size</code> (default 0 = unlimited)</li>
+<li><code>max_idle_pool_size</code> (default 1)</li>
+<li><code>checkout_timeout</code> (default 5.0)</li>
+<li><code>retry_attempts</code> (default 1)</li>
+<li><code>retry_delay</code> (in seconds, default 1.0)</li>
+</ul>
+<p>When querying a database, prepared statements are used by default.
+This can be changed from the <code>prepared_statements</code> URI parameter:</p>
+<ul>
+<li><code>prepared_statements</code> (true, or false, default true)</li>
+</ul>
+
+
+
+
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../DB/ConnectionContext.html">DB::ConnectionContext</a></li>
+    
+      <li class="other-type"><a href="../DB/SessionMethods.html">DB::SessionMethods</a>(<a href="../DB/Database.html">DB::Database</a>, <a href="../DB/PoolStatement.html">DB::PoolStatement</a>)</li>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L31" target="_blank">
+        db/database.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28connection_options%3AConnection%3A%3AOptions%2Cpool_options%3APool%3A%3AOptions%2C%26factory%3A-%3EConnection%29-class-method" class="signature"><strong>.new</strong>(connection_options : Connection::Options, pool_options : Pool::Options, &factory :  -> Connection)</a>
+        
+          <div class="summary"><p>Initialize a database with the specified options and connection factory.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#checkout-instance-method" class="signature"><strong>#checkout</strong></a>
+        
+          <div class="summary"><p>returns a connection from the pool the returned connection must be returned to the pool by explictly calling <code><a href="../DB/Connection.html#release-instance-method">Connection#release</a></code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#close-instance-method" class="signature"><strong>#close</strong></a>
+        
+          <div class="summary"><p>Closes all connection to the database.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#prepared_statements%3F%3ABool-instance-method" class="signature"><strong>#prepared_statements?</strong> : Bool</a>
+        
+          <div class="summary"><p>Returns whether by default the statements should be prepared or not.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#setup_connection%28%26proc%3AConnection-%3ENil%29-instance-method" class="signature"><strong>#setup_connection</strong>(&proc : Connection -> Nil)</a>
+        
+          <div class="summary"><p>Run the specified block every time a new connection is established, yielding the new connection to the block.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#transaction%28%26%29-instance-method" class="signature"><strong>#transaction</strong>(&)</a>
+        
+          <div class="summary"><p>yields a <code><a href="../DB/Transaction.html">Transaction</a></code> from a connection of the pool Refer to <code><a href="../DB/BeginTransaction.html#transaction%28%26%3ATransaction-%3ET%29%3AT%7CNilforallT-instance-method">BeginTransaction#transaction</a></code> for documentation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#using_connection%28%26%29-instance-method" class="signature"><strong>#using_connection</strong>(&)</a>
+        
+          <div class="summary"><p>yields a connection from the pool the connection is returned to the pool when the block ends</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from module <code><a href="../DB/ConnectionContext.html">DB::ConnectionContext</a></code></h3>
+  
+  
+    <a href="../DB/ConnectionContext.html#discard%28connection%3AConnection%29-instance-method" class="tooltip">
+      <span>discard(connection : Connection)</span>
+    discard</a>, 
+    
+  
+    <a href="../DB/ConnectionContext.html#release%28connection%3AConnection%29-instance-method" class="tooltip">
+      <span>release(connection : Connection)</span>
+    release</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+    
+
+  <h3>Instance methods inherited from module <code><a href="../DB/SessionMethods.html">DB::SessionMethods</a>(<a href="../DB/Database.html">DB::Database</a>, <a href="../DB/PoolStatement.html">DB::PoolStatement</a>)</code></h3>
+  
+  
+    <a href="../DB/SessionMethods.html#build%28query%29%3AStmt-instance-method" class="tooltip">
+      <span>build(query) : Stmt</span>
+    build</a>, 
+    
+  
+    <a href="../DB/SessionMethods.html#build_unprepared_statement%28query%29%3AStmt-instance-method" class="tooltip">
+      <span>build_unprepared_statement(query) : Stmt</span>
+    build_unprepared_statement</a>, 
+    
+  
+    <a href="../DB/SessionMethods.html#fetch_or_build_prepared_statement%28query%29%3AStmt-instance-method" class="tooltip">
+      <span>fetch_or_build_prepared_statement(query) : Stmt</span>
+    fetch_or_build_prepared_statement</a>, 
+    
+  
+    <a href="../DB/SessionMethods.html#prepared%28query%29-instance-method" class="tooltip">
+      <span>prepared(query)<br/>prepared</span>
+    prepared</a>, 
+    
+  
+    <a href="../DB/SessionMethods.html#prepared_statements%3F%3ABool-instance-method" class="tooltip">
+      <span>prepared_statements? : Bool</span>
+    prepared_statements?</a>, 
+    
+  
+    <a href="../DB/SessionMethods.html#unprepared%28query%29-instance-method" class="tooltip">
+      <span>unprepared(query)<br/>unprepared</span>
+    unprepared</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+    
+
+  <h3>Instance methods inherited from module <code><a href="../DB/QueryMethods.html">DB::QueryMethods</a>(<a href="../DB/PoolStatement.html">DB::PoolStatement</a>)</code></h3>
+  
+  
+    <a href="../DB/QueryMethods.html#exec%28query%2C%2Aargs_%2Cargs%3AArray%7CNil%3Dnil%29-instance-method" class="tooltip">
+      <span>exec(query, *args_, args : Array | Nil = <span class="n">nil</span>)</span>
+    exec</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query%28query%2C%2Aargs_%2Cargs%3AArray%7CNil%3Dnil%29-instance-method" class="tooltip">
+      <span>query(query, *args_, args : Array | Nil = <span class="n">nil</span>)<br/>query(query, *args_, args : Array | Nil = <span class="n">nil</span>, &)</span>
+    query</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_all%28query%2C%2Aargs_%2Cargs%3AArray%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AArray%28U%29forallU-instance-method" class="tooltip">
+      <span>query_all(query, *args_, args : Array | Nil = <span class="n">nil</span>, &block : ResultSet -> U) : Array(U) forall U<br/>query_all(query, *args_, args : Array | Nil = <span class="n">nil</span>, as types : Tuple)<br/>query_all(query, *args_, args : Array | Nil = <span class="n">nil</span>, as types : NamedTuple)<br/>query_all(query, *args_, args : Array | Nil = <span class="n">nil</span>, as type : Class)</span>
+    query_all</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_each%28query%2C%2Aargs_%2Cargs%3AArray%7CNil%3Dnil%2C%26%29-instance-method" class="tooltip">
+      <span>query_each(query, *args_, args : Array | Nil = <span class="n">nil</span>, &)</span>
+    query_each</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_one%28query%2C%2Aargs_%2Cargs%3AArray%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AUforallU-instance-method" class="tooltip">
+      <span>query_one(query, *args_, args : Array | Nil = <span class="n">nil</span>, &block : ResultSet -> U) : U forall U<br/>query_one(query, *args_, args : Array | Nil = <span class="n">nil</span>, as types : Tuple)<br/>query_one(query, *args_, args : Array | Nil = <span class="n">nil</span>, as types : NamedTuple)<br/>query_one(query, *args_, args : Array | Nil = <span class="n">nil</span>, as type : Class)</span>
+    query_one</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#query_one%3F%28query%2C%2Aargs_%2Cargs%3AArray%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AU%7CNilforallU-instance-method" class="tooltip">
+      <span>query_one?(query, *args_, args : Array | Nil = <span class="n">nil</span>, &block : ResultSet -> U) : U | Nil forall U<br/>query_one?(query, *args_, args : Array | Nil = <span class="n">nil</span>, as types : Tuple)<br/>query_one?(query, *args_, args : Array | Nil = <span class="n">nil</span>, as types : NamedTuple)<br/>query_one?(query, *args_, args : Array | Nil = <span class="n">nil</span>, as type : Class)</span>
+    query_one?</a>, 
+    
+  
+    <a href="../DB/QueryMethods.html#scalar%28query%2C%2Aargs_%2Cargs%3AArray%7CNil%3Dnil%29-instance-method" class="tooltip">
+      <span>scalar(query, *args_, args : Array | Nil = <span class="n">nil</span>)</span>
+    scalar</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(connection_options:Connection::Options,pool_options:Pool::Options,&amp;factory:-&gt;Connection)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(connection_options : <a href="../DB/Connection/Options.html">Connection::Options</a>, pool_options : <a href="../DB/Pool/Options.html">Pool::Options</a>, &factory :  -> <a href="../DB/Connection.html">Connection</a>)
+
+        <a class="method-permalink" href="#new%28connection_options%3AConnection%3A%3AOptions%2Cpool_options%3APool%3A%3AOptions%2C%26factory%3A-%3EConnection%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Initialize a database with the specified options and connection factory.
+This covers more advanced use cases that might not be supported by an URI connection string such as tunneling connection.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L45" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="checkout-instance-method">
+      <div class="signature">
+        
+        def <strong>checkout</strong>
+
+        <a class="method-permalink" href="#checkout-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>returns a connection from the pool
+the returned connection must be returned
+to the pool by explictly calling <code><a href="../DB/Connection.html#release-instance-method">Connection#release</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L131" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="close-instance-method">
+      <div class="signature">
+        
+        def <strong>close</strong>
+
+        <a class="method-permalink" href="#close-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Closes all connection to the database.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L79" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="prepared_statements?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>prepared_statements?</strong> : Bool
+
+        <a class="method-permalink" href="#prepared_statements%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from module <a href="../DB/SessionMethods.html">DB::SessionMethods</a>(<a href="../DB/Database.html">DB::Database</a>, <a href="../DB/PoolStatement.html">DB::PoolStatement</a>)
+            </div>
+          
+          <p>Returns whether by default the statements should
+be prepared or not.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L58" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="setup_connection(&amp;proc:Connection-&gt;Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>setup_connection</strong>(&proc : <a href="../DB/Connection.html">Connection</a> -> Nil)
+
+        <a class="method-permalink" href="#setup_connection%28%26proc%3AConnection-%3ENil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Run the specified block every time a new connection is established, yielding the new connection
+to the block.</p>
+<pre><code class="language-crystal">db <span class="o">=</span> <span class="t">DB</span>.open(<span class="t">DB_URL</span>)
+db.setup_connection <span class="k">do</span> <span class="o">|</span>connection<span class="o">|</span>
+  connection.exec <span class="s">&quot;SET TIME ZONE &#39;America/New_York&#39;&quot;</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L71" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="transaction(&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>transaction</strong>(&)
+
+        <a class="method-permalink" href="#transaction%28%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>yields a <code><a href="../DB/Transaction.html">Transaction</a></code> from a connection of the pool
+Refer to <code><a href="../DB/BeginTransaction.html#transaction%28%26%3ATransaction-%3ET%29%3AT%7CNilforallT-instance-method">BeginTransaction#transaction</a></code> for documentation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L139" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="using_connection(&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>using_connection</strong>(&)
+
+        <a class="method-permalink" href="#using_connection%28%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>yields a connection from the pool
+the connection is returned to the pool
+when the block ends</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.12.0/src/db/database.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
