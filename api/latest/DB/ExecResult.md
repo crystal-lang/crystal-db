@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.11/DB/ExecResult.html
+  - /api/0.12/DB/ExecResult.html
 ---
