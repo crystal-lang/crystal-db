@@ -1,8 +1,8 @@
 name: db
-version: 0.11.0
+version: 0.12.0
 
 authors:
-  - Brian J. Cardiff <bcardiff@manas.tech>
+  - Brian J. Cardiff <bcardiff@gmail.com>
 
 crystal: ">= 1.0.0, < 2.0.0"
 

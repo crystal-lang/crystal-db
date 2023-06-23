@@ -1,3 +1,14 @@
+## v0.12.0 (2023-06-23)
+
+- **(breaking-change)** Refactor how drivers create connections. Allow creating `Database` without `URI`s. ([#181](https://github.com/crystal-lang/crystal-db/pull/181), thanks @bcardiff)
+- Close a transaction when `return`ing from within its block. ([#167](https://github.com/crystal-lang/crystal-db/pull/167), thanks @jgaskins)
+- Fix race conditions in multi-thread mode. ([#178](https://github.com/crystal-lang/crystal-db/pull/178), thanks @bcardiff)
+- Allow the use of `Enum`s when reading a `ResultSet`. ([#168](https://github.com/crystal-lang/crystal-db/pull/168), thanks @jgaskins)
+- Fix specs for Crystal 1.4 and 1.5. ([#163](https://github.com/crystal-lang/crystal-db/pull/163), [#173](https://github.com/crystal-lang/crystal-db/pull/173), thanks @straight-shoota)
+- Update README. ([#172](https://github.com/crystal-lang/crystal-db/pull/172), [#180](https://github.com/crystal-lang/crystal-db/pull/180), thanks @amauryt, @jgaskins)
+
+Note: The breaking-change introduced in this release does not affect consumers of the library, only drivers implementors.
+
 ## v0.11.0 (2022-01-27)
 
 * Fix `Connection#transaction` method to return the block value as the result. ([#159](https://github.com/crystal-lang/crystal-db/pull/159), [#160](https://github.com/crystal-lang/crystal-db/pull/160), thanks @bcardiff)
