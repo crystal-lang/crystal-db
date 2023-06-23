@@ -7,7 +7,7 @@
 - Fix specs for Crystal 1.4 and 1.5. ([#163](https://github.com/crystal-lang/crystal-db/pull/163), [#173](https://github.com/crystal-lang/crystal-db/pull/173), thanks @straight-shoota)
 - Update README. ([#172](https://github.com/crystal-lang/crystal-db/pull/172), [#180](https://github.com/crystal-lang/crystal-db/pull/180), thanks @amauryt, @jgaskins)
 
-Note: The breaking-change introduced in this release does not affect consumers of the library, only drivers implementors.
+Note: The breaking-change introduced in this release does not affect consumers of the library, only driver implementors.
 
 ## v0.11.0 (2022-01-27)
 
