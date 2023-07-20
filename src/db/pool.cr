@@ -303,10 +303,6 @@ module DB
       sync { @waiting_resource -= 1 }
     end
 
-    private def are_waiting_for_resource?
-      @waiting_resource > 0
-    end
-
     private def sync
       @mutex.lock
       begin
