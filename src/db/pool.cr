@@ -200,8 +200,11 @@ module DB
         end
       end
 
-      if idle_pushed && are_waiting_for_resource?
-        @availability_channel.send nil
+      if idle_pushed
+        select
+        when @availability_channel.send(nil)
+        else
+        end
       end
     end
 
