@@ -2,7 +2,7 @@
 #
 # % crystal ./spec/manual/load_test.cr
 #
-# It generated a number of producers and consumers. If the process hangs
+# It generates a number of producers and consumers. If the process hangs
 # it means that the connection pool is not working properly. Likely a race condition.
 #
 
