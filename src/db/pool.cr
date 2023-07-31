@@ -57,8 +57,6 @@ module DB
 
     # communicate that a connection is available for checkout
     @availability_channel : Channel(Nil)
-    # signal how many existing connections are waited for
-    @waiting_resource : Int32
     # global pool mutex
     @mutex : Mutex
 
@@ -82,7 +80,6 @@ module DB
       @retry_delay = pool_options.retry_delay
 
       @availability_channel = Channel(Nil).new
-      @waiting_resource = 0
       @inflight = 0
       @mutex = Mutex.new
 
@@ -200,8 +197,11 @@ module DB
         end
       end
 
-      if idle_pushed && are_waiting_for_resource?
-        @availability_channel.send nil
+      if idle_pushed
+        select
+        when @availability_channel.send(nil)
+        else
+        end
       end
     end
 
@@ -281,27 +281,11 @@ module DB
     end
 
     private def wait_for_available
-      sync_inc_waiting_resource
-
       select
       when @availability_channel.receive
-        sync_dec_waiting_resource
       when timeout(@checkout_timeout.seconds)
-        sync_dec_waiting_resource
         raise DB::PoolTimeout.new("Could not check out a connection in #{@checkout_timeout} seconds")
       end
-    end
-
-    private def sync_inc_waiting_resource
-      sync { @waiting_resource += 1 }
-    end
-
-    private def sync_dec_waiting_resource
-      sync { @waiting_resource -= 1 }
-    end
-
-    private def are_waiting_for_resource?
-      @waiting_resource > 0
     end
 
     private def sync

@@ -19,6 +19,7 @@ class DummyDriver < DB::Driver
   class DummyConnection < DB::Connection
     def initialize(options : DB::Connection::Options)
       super(options)
+      Fiber.yield
       @connected = true
       @@connections ||= [] of DummyConnection
       @@connections.not_nil! << self
@@ -113,6 +114,7 @@ class DummyDriver < DB::Driver
     end
 
     protected def perform_query(args : Enumerable) : DB::ResultSet
+      Fiber.yield
       @connection.as(DummyConnection).check
       set_params args
       DummyResultSet.new self, command
@@ -161,6 +163,8 @@ class DummyDriver < DB::Driver
 
     def initialize(statement, command)
       super(statement)
+      Fiber.yield
+
       @top_values = command.split.map { |r| r.split(',') }.to_a
       @column_count = @top_values.size > 0 ? @top_values[0].size : 2
 
