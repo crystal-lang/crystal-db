@@ -7,10 +7,21 @@ module DB
   # require "db"
   #
   # class FakeDriver < DB::Driver
-  #   def connection_builder(uri : URI) : Proc(DB::Connection)
+  #   class FakeConnectionBuilder < DB::ConnectionBuilder
+  #     def initialize(@options : DB::Connection::Options)
+  #     end
+  #
+  #     def build : DB::Connection
+  #       FakeConnection.new(@options)
+  #     end
+  #   end
+  #
+  #   def connection_builder(uri : URI) : ConnectionBuilder
   #     params = HTTP::Params.parse(uri.query || "")
   #     options = connection_options(params)
-  #     ->{ FakeConnection.new(options).as(DB::Connection) }
+  #     # If needed, parse custom options from uri here
+  #     # so they are parsed only once.
+  #     FakeConnectionBuilder.new(options)
   #   end
   # end
   #
