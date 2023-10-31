@@ -396,7 +396,16 @@ module DB
     # :nodoc:
     def with_db(options = nil)
       @before.call
-      DB.open("#{connection_string}#{"?#{options}" if options}") do |db|
+
+      if options
+        uri = URI.parse connection_string
+        uri.query_params.merge! URI::Params.parse(options)
+        connection_string_with_options = uri.to_s
+      else
+        connection_string_with_options = connection_string
+      end
+
+      DB.open(connection_string_with_options) do |db|
         db.exec(sql_drop_table("table1"))
         db.exec(sql_drop_table("table2"))
         db.exec(sql_drop_table("person"))
