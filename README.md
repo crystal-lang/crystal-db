@@ -10,6 +10,7 @@ Common db api for crystal. You will need to have a specific driver to access a d
 * [ODBC](https://github.com/naqvis/crystal-odbc)
 * [Cassandra](https://github.com/kaukas/crystal-cassandra)
 * [DuckDB](https://github.com/amauryt/crystal-duckdb)
+* [Microsoft SQL Server](https://github.com/wonderix/crystal-tds)
 
 ## Installation
 
