@@ -239,6 +239,24 @@ describe DB::Database do
     end
   end
 
+  describe "prepared_statements_cache connection option" do
+    it "should reuse prepared statements if true" do
+      with_dummy "dummy://localhost:1027?prepared_statements=true&prepared_statements_cache=true" do |db|
+        stmt1 = db.build("the query")
+        stmt2 = db.build("the query")
+        stmt1.object_id.should eq(stmt2.object_id)
+      end
+    end
+
+    it "should not reuse prepared statements if false" do
+      with_dummy "dummy://localhost:1027?prepared_statements=true&prepared_statements_cache=false" do |db|
+        stmt1 = db.build("the query")
+        stmt2 = db.build("the query")
+        stmt1.object_id.should_not eq(stmt2.object_id)
+      end
+    end
+  end
+
   describe "unprepared statements in pool" do
     it "creating statements should not create new connections" do
       with_dummy "dummy://localhost:1027?initial_pool_size=1" do |db|
