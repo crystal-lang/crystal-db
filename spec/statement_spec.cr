@@ -34,6 +34,24 @@ describe DB::Statement do
     end
   end
 
+  describe "prepared_statements_cache flag" do
+    it "should reuse prepared statements if true" do
+      with_dummy_connection("prepared_statements=true&prepared_statements_cache=true") do |cnn|
+        stmt1 = cnn.query("the query").statement
+        stmt2 = cnn.query("the query").statement
+        stmt1.object_id.should eq(stmt2.object_id)
+      end
+    end
+
+    it "should not reuse prepared statements if false" do
+      with_dummy_connection("prepared_statements=true&prepared_statements_cache=false") do |cnn|
+        stmt1 = cnn.query("the query").statement
+        stmt2 = cnn.query("the query").statement
+        stmt1.object_id.should_not eq(stmt2.object_id)
+      end
+    end
+  end
+
   it "should initialize positional params in query" do
     with_dummy_connection do |cnn|
       stmt = cnn.prepared("the query").as(DummyDriver::DummyStatement)
