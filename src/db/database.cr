@@ -95,7 +95,11 @@ module DB
 
     # :nodoc:
     def fetch_or_build_prepared_statement(query) : PoolStatement
-      @statements_cache.fetch(query) { build_prepared_statement(query) }
+      if @connection_options.prepared_statements_cache
+        @statements_cache.fetch(query) { build_prepared_statement(query) }
+      else
+        build_prepared_statement(query)
+      end
     end
 
     # :nodoc:

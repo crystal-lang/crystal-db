@@ -25,10 +25,13 @@ module DB
 
     record Options,
       # Return whether the statements should be prepared by default
-      prepared_statements : Bool = true do
+      prepared_statements : Bool = true,
+      # Return whether the prepared statements should be cached or not
+      prepared_statements_cache : Bool = true do
       def self.from_http_params(params : HTTP::Params, default = Options.new)
         Options.new(
-          prepared_statements: DB.fetch_bool(params, "prepared_statements", default.prepared_statements)
+          prepared_statements: DB.fetch_bool(params, "prepared_statements", default.prepared_statements),
+          prepared_statements_cache: DB.fetch_bool(params, "prepared_statements_cache", default.prepared_statements)
         )
       end
     end
@@ -49,7 +52,11 @@ module DB
 
     # :nodoc:
     def fetch_or_build_prepared_statement(query) : Statement
-      @statements_cache.fetch(query) { build_prepared_statement(query) }
+      if @options.prepared_statements_cache
+        @statements_cache.fetch(query) { build_prepared_statement(query) }
+      else
+        build_prepared_statement(query)
+      end
     end
 
     # :nodoc:
