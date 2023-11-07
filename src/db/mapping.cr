@@ -57,7 +57,7 @@ module DB
   # it and initializes this type's instance variables.
   #
   # This macro also declares instance variables of the types given in the mapping.
-  macro mapping(properties, strict = true)
+  macro mapping(properties, strict = true, case_sensitive = true)
     include ::DB::Mappable
 
     {% for key, value in properties %}
@@ -102,9 +102,9 @@ module DB
       {% end %}
 
       %rs.each_column do |col_name|
-        case col_name
+          case col_name{% if !case_sensitive %}.downcase{% end %}
           {% for key, value in properties %}
-            when {{value[:key] || key.id.stringify}}
+              when {{value[:key] || key.id.stringify}}{% if !case_sensitive %}.downcase{% end %}
               %found{key.id} = true
               %var{key.id} =
                 {% if value[:converter] %}

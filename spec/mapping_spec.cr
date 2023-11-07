@@ -63,6 +63,12 @@ class MappingWithConverter
   })
 end
 
+class MappingWithCaseInsensitivity
+  DB.mapping({
+    foo: {type: Int32, key: "C0"},
+  }, case_sensitive: false)
+end
+
 macro from_dummy(query, type)
   with_dummy do |db|
     rs = db.query({{ query }})
@@ -144,6 +150,10 @@ describe "DB.mapping" do
 
   it "should initialize a mapping with a value converter" do
     expect_mapping("Zm9v,a", MappingWithConverter, {c0: "foo".to_slice, c1: "a"})
+  end
+
+  it "should perform column name to property name match with case insensitivity" do
+    expect_mapping("1", MappingWithCaseInsensitivity, {foo: 1})
   end
 
   it "should initialize multiple instances from a single resultset" do
