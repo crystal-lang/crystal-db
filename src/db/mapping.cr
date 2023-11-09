@@ -1,5 +1,6 @@
 module DB
   # Empty module used for marking a class as supporting DB:Mapping
+  @[Deprecated("Use `DB::Serializable` instead")]
   module Mappable; end
 
   # The `DB.mapping` macro defines how an object is built from a `ResultSet`.
@@ -57,6 +58,7 @@ module DB
   # it and initializes this type's instance variables.
   #
   # This macro also declares instance variables of the types given in the mapping.
+  @[Deprecated("Use `DB::Serializable` instead")]
   macro mapping(properties, strict = true)
     include ::DB::Mappable
 
@@ -148,6 +150,7 @@ module DB
     end
   end
 
+  @[Deprecated("Use `DB::Serializable` instead")]
   macro mapping(**properties)
     ::DB.mapping({{properties}})
   end
