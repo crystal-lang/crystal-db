@@ -75,6 +75,10 @@ require "log"
 # end
 # ```
 #
+# ### Object mapping
+#
+# The `DB::Serializable` module implements a declarative mapping from DB result
+# sets to Crystal types.
 module DB
   Log = ::Log.for(self)
 
