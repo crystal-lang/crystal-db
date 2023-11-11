@@ -55,7 +55,9 @@ module DB
       if @options.prepared_statements_cache
         @statements_cache.fetch(query) { build_prepared_statement(query) }
       else
-        build_prepared_statement(query)
+        stmt = build_prepared_statement(query)
+        stmt.auto_close = true
+        stmt
       end
     end
 

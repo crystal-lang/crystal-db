@@ -15,7 +15,14 @@ module DB
       # otherwise the preparation is delayed until the first execution.
       # After the first initialization the connection must be released
       # it will be checked out when executing it.
-      statement_with_retry &.release_connection
+
+      # This only happens if the db is configured to use prepared statements cache.
+      # Without that there is no reference to the already prepared statement we can
+      # take advantage of.
+      if db.prepared_statements_cache?
+        statement_with_retry &.release_connection
+      end
+
       # TODO use a round-robin selection in the pool so multiple sequentially
       #      initialized statements are assigned to different connections.
     end

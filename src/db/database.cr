@@ -59,6 +59,10 @@ module DB
       @connection_options.prepared_statements
     end
 
+    def prepared_statements_cache? : Bool
+      @connection_options.prepared_statements_cache
+    end
+
     # Run the specified block every time a new connection is established, yielding the new connection
     # to the block.
     #
