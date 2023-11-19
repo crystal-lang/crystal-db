@@ -34,14 +34,20 @@ class DummyDriver < DB::Driver
     end
 
     def build_prepared_statement(query) : DB::Statement
+      assert_not_closed!
+
       DummyStatement.new(self, query, true)
     end
 
     def build_unprepared_statement(query) : DB::Statement
+      assert_not_closed!
+
       DummyStatement.new(self, query, false)
     end
 
     def last_insert_id : Int64
+      assert_not_closed!
+
       0
     end
 
@@ -54,11 +60,17 @@ class DummyDriver < DB::Driver
     end
 
     def create_transaction
+      assert_not_closed!
+
       DummyTransaction.new(self)
     end
 
     protected def do_close
       super
+    end
+
+    private def assert_not_closed!
+      raise "Statement is closed" if closed?
     end
   end
 
@@ -114,6 +126,8 @@ class DummyDriver < DB::Driver
     end
 
     protected def perform_query(args : Enumerable) : DB::ResultSet
+      assert_not_closed!
+
       Fiber.yield
       @connection.as(DummyConnection).check
       set_params args
@@ -121,6 +135,8 @@ class DummyDriver < DB::Driver
     end
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
+      assert_not_closed!
+
       @connection.as(DummyConnection).check
       set_params args
       raise DB::Error.new("forced exception due to query") if command == "raise"
@@ -152,6 +168,10 @@ class DummyDriver < DB::Driver
 
     protected def do_close
       super
+    end
+
+    private def assert_not_closed!
+      raise "Statement is closed" if closed?
     end
   end
 

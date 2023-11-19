@@ -43,11 +43,33 @@ describe DB::Statement do
       end
     end
 
+    it "should leave statements open to be reused if true" do
+      with_dummy_connection("prepared_statements=true&prepared_statements_cache=true") do |cnn|
+        rs = cnn.query("the query")
+        # do not close while iterating
+        rs.statement.closed?.should be_false
+        rs.close
+        # do not close to be reused
+        rs.statement.closed?.should be_false
+      end
+    end
+
     it "should not reuse prepared statements if false" do
       with_dummy_connection("prepared_statements=true&prepared_statements_cache=false") do |cnn|
         stmt1 = cnn.query("the query").statement
         stmt2 = cnn.query("the query").statement
         stmt1.object_id.should_not eq(stmt2.object_id)
+      end
+    end
+
+    it "should close statements if false" do
+      with_dummy_connection("prepared_statements=true&prepared_statements_cache=false") do |cnn|
+        rs = cnn.query("the query")
+        # do not close while iterating
+        rs.statement.closed?.should be_false
+        rs.close
+        # do close after iterating
+        rs.statement.closed?.should be_true
       end
     end
   end
