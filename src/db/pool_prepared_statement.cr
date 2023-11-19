@@ -53,7 +53,7 @@ module DB
         conn.release
         raise ex
       end
-      unless existing
+      if !existing && @db.prepared_statements_cache?
         @mutex.synchronize do
           @connections << WeakRef.new(conn)
         end
@@ -62,6 +62,8 @@ module DB
     end
 
     private def clean_connections
+      return unless @db.prepared_statements_cache?
+
       @mutex.synchronize do
         # remove disposed or closed connections
         @connections.each do |ref|
