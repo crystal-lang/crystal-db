@@ -72,6 +72,20 @@ describe DB::Statement do
         rs.statement.closed?.should be_true
       end
     end
+
+    it "should not close statements if false and created explicitly" do
+      with_dummy_connection("prepared_statements=true&prepared_statements_cache=false") do |cnn|
+        stmt = cnn.prepared("the query")
+
+        rs = stmt.query
+        # do not close while iterating
+        stmt.closed?.should be_false
+        rs.close
+
+        # do not close after iterating
+        stmt.closed?.should be_false
+      end
+    end
   end
 
   it "should initialize positional params in query" do
