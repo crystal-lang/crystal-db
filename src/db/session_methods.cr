@@ -14,13 +14,27 @@ module DB
     # be prepared or not.
     abstract def prepared_statements? : Bool
 
+    abstract def prepared_statements_cache? : Bool
+
     abstract def fetch_or_build_prepared_statement(query) : Stmt
 
     abstract def build_unprepared_statement(query) : Stmt
 
     def build(query) : Stmt
       if prepared_statements?
-        fetch_or_build_prepared_statement(query)
+        stmt = fetch_or_build_prepared_statement(query)
+
+        # #build is a :nodoc: method used on QueryMethods where
+        # the statements are not exposed. As such if the cache
+        # is disabled we should auto_close the statement.
+        # When the statements are build explicitly the #prepared
+        # and #unprepared methods are used. In that case the
+        # statement is closed by the user explicitly also.
+        if !prepared_statements_cache?
+          stmt.auto_close = true if stmt.responds_to?(:auto_close=)
+        end
+
+        stmt
       else
         build_unprepared_statement(query)
       end
