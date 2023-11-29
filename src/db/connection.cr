@@ -50,6 +50,10 @@ module DB
       @options.prepared_statements
     end
 
+    def prepared_statements_cache? : Bool
+      @options.prepared_statements_cache
+    end
+
     # :nodoc:
     def fetch_or_build_prepared_statement(query) : Statement
       if @options.prepared_statements_cache

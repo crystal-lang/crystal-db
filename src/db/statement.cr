@@ -56,6 +56,15 @@ module DB
     def initialize(@connection : Connection, @command : String)
     end
 
+    # :nodoc:
+    property auto_close : Bool = false
+
+    # :nodoc:
+    def release_from_result_set
+      self.close if @auto_close
+      self.release_connection
+    end
+
     def release_connection
       @connection.release_from_statement
     end

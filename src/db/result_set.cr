@@ -29,7 +29,7 @@ module DB
     end
 
     protected def do_close
-      statement.release_connection
+      statement.release_from_result_set
     end
 
     # TODO add_next_result_set : Bool
