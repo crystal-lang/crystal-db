@@ -158,27 +158,6 @@ module DB
       end
     end
 
-    # ```
-    # selected, is_candidate = pool.checkout_some(candidates)
-    # ```
-    # `selected` be a resource from the `candidates` list and `is_candidate` == `true`
-    # or `selected` will be a new resource and `is_candidate` == `false`
-    def checkout_some(candidates : Enumerable(WeakRef(T))) : {T, Bool}
-      sync do
-        candidates.each do |ref|
-          resource = ref.value
-          if resource && is_available?(resource)
-            @idle.delete resource
-            resource.before_checkout
-            return {resource, true}
-          end
-        end
-      end
-
-      resource = checkout
-      {resource, candidates.any? { |ref| ref.value == resource }}
-    end
-
     def release(resource : T) : Nil
       idle_pushed = false
 
