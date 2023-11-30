@@ -30,7 +30,8 @@ module DB
   class PoolResourceLost(T) < Error
     getter resource : T
 
-    def initialize(@resource : T)
+    def initialize(@resource : T, cause : Exception? = nil)
+      super(cause: cause)
       @resource.close
     end
   end
