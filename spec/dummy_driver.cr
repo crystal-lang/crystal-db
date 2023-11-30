@@ -1,4 +1,3 @@
-require "spec"
 require "../src/db"
 
 class DummyDriver < DB::Driver
@@ -17,20 +16,37 @@ class DummyDriver < DB::Driver
   end
 
   class DummyConnection < DB::Connection
+    @@connections = [] of DummyConnection
+    @@connections_count = Atomic(Int32).new(0)
+
     def initialize(options : DB::Connection::Options)
       super(options)
       Fiber.yield
+      @@connections_count.add(1)
       @connected = true
-      @@connections ||= [] of DummyConnection
-      @@connections.not_nil! << self
+      {% unless flag?(:preview_mt) %}
+        # @@connections is only used in single-threaded mode in specs
+        # for benchmarks we want to avoid the overhead of synchronizing this array
+        @@connections << self
+      {% end %}
+    end
+
+    def self.connections_count
+      @@connections_count.get
     end
 
     def self.connections
-      @@connections.not_nil!
+      {% if flag?(:preview_mt) %}
+        raise "DummyConnection.connections is only available in single-threaded mode"
+      {% end %}
+      @@connections
     end
 
     def self.clear_connections
-      @@connections.try &.clear
+      {% if flag?(:preview_mt) %}
+        raise "DummyConnection.clear_connections is only available in single-threaded mode"
+      {% end %}
+      @@connections.clear
     end
 
     def build_prepared_statement(query) : DB::Statement
@@ -117,16 +133,29 @@ class DummyDriver < DB::Driver
   end
 
   class DummyStatement < DB::Statement
+    @@statements_count = Atomic(Int32).new(0)
+    @@statements_exec_count = Atomic(Int32).new(0)
     property params
 
     def initialize(connection, command : String, @prepared : Bool)
       @params = Hash(Int32 | String, DB::Any | Array(DB::Any)).new
       super(connection, command)
+      @@statements_count.add(1)
       raise DB::Error.new(command) if command == "syntax error"
+    end
+
+    def self.statements_count
+      @@statements_count.get
+    end
+
+    def self.statements_exec_count
+      @@statements_exec_count.get
     end
 
     protected def perform_query(args : Enumerable) : DB::ResultSet
       assert_not_closed!
+
+      @@statements_exec_count.add(1)
 
       Fiber.yield
       @connection.as(DummyConnection).check
@@ -136,6 +165,8 @@ class DummyDriver < DB::Driver
 
     protected def perform_exec(args : Enumerable) : DB::ExecResult
       assert_not_closed!
+
+      @@statements_exec_count.add(1)
 
       @connection.as(DummyConnection).check
       set_params args
