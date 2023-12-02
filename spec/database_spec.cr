@@ -57,14 +57,6 @@ describe DB::Database do
     end
   end
 
-  it "should close pool statements when closing db" do
-    stmt = uninitialized DB::PoolStatement
-    with_dummy do |db|
-      stmt = db.build("query1")
-    end
-    stmt.closed?.should be_true
-  end
-
   it "should not reconnect if connection is lost and retry_attempts=0" do
     DummyDriver::DummyConnection.clear_connections
     DB.open "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&retry_attempts=0" do |db|
@@ -235,24 +227,6 @@ describe DB::Database do
       with_dummy "dummy://localhost:1027?prepared_statements=false" do |db|
         stmt = db.prepared.query("the query").statement.as(DummyDriver::DummyStatement)
         stmt.prepared?.should be_true
-      end
-    end
-  end
-
-  describe "prepared_statements_cache connection option" do
-    it "should reuse prepared statements if true" do
-      with_dummy "dummy://localhost:1027?prepared_statements=true&prepared_statements_cache=true" do |db|
-        stmt1 = db.build("the query")
-        stmt2 = db.build("the query")
-        stmt1.object_id.should eq(stmt2.object_id)
-      end
-    end
-
-    it "should not reuse prepared statements if false" do
-      with_dummy "dummy://localhost:1027?prepared_statements=true&prepared_statements_cache=false" do |db|
-        stmt1 = db.build("the query")
-        stmt2 = db.build("the query")
-        stmt1.object_id.should_not eq(stmt2.object_id)
       end
     end
   end

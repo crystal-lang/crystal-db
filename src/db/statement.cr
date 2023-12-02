@@ -2,11 +2,6 @@ module DB
   # Common interface for connection based statements
   # and for connection pool statements.
   module StatementMethods
-    include Disposable
-
-    protected def do_close
-    end
-
     # See `QueryMethods#scalar`
     def scalar(*args_, args : Array? = nil)
       query(*args_, args: args) do |rs|
@@ -47,6 +42,10 @@ module DB
   # 6. `#do_close` is called to release the statement resources.
   abstract class Statement
     include StatementMethods
+    include Disposable
+
+    protected def do_close
+    end
 
     # :nodoc:
     getter connection

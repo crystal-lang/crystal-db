@@ -4,7 +4,7 @@ module DB
   # The execution of the statement is retried according to the pool configuration.
   #
   # See `PoolStatement`
-  class PoolPreparedStatement < PoolStatement
+  struct PoolPreparedStatement < PoolStatement
     def initialize(db : Database, query : String)
       super
     end
