@@ -9,10 +9,6 @@ module DB
       super
     end
 
-    protected def do_close
-      # unprepared statements do not need to be release in each connection
-    end
-
     # builds a statement over a real connection
     private def build_statement : Statement
       conn = @db.pool.checkout
