@@ -179,6 +179,25 @@ describe DB::Database do
     end
   end
 
+  it "should not checkout multiple connections if there is a statement error" do
+    with_dummy "dummy://localhost:1027?initial_pool_size=1&max_pool_size=10&retry_attempts=10" do |db|
+      expect_raises DB::Error do
+        db.exec("syntax error")
+      end
+      DummyDriver::DummyConnection.connections.size.should eq(1)
+    end
+  end
+
+  it "should attempt all retries if connection is lost" do
+    with_dummy "dummy://localhost:1027?initial_pool_size=1&max_pool_size=1&retry_attempts=10" do |db|
+      expect_raises DB::PoolRetryAttemptsExceeded do
+        db.exec("raise ConnectionLost")
+      end
+      # 1 initial + 10 retries
+      DummyDriver::DummyConnection.connections.size.should eq(11)
+    end
+  end
+
   describe "prepared_statements connection option" do
     it "defaults to true" do
       with_dummy "dummy://localhost:1027" do |db|

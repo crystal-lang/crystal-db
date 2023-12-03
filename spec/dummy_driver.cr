@@ -142,6 +142,7 @@ class DummyDriver < DB::Driver
       super(connection, command)
       @@statements_count.add(1)
       raise DB::Error.new(command) if command == "syntax error"
+      raise DB::ConnectionLost.new(connection) if command == "raise ConnectionLost"
     end
 
     def self.statements_count
