@@ -193,6 +193,7 @@ module DB
 end
 
 require "./db/pool"
+require "./db/thread_local_pool"
 require "./db/string_key_cache"
 require "./db/enumerable_concat"
 require "./db/query_methods"

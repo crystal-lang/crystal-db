@@ -36,7 +36,11 @@ module DB
     getter pool
 
     @connection_options : Connection::Options
-    @pool : Pool(Connection)
+    {% if flag?(:preview_mt) %}
+      @pool : Pool(Connection) | ThreadLocalPool(Connection)
+    {% else %}
+      @pool : Pool(Connection)
+    {% end %}
     @setup_connection : Connection -> Nil
 
     # Initialize a database with the specified options and connection factory.
@@ -44,14 +48,26 @@ module DB
     def initialize(connection_options : Connection::Options, pool_options : Pool::Options, &factory : -> Connection)
       @connection_options = connection_options
       @setup_connection = ->(conn : Connection) {}
+
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
-      @pool = Pool(Connection).new(pool_options) {
-        conn = factory.call
+      wrapped_factory = ->{
+        conn = factory.call.as(Connection)
         conn.auto_release = false
         conn.context = self
         @setup_connection.call conn
         conn
       }
+
+      {% if flag?(:preview_mt) %}
+        @pool =
+          if pool_options.thread_local_pool
+            ThreadLocalPool(Connection).new(pool_options, &wrapped_factory)
+          else
+            @pool = Pool(Connection).new(pool_options, &wrapped_factory)
+          end
+      {% else %}
+        @pool = Pool(Connection).new(pool_options, &wrapped_factory)
+      {% end %}
     end
 
     def prepared_statements? : Bool

@@ -16,7 +16,9 @@ module DB
       # maximum amount of retry attempts to reconnect to the db. See `Pool#retry`
       retry_attempts : Int32 = 1,
       # seconds to wait before a retry attempt
-      retry_delay : Float64 = 0.2 do
+      retry_delay : Float64 = 0.2,
+      # there will be a connection pool per thread (only in multi-threaded)
+      thread_local_pool : Bool = false do
       def self.from_http_params(params : HTTP::Params, default = Options.new)
         Options.new(
           initial_pool_size: params.fetch("initial_pool_size", default.initial_pool_size).to_i,
@@ -25,6 +27,7 @@ module DB
           checkout_timeout: params.fetch("checkout_timeout", default.checkout_timeout).to_f,
           retry_attempts: params.fetch("retry_attempts", default.retry_attempts).to_i,
           retry_delay: params.fetch("retry_delay", default.retry_delay).to_f,
+          thread_local_pool: DB.fetch_bool(params, "thread_local_pool", default.thread_local_pool),
         )
       end
     end
