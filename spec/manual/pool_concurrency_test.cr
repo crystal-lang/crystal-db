@@ -61,7 +61,7 @@ puts "   Multi Threaded : #{multi_threaded ? "Yes (#{multi_threaded})" : "No"}"
 puts "Total Connections : #{DummyDriver::DummyConnection.connections_count}"
 puts " Total Statements : #{DummyDriver::DummyStatement.statements_count}"
 puts "    Total Queries : #{DummyDriver::DummyStatement.statements_exec_count}"
-puts "Throughtput (q/s) : #{DummyDriver::DummyStatement.statements_exec_count / duration}"
+puts " Throughput (q/s) : #{DummyDriver::DummyStatement.statements_exec_count / duration}"
 
 if !release
   puts "WARNING: This should be run in release mode."
