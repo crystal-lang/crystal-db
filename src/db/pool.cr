@@ -158,27 +158,6 @@ module DB
       end
     end
 
-    # ```
-    # selected, is_candidate = pool.checkout_some(candidates)
-    # ```
-    # `selected` be a resource from the `candidates` list and `is_candidate` == `true`
-    # or `selected` will be a new resource and `is_candidate` == `false`
-    def checkout_some(candidates : Enumerable(WeakRef(T))) : {T, Bool}
-      sync do
-        candidates.each do |ref|
-          resource = ref.value
-          if resource && is_available?(resource)
-            @idle.delete resource
-            resource.before_checkout
-            return {resource, true}
-          end
-        end
-      end
-
-      resource = checkout
-      {resource, candidates.any? { |ref| ref.value == resource }}
-    end
-
     def release(resource : T) : Nil
       idle_pushed = false
 
@@ -227,8 +206,6 @@ module DB
           # if the connection is lost it will be closed by
           # the exception to release resources
           # we still need to remove it from the known pool.
-          # Closed connection will be evicted from statement cache
-          # in PoolPreparedStatement#clean_connections
           sync { delete(e.resource) }
         rescue e : PoolResourceRefused
           # a ConnectionRefused means a new connection

@@ -38,7 +38,6 @@ module DB
     @connection_options : Connection::Options
     @pool : Pool(Connection)
     @setup_connection : Connection -> Nil
-    @statements_cache = StringKeyCache(PoolPreparedStatement).new
 
     # Initialize a database with the specified options and connection factory.
     # This covers more advanced use cases that might not be supported by an URI connection string such as tunneling connection.
@@ -81,9 +80,6 @@ module DB
 
     # Closes all connection to the database.
     def close
-      @statements_cache.each_value &.close
-      @statements_cache.clear
-
       @pool.close
     end
 
@@ -99,15 +95,6 @@ module DB
 
     # :nodoc:
     def fetch_or_build_prepared_statement(query) : PoolStatement
-      if @connection_options.prepared_statements_cache
-        @statements_cache.fetch(query) { build_prepared_statement(query) }
-      else
-        build_prepared_statement(query)
-      end
-    end
-
-    # :nodoc:
-    def build_prepared_statement(query) : PoolStatement
       PoolPreparedStatement.new(self, query)
     end
 

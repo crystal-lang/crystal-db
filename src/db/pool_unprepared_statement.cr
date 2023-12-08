@@ -4,13 +4,9 @@ module DB
   # The execution of the statement is retried according to the pool configuration.
   #
   # See `PoolStatement`
-  class PoolUnpreparedStatement < PoolStatement
+  struct PoolUnpreparedStatement < PoolStatement
     def initialize(db : Database, query : String)
       super
-    end
-
-    protected def do_close
-      # unprepared statements do not need to be release in each connection
     end
 
     # builds a statement over a real connection

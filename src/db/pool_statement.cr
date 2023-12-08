@@ -3,7 +3,7 @@ module DB
   # a statement from the DB needs to be able to represent a statement in any
   # of the connections of the pool. Otherwise the user will need to deal with
   # actual connections in some point.
-  abstract class PoolStatement
+  abstract struct PoolStatement
     include StatementMethods
 
     def initialize(@db : Database, @query : String)
