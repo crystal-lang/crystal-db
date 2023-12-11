@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.12/DB/StringKeyCache.html
+  - /api/0.13/DB/StringKeyCache.html
 ---

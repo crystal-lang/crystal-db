@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.12/DB/PoolRetryAttemptsExceeded.html
+  - /api/0.13/DB/PoolRetryAttemptsExceeded.html
 ---

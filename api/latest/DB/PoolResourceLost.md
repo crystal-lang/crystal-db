@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.12/DB/PoolResourceLost.html
+  - /api/0.13/DB/PoolResourceLost.html
 ---

@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.12/DB/SessionMethods/PreparedQuery.html
+  - /api/0.13/DB/SessionMethods/PreparedQuery.html
 ---

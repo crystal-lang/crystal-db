@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.12/Enum.html
+  - /api/0.13/Enum.html
 ---

@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.12/DB/MetadataValueConverter.html
+  - /api/0.13/DB/MetadataValueConverter.html
 ---
