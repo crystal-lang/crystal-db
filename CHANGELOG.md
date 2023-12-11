@@ -1,3 +1,21 @@
+## v0.13.0 (2023-12-??)
+
+* **(breaking-change)** Deprecate `DB.mapping`. ([#196](https://github.com/crystal-lang/crystal-db/pull/196), thanks @straight-shoota)
+* **(breaking-change)** Drop `Pool#checkout_some`, make `PoolStatement` a struct. ([#200](https://github.com/crystal-lang/crystal-db/pull/200), thanks @bcardiff)
+* Simplifications and performance improvements on pool statements. ([#200](https://github.com/crystal-lang/crystal-db/pull/200), thanks @bcardiff)
+* Allow `prepared_statements_cache=false`` option to disable prepared statements cache. ([#194](https://github.com/crystal-lang/crystal-db/pull/194), [#198](https://github.com/crystal-lang/crystal-db/pull/198), thanks @bcardiff)
+* Add exception cause support to `PoolResourceLost` and `ConnectionLost` constructors. ([#199](https://github.com/crystal-lang/crystal-db/pull/199), thanks @lachlan)
+* Fix inflight counter on `ConnectionRefused`. ([#184](https://github.com/crystal-lang/crystal-db/pull/184), thanks @jgaskins)
+* Fix max_idle_pool_size race condition. ([#186](https://github.com/crystal-lang/crystal-db/pull/186), thanks @bcardiff)
+* Fix `DB::DriverSpecs#with_db` `connection_string` query param support. ([#192](https://github.com/crystal-lang/crystal-db/pull/192), thanks @lachlan)
+* Update docs regarding `ConnectionBuilder`. ([#188](https://github.com/crystal-lang/crystal-db/pull/188), thanks @bcardiff)
+* Add reference to `DB::Serializable` in docs. ([#197](https://github.com/crystal-lang/crystal-db/pull/197), thanks @straight-shoota)
+* Add link to crystal-tds. ([#193](https://github.com/crystal-lang/crystal-db/pull/193), thanks @wonderix)
+
+### Notes for driver implementors
+
+* Use new constructors to preserve the underlying reason of a `PoolResourceLost` or `ConnectionLost` constructors (See [#199](https://github.com/crystal-lang/crystal-db/pull/199))
+
 ## v0.12.0 (2023-06-23)
 
 - **(breaking-change)** Refactor how drivers create connections. Allow creating `Database` without `URI`s. ([#181](https://github.com/crystal-lang/crystal-db/pull/181), thanks @bcardiff)
