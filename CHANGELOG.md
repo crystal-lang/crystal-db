@@ -1,4 +1,4 @@
-## v0.13.0 (2023-12-??)
+## v0.13.0 (2023-12-11)
 
 * **(breaking-change)** Deprecate `DB.mapping`. ([#196](https://github.com/crystal-lang/crystal-db/pull/196), thanks @straight-shoota)
 * **(breaking-change)** Drop `Pool#checkout_some`, make `PoolStatement` a struct. ([#200](https://github.com/crystal-lang/crystal-db/pull/200), thanks @bcardiff)
