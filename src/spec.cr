@@ -398,9 +398,13 @@ module DB
       @before.call
 
       if options
-        uri = URI.parse connection_string
-        uri.query_params.merge! URI::Params.parse(options)
-        connection_string_with_options = uri.to_s
+        {% if compare_versions(Crystal::VERSION, "1.9.0") >= 0 %}
+          uri = URI.parse connection_string
+          uri.query_params.merge! URI::Params.parse(options)
+          connection_string_with_options = uri.to_s
+        {% else %}
+          raise "Crystal 1.9.0 or greater is required to run with_db with options"
+        {% end %}
       else
         connection_string_with_options = connection_string
       end
@@ -561,14 +565,16 @@ module DB
                 end
               end
             else
-              values.each do |prepared_statements|
-                it("#{db_it.description} (prepared_statements=#{prepared_statements})", db_it.file, db_it.line, db_it.end_line) do
-                  ctx.with_db "prepared_statements=#{prepared_statements}" do |db|
-                    db_it.block.call db
-                    nil
+              {% if compare_versions(Crystal::VERSION, "1.9.0") >= 0 %}
+                values.each do |prepared_statements|
+                  it("#{db_it.description} (prepared_statements=#{prepared_statements})", db_it.file, db_it.line, db_it.end_line) do
+                    ctx.with_db "prepared_statements=#{prepared_statements}" do |db|
+                      db_it.block.call db
+                      nil
+                    end
                   end
                 end
-              end
+              {% end %}
             end
           else
             raise "Invalid prepared value. Allowed values are :both and :default"
