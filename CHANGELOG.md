@@ -1,3 +1,7 @@
+## v0.13.1 (2023-12-21)
+
+* Gracefully allow spec helper to fail on older crystal. ([#202](https://github.com/crystal-lang/crystal-db/pull/202), thanks @bcardiff)
+
 ## v0.13.0 (2023-12-11)
 
 * **(breaking-change)** Deprecate `DB.mapping`. ([#196](https://github.com/crystal-lang/crystal-db/pull/196), thanks @straight-shoota)
