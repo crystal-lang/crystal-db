@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.13.0/DB/Pool/TimeoutHelper.html
+  - /api/0.13.1/DB/Pool/TimeoutHelper.html
 ---

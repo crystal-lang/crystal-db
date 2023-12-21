@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.13.0/DB/Any.html
+  - /api/0.13.1/DB/Any.html
 ---
