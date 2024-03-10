@@ -136,7 +136,7 @@ module DB
                     {% elsif value[:nilable] || value[:default] != nil %}
                       rs.read(::Union({{value[:type]}} | Nil))
                     {% else %}
-                      rs.read({{value[:type]}})
+                      rs.read(::{{value[:type]}})
                     {% end %}
                 rescue exc
                   ::raise ::DB::MappingException.new(exc.message, self.class.to_s, {{name.stringify}}, cause: exc)
@@ -166,7 +166,7 @@ module DB
           {% elsif value[:default] != nil %}
             @{{key}} = %var{key}.is_a?(Nil) ? {{value[:default]}} : %var{key}
           {% else %}
-            @{{key}} = %var{key}.as({{value[:type]}})
+            @{{key}} = %var{key}.as(::{{value[:type]}})
           {% end %}
         {% end %}
       {% end %}
