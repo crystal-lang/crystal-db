@@ -109,7 +109,11 @@ module DB
           {% unless ann && ann[:ignore] %}
             {%
               properties[ivar.id] = {
-                type:      ivar.type,
+                type:      if ivar.type.union?
+                             "Union(#{ivar.type.union_types.map { |t| "::#{t}".id }.join(" | ").id})".id
+                           else
+                             "::#{ivar.type}".id
+                           end,
                 key:       ((ann && ann[:key]) || ivar).id.stringify,
                 default:   ivar.default_value,
                 nilable:   ivar.type.nilable?,
@@ -134,9 +138,9 @@ module DB
                     {% if value[:converter] %}
                       {{value[:converter]}}.from_rs(rs)
                     {% elsif value[:nilable] || value[:default] != nil %}
-                      rs.read(::Union(::{{value[:type]}} | Nil))
+                      rs.read(::Union({{value[:type]}} | Nil))
                     {% else %}
-                      rs.read(::{{value[:type]}})
+                      rs.read({{value[:type]}})
                     {% end %}
                 rescue exc
                   ::raise ::DB::MappingException.new(exc.message, self.class.to_s, {{name.stringify}}, cause: exc)
@@ -166,7 +170,7 @@ module DB
           {% elsif value[:default] != nil %}
             @{{key}} = %var{key}.is_a?(Nil) ? {{value[:default]}} : %var{key}
           {% else %}
-            @{{key}} = %var{key}.as(::{{value[:type]}})
+            @{{key}} = %var{key}.as({{value[:type]}})
           {% end %}
         {% end %}
       {% end %}
