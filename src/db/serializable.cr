@@ -134,7 +134,7 @@ module DB
                     {% if value[:converter] %}
                       {{value[:converter]}}.from_rs(rs)
                     {% elsif value[:nilable] || value[:default] != nil %}
-                      rs.read(::Union({{value[:type]}} | Nil))
+                      rs.read(::Union(::{{value[:type]}} | Nil))
                     {% else %}
                       rs.read(::{{value[:type]}})
                     {% end %}
