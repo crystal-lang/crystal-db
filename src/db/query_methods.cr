@@ -42,7 +42,7 @@ module DB
     # result = db.query "select name from contacts where id = ?", args: [10]
     # ```
     #
-    def query(query, *args_, args : Array? = nil)
+    def query(query, *args_, args : Enumerable? = nil)
       build(query).query(*args_, args: args)
     end
 
@@ -56,7 +56,7 @@ module DB
     #   end
     # end
     # ```
-    def query(query, *args_, args : Array? = nil)
+    def query(query, *args_, args : Enumerable? = nil)
       # CHECK build(query).query(*args, &block)
       rs = query(query, *args_, args: args)
       yield rs ensure rs.close
@@ -73,7 +73,7 @@ module DB
     # ```
     # name = db.query_one "select name from contacts where id = ?", 18, &.read(String)
     # ```
-    def query_one(query, *args_, args : Array? = nil, &block : ResultSet -> U) : U forall U
+    def query_one(query, *args_, args : Enumerable? = nil, &block : ResultSet -> U) : U forall U
       query(query, *args_, args: args) do |rs|
         raise DB::NoResultsError.new("no results") unless rs.move_next
 
@@ -92,7 +92,7 @@ module DB
     # ```
     # db.query_one "select name, age from contacts where id = ?", 1, as: {String, Int32}
     # ```
-    def query_one(query, *args_, args : Array? = nil, as types : Tuple)
+    def query_one(query, *args_, args : Enumerable? = nil, as types : Tuple)
       query_one(query, *args_, args: args) do |rs|
         rs.read(*types)
       end
@@ -108,7 +108,7 @@ module DB
     # ```
     # db.query_one "select name, age from contacts where id = ?", 1, as: {name: String, age: Int32}
     # ```
-    def query_one(query, *args_, args : Array? = nil, as types : NamedTuple)
+    def query_one(query, *args_, args : Enumerable? = nil, as types : NamedTuple)
       query_one(query, *args_, args: args) do |rs|
         rs.read(**types)
       end
@@ -123,7 +123,7 @@ module DB
     # ```
     # db.query_one "select name from contacts where id = ?", 1, as: String
     # ```
-    def query_one(query, *args_, args : Array? = nil, as type : Class)
+    def query_one(query, *args_, args : Enumerable? = nil, as type : Class)
       query_one(query, *args_, args: args) do |rs|
         rs.read(type)
       end
@@ -141,7 +141,7 @@ module DB
     # name = db.query_one? "select name from contacts where id = ?", 18, &.read(String)
     # typeof(name) # => String | Nil
     # ```
-    def query_one?(query, *args_, args : Array? = nil, &block : ResultSet -> U) : U? forall U
+    def query_one?(query, *args_, args : Enumerable? = nil, &block : ResultSet -> U) : U? forall U
       query(query, *args_, args: args) do |rs|
         return nil unless rs.move_next
 
@@ -162,7 +162,7 @@ module DB
     # result = db.query_one? "select name, age from contacts where id = ?", 1, as: {String, Int32}
     # typeof(result) # => Tuple(String, Int32) | Nil
     # ```
-    def query_one?(query, *args_, args : Array? = nil, as types : Tuple)
+    def query_one?(query, *args_, args : Enumerable? = nil, as types : Tuple)
       query_one?(query, *args_, args: args) do |rs|
         rs.read(*types)
       end
@@ -180,7 +180,7 @@ module DB
     # result = db.query_one? "select name, age from contacts where id = ?", 1, as: {age: String, name: Int32}
     # typeof(result) # => NamedTuple(age: String, name: Int32) | Nil
     # ```
-    def query_one?(query, *args_, args : Array? = nil, as types : NamedTuple)
+    def query_one?(query, *args_, args : Enumerable? = nil, as types : NamedTuple)
       query_one?(query, *args_, args: args) do |rs|
         rs.read(**types)
       end
@@ -197,7 +197,7 @@ module DB
     # name = db.query_one? "select name from contacts where id = ?", 1, as: String
     # typeof(name) # => String?
     # ```
-    def query_one?(query, *args_, args : Array? = nil, as type : Class)
+    def query_one?(query, *args_, args : Enumerable? = nil, as type : Class)
       query_one?(query, *args_, args: args) do |rs|
         rs.read(type)
       end
@@ -209,7 +209,7 @@ module DB
     # ```
     # names = db.query_all "select name from contacts", &.read(String)
     # ```
-    def query_all(query, *args_, args : Array? = nil, &block : ResultSet -> U) : Array(U) forall U
+    def query_all(query, *args_, args : Enumerable? = nil, &block : ResultSet -> U) : Array(U) forall U
       ary = [] of U
       query_each(query, *args_, args: args) do |rs|
         ary.push(yield rs)
@@ -223,7 +223,7 @@ module DB
     # ```
     # contacts = db.query_all "select name, age from contacts", as: {String, Int32}
     # ```
-    def query_all(query, *args_, args : Array? = nil, as types : Tuple)
+    def query_all(query, *args_, args : Enumerable? = nil, as types : Tuple)
       query_all(query, *args_, args: args) do |rs|
         rs.read(*types)
       end
@@ -236,7 +236,7 @@ module DB
     # ```
     # contacts = db.query_all "select name, age from contacts", as: {name: String, age: Int32}
     # ```
-    def query_all(query, *args_, args : Array? = nil, as types : NamedTuple)
+    def query_all(query, *args_, args : Enumerable? = nil, as types : NamedTuple)
       query_all(query, *args_, args: args) do |rs|
         rs.read(**types)
       end
@@ -248,7 +248,7 @@ module DB
     # ```
     # names = db.query_all "select name from contacts", as: String
     # ```
-    def query_all(query, *args_, args : Array? = nil, as type : Class)
+    def query_all(query, *args_, args : Enumerable? = nil, as type : Class)
       query_all(query, *args_, args: args) do |rs|
         rs.read(type)
       end
@@ -262,7 +262,7 @@ module DB
     #   puts rs.read(String)
     # end
     # ```
-    def query_each(query, *args_, args : Array? = nil)
+    def query_each(query, *args_, args : Enumerable? = nil)
       query(query, *args_, args: args) do |rs|
         rs.each do
           yield rs
@@ -271,7 +271,7 @@ module DB
     end
 
     # Performs the `query` and returns an `ExecResult`
-    def exec(query, *args_, args : Array? = nil)
+    def exec(query, *args_, args : Enumerable? = nil)
       build(query).exec(*args_, args: args)
     end
 
@@ -280,7 +280,7 @@ module DB
     # ```
     # puts db.scalar("SELECT MAX(name)").as(String) # => (a String)
     # ```
-    def scalar(query, *args_, args : Array? = nil)
+    def scalar(query, *args_, args : Enumerable? = nil)
       build(query).scalar(*args_, args: args)
     end
   end

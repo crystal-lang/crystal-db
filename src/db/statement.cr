@@ -3,7 +3,7 @@ module DB
   # and for connection pool statements.
   module StatementMethods
     # See `QueryMethods#scalar`
-    def scalar(*args_, args : Array? = nil)
+    def scalar(*args_, args : Enumerable? = nil)
       query(*args_, args: args) do |rs|
         rs.each do
           return rs.read
@@ -14,7 +14,7 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*args_, args : Array? = nil)
+    def query(*args_, args : Enumerable? = nil)
       rs = query(*args_, args: args)
       yield rs ensure rs.close
     end
@@ -22,12 +22,12 @@ module DB
     # See `QueryMethods#exec`
     abstract def exec : ExecResult
     # See `QueryMethods#exec`
-    abstract def exec(*args_, args : Array? = nil) : ExecResult
+    abstract def exec(*args_, args : Enumerable? = nil) : ExecResult
 
     # See `QueryMethods#query`
     abstract def query : ResultSet
     # See `QueryMethods#query`
-    abstract def query(*args_, args : Array? = nil) : ResultSet
+    abstract def query(*args_, args : Enumerable? = nil) : ResultSet
   end
 
   # Represents a query in a `Connection`.
@@ -74,7 +74,7 @@ module DB
     end
 
     # See `QueryMethods#exec`
-    def exec(*args_, args : Array? = nil) : DB::ExecResult
+    def exec(*args_, args : Enumerable? = nil) : DB::ExecResult
       perform_exec_and_release(EnumerableConcat.build(args_, args))
     end
 
@@ -84,7 +84,7 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*args_, args : Array? = nil) : DB::ResultSet
+    def query(*args_, args : Enumerable? = nil) : DB::ResultSet
       perform_query_with_rescue(EnumerableConcat.build(args_, args))
     end
 
