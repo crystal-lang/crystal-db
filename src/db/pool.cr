@@ -209,8 +209,8 @@ module DB
           sync { delete(e.resource) }
         rescue e : PoolResourceRefused
           # a ConnectionRefused means a new connection
-          # was intended to be created
-          # nothing to due but to retry soon
+          # was intended to be created,
+          # nothing to do but to retry soon
         end
       end
       raise PoolRetryAttemptsExceeded.new
