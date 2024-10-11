@@ -38,7 +38,7 @@ module DB
     # the conneciton is registered in `@connections`
     private abstract def build_statement : Statement
 
-    private def statement_with_retry
+    private def statement_with_retry(&)
       @db.retry do
         return yield build_statement
       end

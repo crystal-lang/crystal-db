@@ -14,7 +14,7 @@ module DB
     end
 
     # See `QueryMethods#query`
-    def query(*args_, args : Enumerable? = nil)
+    def query(*args_, args : Enumerable? = nil, &)
       rs = query(*args_, args: args)
       yield rs ensure rs.close
     end
@@ -113,7 +113,7 @@ module DB
     # This method is called when executing the statement. Although it can be
     # redefined, it is recommended to use the `def_around_query_or_exec` macro
     # to be able to add new behaviors without loosing prior existing ones.
-    protected def around_query_or_exec(args : Enumerable)
+    protected def around_query_or_exec(args : Enumerable, &)
       yield
     end
 

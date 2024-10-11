@@ -9,7 +9,7 @@ class ShouldSleepingOp
     @sleep_happened = Channel(Nil).new
   end
 
-  def should_sleep
+  def should_sleep(&)
     s = self
     @is_sleeping = true
     spawn do

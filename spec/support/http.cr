@@ -1,7 +1,7 @@
 require "http"
 require "./fibers"
 
-def wait_for(timeout = 5.seconds)
+def wait_for(timeout = 5.seconds, &)
   now = Time.monotonic
 
   until yield
@@ -22,7 +22,7 @@ end
 #    shut down before continuing execution in the current fiber.
 # 6. If the listening fiber raises an exception, it is rescued and re-raised
 #    in the current fiber.
-def run_server(server)
+def run_server(server, &)
   server_done = Channel(Exception?).new
 
   f = spawn do

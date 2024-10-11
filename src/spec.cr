@@ -51,8 +51,8 @@ module DB
   class DriverSpecs(DBAnyType)
     record ColumnDef, name : String, sql_type : String, null : Bool
 
-    @before : Proc(Nil) = ->{}
-    @after : Proc(Nil) = ->{}
+    @before : Proc(Nil) = -> { }
+    @after : Proc(Nil) = -> { }
     @encode_null = "NULL"
     @support_prepared = true
     @support_unprepared = true
@@ -394,7 +394,7 @@ module DB
     end
 
     # :nodoc:
-    def with_db(options = nil)
+    def with_db(options = nil, &)
       @before.call
 
       if options
@@ -534,7 +534,7 @@ module DB
       drop_table_if_exists_syntax.call(table_name)
     end
 
-    def self.run(description = "as a db")
+    def self.run(description = "as a db", &)
       ctx = self.new
       with ctx yield ctx
 

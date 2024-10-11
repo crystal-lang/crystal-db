@@ -319,13 +319,13 @@ class Witness
   end
 end
 
-def with_witness(count = 1)
+def with_witness(count = 1, &)
   w = Witness.new(count)
   yield w
   w.count.should eq(0), "The expected coverage was unmet"
 end
 
-def with_dummy(uri : String = "dummy://host?checkout_timeout=0.5")
+def with_dummy(uri : String = "dummy://host?checkout_timeout=0.5", &)
   DummyDriver::DummyConnection.clear_connections
 
   DB.open uri do |db|
@@ -333,7 +333,7 @@ def with_dummy(uri : String = "dummy://host?checkout_timeout=0.5")
   end
 end
 
-def with_dummy_connection(options = "")
+def with_dummy_connection(options = "", &)
   with_dummy("dummy://host?checkout_timeout=0.5&#{options}") do |db|
     db.using_connection do |cnn|
       yield cnn.as(DummyDriver::DummyConnection)

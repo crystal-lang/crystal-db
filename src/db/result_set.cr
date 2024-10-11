@@ -35,14 +35,14 @@ module DB
     # TODO add_next_result_set : Bool
 
     # Iterates over all the rows
-    def each
+    def each(&)
       while move_next
         yield
       end
     end
 
     # Iterates over all the columns
-    def each_column
+    def each_column(&)
       column_count.times do |x|
         yield column_name(x)
       end
