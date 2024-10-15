@@ -6,7 +6,7 @@ module DB
     def initialize(@e1 : T, @e2 : U)
     end
 
-    def each
+    def each(&)
       if e1 = @e1
         @e1.each do |e|
           yield e

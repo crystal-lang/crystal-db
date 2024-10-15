@@ -3,7 +3,7 @@ require "./spec_helper"
 private class FooException < Exception
 end
 
-private def with_dummy_top_transaction
+private def with_dummy_top_transaction(&)
   with_dummy_connection do |cnn|
     cnn.transaction do |tx|
       yield tx.as(DummyDriver::DummyTransaction), cnn
@@ -11,7 +11,7 @@ private def with_dummy_top_transaction
   end
 end
 
-private def with_dummy_nested_transaction
+private def with_dummy_nested_transaction(&)
   with_dummy_connection do |cnn|
     cnn.transaction do |tx|
       tx.transaction do |nested|

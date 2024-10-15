@@ -43,7 +43,7 @@ module DB
     # This covers more advanced use cases that might not be supported by an URI connection string such as tunneling connection.
     def initialize(connection_options : Connection::Options, pool_options : Pool::Options, &factory : -> Connection)
       @connection_options = connection_options
-      @setup_connection = ->(conn : Connection) {}
+      @setup_connection = ->(conn : Connection) { }
       @pool = uninitialized Pool(Connection) # in order to use self in the factory proc
       @pool = Pool(Connection).new(pool_options) {
         conn = factory.call
@@ -111,7 +111,7 @@ module DB
     # yields a connection from the pool
     # the connection is returned to the pool
     # when the block ends
-    def using_connection
+    def using_connection(&)
       connection = self.checkout
       begin
         yield connection
@@ -131,7 +131,7 @@ module DB
 
     # yields a `Transaction` from a connection of the pool
     # Refer to `BeginTransaction#transaction` for documentation.
-    def transaction
+    def transaction(&)
       using_connection do |cnn|
         cnn.transaction do |tx|
           yield tx
@@ -140,7 +140,7 @@ module DB
     end
 
     # :nodoc:
-    def retry
+    def retry(&)
       @pool.retry do
         yield
       end

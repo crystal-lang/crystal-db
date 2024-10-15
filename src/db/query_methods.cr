@@ -56,7 +56,7 @@ module DB
     #   end
     # end
     # ```
-    def query(query, *args_, args : Enumerable? = nil)
+    def query(query, *args_, args : Enumerable? = nil, &)
       # CHECK build(query).query(*args, &block)
       rs = query(query, *args_, args: args)
       yield rs ensure rs.close
@@ -262,7 +262,7 @@ module DB
     #   puts rs.read(String)
     # end
     # ```
-    def query_each(query, *args_, args : Enumerable? = nil)
+    def query_each(query, *args_, args : Enumerable? = nil, &)
       query(query, *args_, args: args) do |rs|
         rs.each do
           yield rs
