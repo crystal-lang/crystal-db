@@ -132,9 +132,10 @@ module DB
     @values = [] of ValueDef(DBAnyType)
 
     # Use *value* as sample value that should be stored in columns of type *sql_type*.
-    # *value_encoded* is driver specific expression that should generate that value in the database.
-    # *type_safe_value* indicates whether *value_encoded* is expected to generate the *value* even without
-    # been stored in a table (default `true`).
+    #
+    # * *value_encoded* is driver specific expression that should generate that value in the database.
+    # * *type_safe_value* indicates whether *value_encoded* is expected to generate the *value* even without
+    #   been stored in a table (default `true`).
     def sample_value(value, sql_type, value_encoded, *, type_safe_value = true)
       @values << ValueDef(DBAnyType).new(value, sql_type, value_encoded)
 
