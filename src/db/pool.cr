@@ -76,7 +76,7 @@ module DB
     @inflight : Int32
 
     # Tracks creation and last (checked out) used timestamps of a specific resource
-    private struct ResourceTimeEntry
+    private class ResourceTimeEntry
       # Time of creation
       getter creation : Time = Time.utc
       # Time the resource was last checked out
@@ -212,8 +212,8 @@ module DB
                      end
         end
 
-        # A newly checked out client could potentially also have been idled for too long.
-        remove_expired!(resource, check_idle: true)
+        # Remove client if expired (either idle or lifetime)
+        remove_expired!(resource)
 
         @idle.delete resource
 
@@ -243,11 +243,9 @@ module DB
         if resource.responds_to?(:closed?) && resource.closed?
           delete(resource)
         elsif can_increase_idle_pool
-          # We only check lifetime expiration since this client has just been used
-          # and can no longer be considered a stale client even if it passed its idle
-          # expiration post-checkout.
-          expire_info = remove_expired!(resource)
-          expire_info.got_checked_out
+          # Checks (lifetime) expiration and updates last checked out time
+          # This will skip checking idle expiration time since it'll get updated
+          expire_info = remove_expired!(resource, update_last_checked_out: true)
 
           @idle << resource
           if resource.responds_to?(:after_release)
@@ -338,26 +336,26 @@ module DB
       (time - time_entry.last_checked_out) >= @max_idle_time_per_resource
     end
 
-    # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so. Otherwise returns the lifecycle information
-    def remove_expired!(resource : T, check_idle : Bool = false)
+    # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so
+    def remove_expired!(resource : T, update_last_checked_out : Bool = false)
       now = Time.utc
       expire_info = @resource_lifecycle[resource]
 
       expiration_type = if lifetime_expired?(expire_info, now)
                           PoolResourceLifetimeExpired
-                        elsif check_idle && idle_expired?(expire_info, now)
+                        elsif !update_last_checked_out && idle_expired?(expire_info, now)
                           PoolResourceIdleExpired
                         else
                           nil
                         end
+
+      expire_info.got_checked_out if update_last_checked_out
 
       if expiration_type
         resource.close
         delete(resource)
         raise expiration_type.new(resource)
       end
-
-      return expire_info
     end
 
     private def build_resource : T

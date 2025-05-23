@@ -266,7 +266,7 @@ describe DB::Pool do
       expired_resource_sweeper: false
     ) { Closable.new.tap { |c| all << c } }
 
-    # Pass
+    # Idle gets reset; not expired
     pool.checkout do |client|
       sleep 0.5.seconds
     end
@@ -274,7 +274,10 @@ describe DB::Pool do
     # Not closed?
     all[0].closed?.should be_false
 
-    # We should expect to see an idle connection timeout now with the #checkout
+    # We should expect to see an idle connection timeout now with the #checkout after
+    # waiting another 0.5 seconds
+
+    sleep 0.6.seconds
     ex = expect_raises DB::PoolResourceIdleExpired(Closable) do
       pool.checkout
     end
@@ -289,6 +292,32 @@ describe DB::Pool do
     all[1].closed?.should be_true
   end
 
+  it "should reset idle-time on checkout" do
+    all = [] of Closable
+    pool = create_pool(
+      max_pool_size: 2,
+      max_idle_pool_size: 1,
+      max_idle_time_per_resource: 1.0,
+      max_lifetime_per_resource: 2.0,
+      expired_resource_sweeper: false
+    ) { Closable.new.tap { |c| all << c } }
+
+    # Resource gets idled every second. It should get reset every time we checkout and release the resource.
+    # If we can last more than 2 seconds from the time of creation then it should get expired
+    # by the lifetime expiration instead.
+
+    # Idle expiration error should cause the resource to be closed
+    ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
+      2.times {
+        pool.checkout {
+          sleep 1
+        }
+      }
+    end
+
+    all[0].closed?.should be_true
+  end
+
   describe "background expired resource sweeper " do
     it "should clear idle resources" do
       all = [] of Closable
@@ -299,21 +328,17 @@ describe DB::Pool do
         max_idle_time_per_resource: 2.0,
       ) { Closable.new.tap { |c| all << c } }
 
-      wait_checkout = WaitFor.new
-
+      # Create 5 resource
       5.times {
         spawn do
-          pool.checkout { sleep 0.5 }
-          wait_checkout.check
+          pool.checkout { sleep 0.1 }
         end
       }
 
-      5.times do
-        wait_checkout.wait
-      end
+      # Don't do anything for 5 seconds
+      sleep 5
 
-      sleep 3
-
+      # Gone
       all.each &.closed?.should be_true
       pool.stats.open_connections.should eq(0)
       pool.stats.idle_connections.should eq(0)
