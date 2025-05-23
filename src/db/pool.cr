@@ -16,7 +16,11 @@ module DB
       # maximum amount of retry attempts to reconnect to the db. See `Pool#retry`
       retry_attempts : Int32 = 1,
       # seconds to wait before a retry attempt
-      retry_delay : Float64 = 0.2 do
+      retry_delay : Float64 = 0.2,
+      # maximum number of seconds the resource can persist after being created. 0 to disable.
+      max_lifetime_per_resource : Float64 = 0.0,
+      # maximum number of seconds an idle resource can remain unused for being removed. 0 to disable.
+      max_idle_time_per_resource : Float64 = 0.0 do
       def self.from_http_params(params : HTTP::Params, default = Options.new)
         Options.new(
           initial_pool_size: params.fetch("initial_pool_size", default.initial_pool_size).to_i,
@@ -43,6 +47,11 @@ module DB
     @retry_attempts : Int32
     # seconds to wait before a retry attempt
     @retry_delay : Float64
+
+    # maximum number of seconds the resource can persist after being created. 0 to disable.
+    @max_lifetime_per_resource : Float64
+    # maximum number of seconds an idle resource can remain unused for being removed. 0 to disable.
+    @max_idle_time_per_resource : Float64
 
     # Pool state
 
@@ -78,6 +87,8 @@ module DB
       @checkout_timeout = pool_options.checkout_timeout
       @retry_attempts = pool_options.retry_attempts
       @retry_delay = pool_options.retry_delay
+      @max_lifetime_per_resource = pool_options.max_lifetime_per_resource
+      @max_idle_time_per_resource = pool_options.max_idle_time_per_resource
 
       @availability_channel = Channel(Nil).new
       @inflight = 0
