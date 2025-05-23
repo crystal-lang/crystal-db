@@ -18,9 +18,9 @@ module DB
       # seconds to wait before a retry attempt
       retry_delay : Float64 = 0.2,
       # maximum number of seconds the resource can persist after being created. 0 to disable.
-      max_lifetime_per_resource : Float64 = 0.0,
+      max_lifetime_per_resource : Float64  | Time::Span = 0.0,
       # maximum number of seconds an idle resource can remain unused for being removed. 0 to disable.
-      max_idle_time_per_resource : Float64 = 0.0 do
+      max_idle_time_per_resource : Float64 | Time::Span = 0.0 do
       def self.from_http_params(params : HTTP::Params, default = Options.new)
         Options.new(
           initial_pool_size: params.fetch("initial_pool_size", default.initial_pool_size).to_i,
@@ -29,6 +29,8 @@ module DB
           checkout_timeout: params.fetch("checkout_timeout", default.checkout_timeout).to_f,
           retry_attempts: params.fetch("retry_attempts", default.retry_attempts).to_i,
           retry_delay: params.fetch("retry_delay", default.retry_delay).to_f,
+          max_lifetime_per_resource: params.fetch("max_lifetime_per_resource", default.max_lifetime_per_resource).to_f,
+          max_idle_time_per_resource: params.fetch("max_idle_time_per_resource", default.max_idle_time_per_resource).to_f,
         )
       end
     end
@@ -49,9 +51,9 @@ module DB
     @retry_delay : Float64
 
     # maximum number of seconds the resource can persist after being created. 0 to disable.
-    @max_lifetime_per_resource : Float64
+    @max_lifetime_per_resource : Time::Span
     # maximum number of seconds an idle resource can remain unused for being removed. 0 to disable.
-    @max_idle_time_per_resource : Float64
+    @max_idle_time_per_resource : Time::Span
 
     # Pool state
 
@@ -87,14 +89,23 @@ module DB
       @checkout_timeout = pool_options.checkout_timeout
       @retry_attempts = pool_options.retry_attempts
       @retry_delay = pool_options.retry_delay
-      @max_lifetime_per_resource = pool_options.max_lifetime_per_resource
-      @max_idle_time_per_resource = pool_options.max_idle_time_per_resource
 
       @availability_channel = Channel(Nil).new
       @inflight = 0
       @mutex = Mutex.new
 
+      @max_lifetime_per_resource = ensure_time_span(pool_options.max_lifetime_per_resource).as(Time::Span)
+      @max_idle_time_per_resource = ensure_time_span(pool_options.max_idle_time_per_resource).as(Time::Span)
+
       @initial_pool_size.times { build_resource }
+    end
+
+    private macro ensure_time_span(value)
+      if {{value}}.is_a? Number
+        {{value}}.seconds
+      else
+        {{value}}
+      end
     end
 
     # close all resources in the pool
