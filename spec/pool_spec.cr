@@ -307,7 +307,7 @@ describe DB::Pool do
     # by the lifetime expiration instead.
     2.times {
       pool.checkout {
-        sleep 0.6
+        sleep 0.6.seconds
       }
     }
 
@@ -332,7 +332,7 @@ describe DB::Pool do
     # Initially have 3 clients
     all.size.should eq(3)
 
-    sleep 0.6
+    sleep 0.6.seconds
 
     # checkout
     3.times do |i|
@@ -368,7 +368,7 @@ describe DB::Pool do
     }
 
     # Await lifetime expiration
-    sleep 2.1
+    sleep 2.1.seconds
     # release
     temp_resource_store.each_with_index do |resource, i|
       # All three idle connections were checked out
@@ -396,12 +396,12 @@ describe DB::Pool do
       # Create 5 resource
       5.times {
         spawn do
-          pool.checkout { sleep 0.1 }
+          pool.checkout { sleep 0.1.seconds }
         end
       }
 
       # Don't do anything for 5 seconds
-      sleep 5
+      sleep 5.seconds
 
       # Gone
       all.each &.closed?.should be_true
