@@ -1,4 +1,5 @@
 require "./spec_helper"
+require "../src/db/error.cr"
 
 class ShouldSleepingOp
   @is_sleeping = false
@@ -223,5 +224,62 @@ describe DB::Pool do
     pool.checkout
 
     all.size.should eq 4
+  end
+
+  it "should expire resources that exceed maximum lifetime on checkout" do
+    all = [] of Closable
+    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_lifetime_per_resource: 0.5) { Closable.new.tap { |c| all << c } }
+
+    # After 0.5 seconds we should expect to get an expired resource
+    sleep 0.5.seconds
+
+    ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
+      pool.checkout
+    end
+
+    # Lifetime expiration error should cause the client to be closed
+    all[0].closed?.should be_true
+  end
+
+  it "should expire resources that exceed maximum idle-time on checkout" do
+    all = [] of Closable
+    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_idle_time_per_resource: 0.5) { Closable.new.tap { |c| all << c } }
+
+    # After two seconds we should expect to get an expired resource
+    sleep 0.5.seconds
+
+    # Idle expiration error should cause the client to be closed
+    ex = expect_raises DB::PoolResourceIdleExpired(Closable) do
+      pool.checkout
+    end
+
+    all[0].closed?.should be_true
+  end
+
+  it "should only check lifetime expiration on release" do
+    all = [] of Closable
+    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_lifetime_per_resource: 2.0, max_idle_time_per_resource: 0.5) { Closable.new.tap { |c| all << c } }
+
+    # Pass
+    pool.checkout do |client|
+      sleep 0.5.seconds
+    end
+
+    # Not closed?
+    all[0].closed?.should be_false
+
+    # We should expect to see an idle connection timeout now with the #checkout
+    ex = expect_raises DB::PoolResourceIdleExpired(Closable) do
+      pool.checkout
+    end
+
+    all[0].closed?.should be_true
+
+    # This should now create a new client that will be expired on release
+    ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
+      pool.checkout { sleep 2.seconds }
+    end
+
+    all[1].closed?.should be_true
   end
 end

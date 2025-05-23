@@ -18,7 +18,7 @@ module DB
       # seconds to wait before a retry attempt
       retry_delay : Float64 = 0.2,
       # maximum number of seconds the resource can persist after being created. 0 to disable.
-      max_lifetime_per_resource : Float64  | Time::Span = 0.0,
+      max_lifetime_per_resource : Float64 | Time::Span = 0.0,
       # maximum number of seconds an idle resource can remain unused for being removed. 0 to disable.
       max_idle_time_per_resource : Float64 | Time::Span = 0.0 do
       def self.from_http_params(params : HTTP::Params, default = Options.new)
@@ -63,6 +63,26 @@ module DB
     @idle = Set(T).new
     # connections waiting to be stablished (they are not in *@idle* nor in *@total*)
     @inflight : Int32
+
+    # Tracks creation and last (checked out) used timestamps of a specific resource
+    private struct ResourceTimeEntry
+      # Time of creation
+      getter creation : Time = Time.utc
+      # Time the resource was last checked out
+      getter last_checked_out : Time
+
+      def initialize
+        @last_checked_out = @creation
+      end
+
+      # Sets the last checked out time to now
+      def got_checked_out
+        @last_checked_out = Time.utc
+      end
+    end
+
+    # Maps a resource to a corresponding `ResourceTimeEntry`
+    @resource_lifecycle = {} of T => ResourceTimeEntry
 
     # Sync state
 
@@ -159,6 +179,9 @@ module DB
                      end
         end
 
+        # A newly checked out client could potentially also have been idled for too long.
+        remove_expired!(resource, check_idle: true)
+
         @idle.delete resource
 
         resource
@@ -185,8 +208,14 @@ module DB
 
       sync do
         if resource.responds_to?(:closed?) && resource.closed?
-          @total.delete(resource)
+          delete(resource)
         elsif can_increase_idle_pool
+          # We only check lifetime expiration since this client has just been used
+          # and can no longer be considered a stale client even if it passed its idle
+          # expiration post-checkout.
+          expire_info = remove_expired!(resource)
+          expire_info.got_checked_out
+
           @idle << resource
           if resource.responds_to?(:after_release)
             resource.after_release
@@ -194,7 +223,7 @@ module DB
           idle_pushed = true
         else
           resource.close
-          @total.delete(resource)
+          delete(resource)
         end
       end
 
@@ -242,6 +271,7 @@ module DB
     def each_resource(&)
       sync do
         @idle.each do |resource|
+          @resource_lifecycle[resource].got_checked_out
           yield resource
         end
       end
@@ -256,6 +286,62 @@ module DB
     def delete(resource : T)
       @total.delete(resource)
       @idle.delete(resource)
+      @resource_lifecycle.delete(resource)
+    end
+
+    # Checks if a resource has exceeded the maximum lifetime
+    #
+    # :nodoc:
+    def lifetime_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
+      return false if @max_lifetime_per_resource.zero?
+      (time - time_entry.creation) >= @max_lifetime_per_resource
+    end
+
+    # Checks if a resource has exceeded the maximum idle time
+    #
+    # :nodoc:
+    def idle_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
+      return false if @max_idle_time_per_resource.zero?
+      (time - time_entry.last_checked_out) >= @max_idle_time_per_resource
+    end
+
+    # Checks if the resource is expired, deletes if so. Otherwise returns the lifecycle information
+    def remove_expired?(resource : T, check_idle : Bool = false)
+      now = Time.utc
+      expire_info = @resource_lifecycle[resource]
+
+      # For most situations only lifetime expiration needs to be checked.
+      # Idle timer is then shortly bumped if the resource hasn't expired yet.
+      if lifetime_expired?(expire_info, now) || (
+           check_idle && idle_expired?(expire_info, now)
+         )
+        resource.close
+        delete(resource)
+      end
+
+      return expire_info
+    end
+
+    # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so. Otherwise returns the lifecycle information
+    def remove_expired!(resource : T, check_idle : Bool = false)
+      now = Time.utc
+      expire_info = @resource_lifecycle[resource]
+
+      expiration_type = if lifetime_expired?(expire_info, now)
+                          PoolResourceLifetimeExpired
+                        elsif check_idle && idle_expired?(expire_info, now)
+                          PoolResourceIdleExpired
+                        else
+                          nil
+                        end
+
+      if expiration_type
+        resource.close
+        delete(resource)
+        raise expiration_type.new(resource)
+      end
+
+      return expire_info
     end
 
     private def build_resource : T
@@ -263,6 +349,7 @@ module DB
       sync do
         @total << resource
         @idle << resource
+        @resource_lifecycle[resource] = ResourceTimeEntry.new
       end
       resource
     end
