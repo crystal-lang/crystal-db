@@ -175,6 +175,7 @@ module DB
       @total.each &.close
       @total.clear
       @idle.clear
+      @resource_lifecycle.clear
       @sweep_job_close_channel.send(nil) if @sweep_job_running
     end
 
