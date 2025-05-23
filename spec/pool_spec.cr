@@ -267,7 +267,7 @@ describe DB::Pool do
     ) { Closable.new.tap { |c| all << c } }
 
     # Idle gets reset; not expired
-    pool.checkout do |client|
+    pool.checkout do |resource|
       sleep 0.5.seconds
     end
 
@@ -285,9 +285,8 @@ describe DB::Pool do
     all[0].closed?.should be_true
 
     # This should now create a new client that will be expired on release
-    ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
-      pool.checkout { sleep 2.seconds }
-    end
+    pool.checkout { sleep 2.seconds }
+    pool.stats.lifetime_expired_connections.should eq 1
 
     all[1].closed?.should be_true
   end
@@ -296,26 +295,26 @@ describe DB::Pool do
     all = [] of Closable
     pool = create_pool(
       max_pool_size: 2,
+      initial_pool_size: 0,
       max_idle_pool_size: 1,
-      max_idle_time_per_resource: 1.0,
-      max_lifetime_per_resource: 2.0,
+      max_idle_time_per_resource: 0.5,
+      max_lifetime_per_resource: 1.0,
       expired_resource_sweeper: false
     ) { Closable.new.tap { |c| all << c } }
 
-    # Resource gets idled every second. It should get reset every time we checkout and release the resource.
-    # If we can last more than 2 seconds from the time of creation then it should get expired
+    # Resource gets idled every half second. It should get reset every time we checkout and release the resource.
+    # If we can last more than a second from the time of creation then it should get expired
     # by the lifetime expiration instead.
-
-    # Idle expiration error should cause the resource to be closed
-    ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
-      2.times {
-        pool.checkout {
-          sleep 1
-        }
+    2.times {
+      pool.checkout {
+        sleep 0.6
       }
-    end
+    }
 
-    all[0].closed?.should be_true
+    pool.stats.lifetime_expired_connections.should eq(1)
+    pool.stats.idle_expired_connections.should eq(0)
+    all.each &.closed?.should be_true
+    all.size.should eq(1)
   end
 
   it "Should ensure minimum of initial_pool_size non-expired idle resources on checkout" do
@@ -375,12 +374,9 @@ describe DB::Pool do
       # All three idle connections were checked out
       # Each iteration should result in a new idle connection being created
       # as the one we release get expired.
-      expect_raises DB::PoolResourceLifetimeExpired(Closable) do
-        pool.release(resource)
-      end
+      pool.release(resource)
 
       pool.stats.idle_connections.should eq(i + 1)
-
       pool.stats.lifetime_expired_connections.should eq(i + 1)
       all.size.should eq(3 + (i + 1))
       all[i].closed?.should be_true

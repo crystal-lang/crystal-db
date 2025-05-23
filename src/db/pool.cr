@@ -259,9 +259,18 @@ module DB
         if resource.responds_to?(:closed?) && resource.closed?
           delete(resource)
         elsif can_increase_idle_pool
-          # Checks (lifetime) expiration and updates last checked out time
-          # This will skip checking idle expiration time since it'll get updated
-          expire_info = remove_expired!(resource, update_last_checked_out: true)
+          # Checks lifetime expiration and updates last checked out time
+          # Old idle expiration isn't checked because this replaces it.
+          expire_info = @resource_lifecycle[resource]
+          if lifetime_expired?(expire_info, Time.utc)
+            resource.close
+            delete(resource)
+            ensure_minimum_fresh_resources
+
+            return nil
+          else
+            expire_info.got_checked_out
+          end
 
           @idle << resource
           if resource.responds_to?(:after_release)
@@ -361,19 +370,17 @@ module DB
     # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so
     #
     # :nodoc:
-    def remove_expired!(resource : T, update_last_checked_out : Bool = false)
+    def remove_expired!(resource : T)
       now = Time.utc
       expire_info = @resource_lifecycle[resource]
 
       expiration_type = if lifetime_expired?(expire_info, now)
                           PoolResourceLifetimeExpired
-                        elsif !update_last_checked_out && idle_expired?(expire_info, now)
+                        elsif idle_expired?(expire_info, now)
                           PoolResourceIdleExpired
                         else
                           nil
                         end
-
-      expire_info.got_checked_out if update_last_checked_out
 
       if expiration_type
         resource.close
