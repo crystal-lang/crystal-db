@@ -75,6 +75,9 @@ module DB
     # connections waiting to be stablished (they are not in *@idle* nor in *@total*)
     @inflight : Int32
 
+    @idle_expired_count : Int64 = 0
+    @lifetime_expired_count : Int64 = 0
+
     # Tracks creation and last (checked out) used timestamps of a specific resource
     private class ResourceTimeEntry
       # Time of creation
@@ -172,7 +175,9 @@ module DB
       open_connections : Int32,
       idle_connections : Int32,
       in_flight_connections : Int32,
-      max_connections : Int32
+      max_connections : Int32,
+      idle_expired_connections : Int64,
+      lifetime_expired_connections : Int64
 
     # Returns stats of the pool
     def stats
@@ -181,6 +186,8 @@ module DB
         idle_connections: @idle.size,
         in_flight_connections: @inflight,
         max_connections: @max_pool_size,
+        idle_expired_connections: @idle_expired_count,
+        lifetime_expired_connections: @lifetime_expired_count
       )
     end
 
@@ -325,7 +332,10 @@ module DB
     # :nodoc:
     def lifetime_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
       return false if @max_lifetime_per_resource.zero?
-      (time - time_entry.creation) >= @max_lifetime_per_resource
+
+      expired = (time - time_entry.creation) >= @max_lifetime_per_resource
+      @lifetime_expired_count += 1 if expired
+      return expired
     end
 
     # Checks if a resource has exceeded the maximum idle time
@@ -333,7 +343,10 @@ module DB
     # :nodoc:
     def idle_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
       return false if @max_idle_time_per_resource.zero?
-      (time - time_entry.last_checked_out) >= @max_idle_time_per_resource
+
+      expired = (time - time_entry.last_checked_out) >= @max_idle_time_per_resource
+      @idle_expired_count += 1 if expired
+      return expired
     end
 
     # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so
