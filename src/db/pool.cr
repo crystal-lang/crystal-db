@@ -109,6 +109,10 @@ module DB
 
     # whether the job is enabled or disabled
     @sweep_job_enabled : Bool
+    # has a sweep job running
+    @sweep_job_running : Bool
+    # timer between each run
+    @sweep_timer : Time::Span?
     # cancels the sweep job as needed
     @sweep_job_close_channel : Channel(Nil)
 
@@ -145,14 +149,16 @@ module DB
       # Cancels the sweep job as needed
       @sweep_job_close_channel = Channel(Nil).new
 
+      @sweep_job_running = false
+
       if @sweep_job_enabled && !(min_expire = {@max_idle_time_per_resource, @max_lifetime_per_resource}.reject(&.zero?).min?).nil?
         sweep_timer = ensure_time_span(pool_options.resource_sweeper_timer).as(Time::Span)
 
         if sweep_timer.zero?
-          sweep_timer = min_expire || sweep_timer
+          @sweep_timer = min_expire || sweep_timer
         end
 
-        sweep_expired_job(sweep_timer) if sweep_timer.positive?
+        sweep_expired_job
       end
     end
 
@@ -169,6 +175,7 @@ module DB
       @total.each &.close
       @total.clear
       @idle.clear
+      @sweep_job_close_channel.send(nil) if @sweep_job_running
     end
 
     record Stats,
@@ -196,6 +203,7 @@ module DB
         resource = nil
 
         until resource
+          sweep_expired_job if !@sweep_job_running
           resource = if @idle.empty?
                        if can_increase_pool?
                          @inflight += 1
@@ -422,11 +430,18 @@ module DB
       end
     end
 
-    private def sweep_expired_job(timer : Time::Span)
+    private def sweep_expired_job
+      timer = @sweep_timer
+      return if timer.nil? || !timer.positive?
+
+      @sweep_job_running = true
+
       spawn do
         loop do
           select
-          when @sweep_job_close_channel.receive then break
+          when @sweep_job_close_channel.receive
+            @sweep_job_running = false
+            break
           when timeout(timer)
           end
 
@@ -445,6 +460,9 @@ module DB
             end
 
             ensure_minimum_fresh_resources
+
+            # End job if there is no initial pool size and the entire pool has been expired
+            break if !@initial_pool_size && @total.empty?
           end
         end
       end
