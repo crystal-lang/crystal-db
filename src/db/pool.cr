@@ -20,8 +20,17 @@ module DB
       # maximum number of seconds the resource can persist after being created. 0 to disable.
       max_lifetime_per_resource : Float64 | Time::Span = 0.0,
       # maximum number of seconds an idle resource can remain unused for being removed. 0 to disable.
-      max_idle_time_per_resource : Float64 | Time::Span = 0.0 do
+      max_idle_time_per_resource : Float64 | Time::Span = 0.0,
+      # whether to enable a background sweeper to remove expired clients. Default is true but it will only be spawned if an expiration is actually set
+      expired_resource_sweeper : Bool = true,
+      # number of seconds to wait between each run of the expired resource sweeper. When unset (0) this value defaults to the shortest expiration duration
+      resource_sweeper_timer : Float64 | Int32 = 0 do
       def self.from_http_params(params : HTTP::Params, default = Options.new)
+        enabled_sweeper = params.fetch("expired_resource_sweeper", default.expired_resource_sweeper)
+        if enabled_sweeper.is_a?(String)
+          enabled_sweeper = {'1', "true", 't', "yes"}.includes?(enabled_sweeper.downcase)
+        end
+
         Options.new(
           initial_pool_size: params.fetch("initial_pool_size", default.initial_pool_size).to_i,
           max_pool_size: params.fetch("max_pool_size", default.max_pool_size).to_i,
@@ -31,6 +40,8 @@ module DB
           retry_delay: params.fetch("retry_delay", default.retry_delay).to_f,
           max_lifetime_per_resource: params.fetch("max_lifetime_per_resource", default.max_lifetime_per_resource).to_f,
           max_idle_time_per_resource: params.fetch("max_idle_time_per_resource", default.max_idle_time_per_resource).to_f,
+          expired_resource_sweeper: enabled_sweeper,
+          resource_sweeper_timer: params.fetch("resource_sweeper_timer", default.resource_sweeper_timer).to_f,
         )
       end
     end
@@ -91,6 +102,13 @@ module DB
     # global pool mutex
     @mutex : Mutex
 
+    # Sweep expired resource job
+
+    # whether the job is enabled or disabled
+    @sweep_job_enabled : Bool
+    # cancels the sweep job as needed
+    @sweep_job_close_channel : Channel(Nil)
+
     @[Deprecated("Use `#new` with DB::Pool::Options instead")]
     def initialize(initial_pool_size = 1, max_pool_size = 0, max_idle_pool_size = 1, checkout_timeout = 5.0,
                    retry_attempts = 1, retry_delay = 0.2, &factory : -> T)
@@ -118,6 +136,21 @@ module DB
       @max_idle_time_per_resource = ensure_time_span(pool_options.max_idle_time_per_resource).as(Time::Span)
 
       @initial_pool_size.times { build_resource }
+
+      @sweep_job_enabled = pool_options.expired_resource_sweeper
+
+      # Cancels the sweep job as needed
+      @sweep_job_close_channel = Channel(Nil).new
+
+      if @sweep_job_enabled && !(min_expire = {@max_idle_time_per_resource, @max_lifetime_per_resource}.reject(&.zero?).min?).nil?
+        sweep_timer = ensure_time_span(pool_options.resource_sweeper_timer).as(Time::Span)
+
+        if sweep_timer.zero?
+          sweep_timer = min_expire || sweep_timer
+        end
+
+        sweep_expired_job(sweep_timer) if sweep_timer.positive?
+      end
     end
 
     private macro ensure_time_span(value)
@@ -305,23 +338,6 @@ module DB
       (time - time_entry.last_checked_out) >= @max_idle_time_per_resource
     end
 
-    # Checks if the resource is expired, deletes if so. Otherwise returns the lifecycle information
-    def remove_expired?(resource : T, check_idle : Bool = false)
-      now = Time.utc
-      expire_info = @resource_lifecycle[resource]
-
-      # For most situations only lifetime expiration needs to be checked.
-      # Idle timer is then shortly bumped if the resource hasn't expired yet.
-      if lifetime_expired?(expire_info, now) || (
-           check_idle && idle_expired?(expire_info, now)
-         )
-        resource.close
-        delete(resource)
-      end
-
-      return expire_info
-    end
-
     # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so. Otherwise returns the lifecycle information
     def remove_expired!(resource : T, check_idle : Bool = false)
       now = Time.utc
@@ -390,6 +406,41 @@ module DB
       ensure
         @mutex.lock
       end
+    end
+
+    private def sweep_expired_job(timer : Time::Span)
+      spawn do
+        loop do
+          select
+          when @sweep_job_close_channel.receive then break
+          when timeout(timer)
+          end
+
+          sync do
+            now = Time.utc
+
+            # Although not guaranteed, the first elements of @idle
+            # should be the oldest
+            @idle.each do |resource|
+              expire_info = @resource_lifecycle[resource]
+
+              if lifetime_expired?(expire_info, now) || idle_expired?(expire_info, now)
+                resource.close
+                delete(resource)
+              end
+            end
+
+            ensure_minimum_fresh_resources
+          end
+        end
+      end
+    end
+
+    # Ensure there are at least a minimum of @initial_pool_size non-expired resources
+    #
+    # Should be called after each expiration batch
+    private def ensure_minimum_fresh_resources
+      unsync { (@initial_pool_size - @idle.size).clamp(0, @initial_pool_size).times { build_resource } }
     end
   end
 end

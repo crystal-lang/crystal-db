@@ -258,7 +258,13 @@ describe DB::Pool do
 
   it "should only check lifetime expiration on release" do
     all = [] of Closable
-    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_lifetime_per_resource: 2.0, max_idle_time_per_resource: 0.5) { Closable.new.tap { |c| all << c } }
+    pool = create_pool(
+      max_pool_size: 2,
+      max_idle_pool_size: 1,
+      max_lifetime_per_resource: 2.0,
+      max_idle_time_per_resource: 0.5,
+      expired_resource_sweeper: false
+    ) { Closable.new.tap { |c| all << c } }
 
     # Pass
     pool.checkout do |client|
@@ -281,5 +287,61 @@ describe DB::Pool do
     end
 
     all[1].closed?.should be_true
+  end
+
+  describe "background expired resource sweeper " do
+    it "should clear idle resources" do
+      all = [] of Closable
+      pool = create_pool(
+        initial_pool_size: 0,
+        max_pool_size: 5,
+        max_idle_pool_size: 5,
+        max_idle_time_per_resource: 2.0,
+      ) { Closable.new.tap { |c| all << c } }
+
+      wait_checkout = WaitFor.new
+
+      5.times {
+        spawn do
+          pool.checkout { sleep 0.5 }
+          wait_checkout.check
+        end
+      }
+
+      5.times do
+        wait_checkout.wait
+      end
+
+      sleep 3
+
+      all.each &.closed?.should be_true
+      pool.stats.open_connections.should eq(0)
+      pool.stats.idle_connections.should eq(0)
+    end
+
+    it "should ensure minimum of initial_pool_size fresh resources" do
+      all = [] of Closable
+      pool = create_pool(
+        initial_pool_size: 3,
+        max_pool_size: 5,
+        max_idle_pool_size: 5,
+        max_lifetime_per_resource: 2.0,
+        max_idle_time_per_resource: 0.5,
+      ) { Closable.new.tap { |c| all << c } }
+
+      # Since `resource_sweeper_timer` we should expect to see a sweep every 0.5 seconds (idle is lowest expiration)
+      #
+      # The first run occurs after 0.5 seconds which mean that the initial 3 resources should've gotten sweeped.
+      # Then three more resources should be created as to ensure that the amount of young resources within the pool
+      # never goes below initial_pool_size. We should be left with 6 clients created in total.
+      #
+      # A whole second to ensure the sweep fiber's completion.
+      sleep 1.seconds
+
+      all.size.should eq(6)
+      all[..2].each &.closed?.should be_true
+      all[3..].each &.closed?.should be_false
+      pool.stats.idle_connections.should eq(3)
+    end
   end
 end
