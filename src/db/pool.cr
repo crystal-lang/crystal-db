@@ -350,6 +350,8 @@ module DB
     end
 
     # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so
+    #
+    # :nodoc:
     def remove_expired!(resource : T, update_last_checked_out : Bool = false)
       now = Time.utc
       expire_info = @resource_lifecycle[resource]
@@ -367,6 +369,7 @@ module DB
       if expiration_type
         resource.close
         delete(resource)
+        ensure_minimum_fresh_resources
         raise expiration_type.new(resource)
       end
     end
@@ -451,7 +454,8 @@ module DB
     #
     # Should be called after each expiration batch
     private def ensure_minimum_fresh_resources
-      unsync { (@initial_pool_size - @idle.size).clamp(0, @initial_pool_size).times { build_resource } }
+      replenish = (@initial_pool_size - @total.size).clamp(0, @initial_pool_size)
+      unsync { replenish.times { build_resource } } if replenish > 0
     end
   end
 end

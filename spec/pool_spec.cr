@@ -318,6 +318,75 @@ describe DB::Pool do
     all[0].closed?.should be_true
   end
 
+  it "Should ensure minimum of initial_pool_size non-expired idle resources on checkout" do
+    all = [] of Closable
+
+    pool = create_pool(
+      initial_pool_size: 3,
+      max_pool_size: 5,
+      max_idle_pool_size: 5,
+      max_lifetime_per_resource: 2.0,
+      max_idle_time_per_resource: 0.5,
+      expired_resource_sweeper: false
+    ) { Closable.new.tap { |c| all << c } }
+
+    # Initially have 3 clients
+    all.size.should eq(3)
+
+    sleep 0.6
+
+    # checkout
+    3.times do |i|
+      # Each call should cause another resource to be spawned and the old one expired off
+      # for a minimum of three
+      ex = expect_raises DB::PoolResourceIdleExpired(Closable) do
+        pool.checkout { }
+      end
+
+      pool.stats.idle_connections.should eq(3)
+      pool.stats.idle_expired_connections.should eq(i + 1)
+      all.size.should eq(3 + (i + 1))
+      all[i].closed?.should be_true
+    end
+  end
+
+  it "Should ensure minimum of initial_pool_size non-expired idle resources on release" do
+    all = [] of Closable
+
+    pool = create_pool(
+      initial_pool_size: 3,
+      max_pool_size: 5,
+      max_idle_pool_size: 5,
+      max_lifetime_per_resource: 2.0,
+      max_idle_time_per_resource: 1.0,
+      expired_resource_sweeper: false
+    ) { Closable.new.tap { |c| all << c } }
+
+    temp_resource_store = {
+      pool.checkout,
+      pool.checkout,
+      pool.checkout,
+    }
+
+    # Await lifetime expiration
+    sleep 2.1
+    # release
+    temp_resource_store.each_with_index do |resource, i|
+      # All three idle connections were checked out
+      # Each iteration should result in a new idle connection being created
+      # as the one we release get expired.
+      expect_raises DB::PoolResourceLifetimeExpired(Closable) do
+        pool.release(resource)
+      end
+
+      pool.stats.idle_connections.should eq(i + 1)
+
+      pool.stats.lifetime_expired_connections.should eq(i + 1)
+      all.size.should eq(3 + (i + 1))
+      all[i].closed?.should be_true
+    end
+  end
+
   describe "background expired resource sweeper " do
     it "should clear idle resources" do
       all = [] of Closable
