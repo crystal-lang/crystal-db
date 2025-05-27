@@ -59,13 +59,13 @@ class Closable
 end
 
 class ClosableWithSignal < Closable
-  setter close_signal : Channel(Nil)?
+  setter signal : Channel(Nil)?
 
-  def initialize(@close_signal)
+  def initialize(@signal = nil)
   end
 
   protected def do_close
-    @close_signal.try &.send(nil)
+    @signal.try &.send(nil)
   end
 end
 
@@ -239,11 +239,9 @@ describe DB::Pool do
 
   it "should expire resources that exceed maximum lifetime on checkout" do
     all = [] of Closable
-    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_lifetime_per_resource: 0.5) { Closable.new.tap { |c| all << c } }
+    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_lifetime_per_resource: 0.1) { Closable.new.tap { |c| all << c } }
 
-    # After 0.5 seconds we should expect to get an expired resource
-    sleep 0.5.seconds
-
+    sleep 0.1.seconds
     ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
       pool.checkout
     end
@@ -254,10 +252,9 @@ describe DB::Pool do
 
   it "should expire resources that exceed maximum idle-time on checkout" do
     all = [] of Closable
-    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_idle_time_per_resource: 0.5) { Closable.new.tap { |c| all << c } }
+    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_idle_time_per_resource: 0.1, max_lifetime_per_resource: 2.0) { Closable.new.tap { |c| all << c } }
 
-    # After two seconds we should expect to get an expired resource
-    sleep 0.5.seconds
+    sleep 0.1.seconds
 
     # Idle expiration error should cause the client to be closed
     ex = expect_raises DB::PoolResourceIdleExpired(Closable) do
@@ -267,64 +264,43 @@ describe DB::Pool do
     all[0].closed?.should be_true
   end
 
-  it "should only check lifetime expiration on release" do
+  it "should expire resources that exceed maximum lifetime on release" do
     all = [] of Closable
     pool = create_pool(
       max_pool_size: 2,
       max_idle_pool_size: 1,
-      max_lifetime_per_resource: 2.0,
-      max_idle_time_per_resource: 0.5,
+      max_lifetime_per_resource: 0.2,
+      max_idle_time_per_resource: 2.0,
       expired_resource_sweeper: false
     ) { Closable.new.tap { |c| all << c } }
 
-    # Idle gets reset; not expired
-    pool.checkout do |resource|
-      sleep 0.5.seconds
-    end
-
-    # Not closed?
-    all[0].closed?.should be_false
-
-    # We should expect to see an idle connection timeout now with the #checkout after
-    # waiting another 0.5 seconds
-
-    sleep 0.6.seconds
-    ex = expect_raises DB::PoolResourceIdleExpired(Closable) do
-      pool.checkout
-    end
-
-    all[0].closed?.should be_true
-
-    # This should now create a new client that will be expired on release
-    pool.checkout { sleep 2.seconds }
+    pool.checkout { sleep 0.25.seconds }
     pool.stats.lifetime_expired_connections.should eq 1
-
-    all[1].closed?.should be_true
+    all[0].closed?.should be_true
   end
 
-  it "should reset idle-time on checkout" do
+  it "should reset idle-time during release" do
     all = [] of Closable
     pool = create_pool(
       max_pool_size: 2,
       initial_pool_size: 0,
       max_idle_pool_size: 1,
-      max_idle_time_per_resource: 0.5,
-      max_lifetime_per_resource: 1.0,
+      max_idle_time_per_resource: 0.2,
+      max_lifetime_per_resource: 0.4,
       expired_resource_sweeper: false
     ) { Closable.new.tap { |c| all << c } }
 
-    # Resource gets idled every half second. It should get reset every time we checkout and release the resource.
-    # If we can last more than a second from the time of creation then it should get expired
-    # by the lifetime expiration instead.
-    2.times {
-      pool.checkout {
-        sleep 0.6.seconds
-      }
-    }
+    # Resource gets idled every 0.2 seconds but gets reset upon each release.
+    pool.checkout do
+      sleep 0.21.seconds
+    end
+
+    all[0].closed?.should be_false
+    pool.checkout { sleep 0.2.seconds }
 
     pool.stats.lifetime_expired_connections.should eq(1)
     pool.stats.idle_expired_connections.should eq(0)
-    all.each &.closed?.should be_true
+    all[0].closed?.should be_true
     all.size.should eq(1)
   end
 
@@ -335,15 +311,15 @@ describe DB::Pool do
       initial_pool_size: 3,
       max_pool_size: 5,
       max_idle_pool_size: 5,
-      max_lifetime_per_resource: 2.0,
-      max_idle_time_per_resource: 0.5,
+      max_lifetime_per_resource: 1.0,
+      max_idle_time_per_resource: 0.1,
       expired_resource_sweeper: false
     ) { Closable.new.tap { |c| all << c } }
 
     # Initially have 3 clients
     all.size.should eq(3)
 
-    sleep 0.6.seconds
+    sleep 0.1.seconds
 
     # checkout
     3.times do |i|
@@ -367,8 +343,7 @@ describe DB::Pool do
       initial_pool_size: 3,
       max_pool_size: 5,
       max_idle_pool_size: 5,
-      max_lifetime_per_resource: 2.0,
-      max_idle_time_per_resource: 1.0,
+      max_lifetime_per_resource: 0.2,
       expired_resource_sweeper: false
     ) { Closable.new.tap { |c| all << c } }
 
@@ -379,7 +354,7 @@ describe DB::Pool do
     }
 
     # Await lifetime expiration
-    sleep 2.1.seconds
+    sleep 0.2.seconds
     # release
     temp_resource_store.each_with_index do |resource, i|
       # All three idle connections were checked out
@@ -405,7 +380,7 @@ describe DB::Pool do
       initial_pool_size: 3,
       max_pool_size: 5,
       max_idle_pool_size: 5,
-      max_lifetime_per_resource: 2.0,
+      max_lifetime_per_resource: 0.25,
       expired_resource_sweeper: false
     ) do
       number_of_factory_calls += 1
@@ -420,7 +395,7 @@ describe DB::Pool do
     spawn { pool.checkout { } }
 
     # Make existing resources stale
-    sleep 2.seconds
+    sleep 0.25.seconds
 
     pool.stats.idle_connections.should eq(0)
     pool.stats.in_flight_connections.should eq(1)
@@ -459,12 +434,15 @@ describe DB::Pool do
   describe "background expired resource sweeper " do
     it "should clear idle resources" do
       all = [] of Closable
+      signal = Channel(Nil).new
       pool = create_pool(
         initial_pool_size: 0,
         max_pool_size: 5,
         max_idle_pool_size: 5,
-        max_idle_time_per_resource: 2.0,
-      ) { Closable.new.tap { |c| all << c } }
+        max_idle_time_per_resource: 0.25,
+      ) do
+        ClosableWithSignal.new.tap { |c| all << c }.tap &.signal = signal
+      end
 
       # Create 5 resource
       5.times {
@@ -473,8 +451,11 @@ describe DB::Pool do
         end
       }
 
-      # Don't do anything for 5 seconds
-      sleep 5.seconds
+      all.each &.closed?.should be_false
+
+      5.times do
+        signal.receive
+      end
 
       # Gone
       all.each &.closed?.should be_true
@@ -484,22 +465,19 @@ describe DB::Pool do
 
     it "should ensure minimum of initial_pool_size fresh resources" do
       all = [] of Closable
+      signal = Channel(Nil).new
       pool = create_pool(
         initial_pool_size: 3,
         max_pool_size: 5,
         max_idle_pool_size: 5,
         max_lifetime_per_resource: 2.0,
         max_idle_time_per_resource: 0.5,
-      ) { Closable.new.tap { |c| all << c } }
+      ) { ClosableWithSignal.new.tap { |c| all << c }.tap &.signal = signal }
 
-      # Since `resource_sweeper_timer` we should expect to see a sweep every 0.5 seconds (idle is lowest expiration)
-      #
-      # The first run occurs after 0.5 seconds which mean that the initial 3 resources should've gotten sweeped.
-      # Then three more resources should be created as to ensure that the amount of young resources within the pool
-      # never goes below initial_pool_size. We should be left with 6 clients created in total.
-      #
-      # A whole second to ensure the sweep fiber's completion.
-      sleep 1.seconds
+      # The job will replace the three idle expired resources with new ones
+      3.times { signal.receive }
+      # Wait for the replenishment process to finish
+      sleep 0.25.seconds
 
       all.size.should eq(6)
       all[..2].each &.closed?.should be_true
