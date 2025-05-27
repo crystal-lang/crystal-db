@@ -241,7 +241,7 @@ describe DB::Pool do
     all = [] of Closable
     pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_lifetime_per_resource: 0.1) { Closable.new.tap { |c| all << c } }
 
-    sleep 0.1.seconds
+    sleep 0.2.seconds
     ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
       pool.checkout
     end
@@ -254,7 +254,7 @@ describe DB::Pool do
     all = [] of Closable
     pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_idle_time_per_resource: 0.1, max_lifetime_per_resource: 2.0) { Closable.new.tap { |c| all << c } }
 
-    sleep 0.1.seconds
+    sleep 0.2.seconds
 
     # Idle expiration error should cause the client to be closed
     ex = expect_raises DB::PoolResourceIdleExpired(Closable) do
@@ -319,7 +319,7 @@ describe DB::Pool do
     # Initially have 3 clients
     all.size.should eq(3)
 
-    sleep 0.1.seconds
+    sleep 0.2.seconds
 
     # checkout
     3.times do |i|

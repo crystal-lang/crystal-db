@@ -442,7 +442,7 @@ module DB
 
     private def sweep_expired_job
       timer = @sweep_timer
-      return if timer.nil? || !timer.positive?
+      return if timer.nil? || (timer <= Time::Span::ZERO)
 
       @sweep_job_running = true
 
