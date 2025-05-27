@@ -348,7 +348,7 @@ module DB
     # Checks if a resource has exceeded the maximum lifetime
     #
     # :nodoc:
-    def lifetime_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
+    private def lifetime_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
       return false if @max_lifetime_per_resource.zero?
 
       expired = (time - time_entry.creation) >= @max_lifetime_per_resource
@@ -359,7 +359,7 @@ module DB
     # Checks if a resource has exceeded the maximum idle time
     #
     # :nodoc:
-    def idle_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
+    private def idle_expired?(time_entry : ResourceTimeEntry, time : Time = Time.utc)
       return false if @max_idle_time_per_resource.zero?
 
       expired = (time - time_entry.last_checked_out) >= @max_idle_time_per_resource
@@ -370,7 +370,7 @@ module DB
     # Checks if the resource is expired. Deletes and raises `PoolResourceExpired` if so
     #
     # :nodoc:
-    def remove_expired!(resource : T)
+    private def remove_expired!(resource : T)
       now = Time.utc
       expire_info = @resource_lifecycle[resource]
 
