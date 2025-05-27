@@ -266,7 +266,6 @@ module DB
             resource.close
             delete(resource)
             ensure_minimum_fresh_resources
-
             return nil
           else
             expire_info.got_checked_out
@@ -283,12 +282,7 @@ module DB
         end
       end
 
-      if idle_pushed
-        select
-        when @availability_channel.send(nil)
-        else
-        end
-      end
+      notify_availability if idle_pushed
     end
 
     # :nodoc:
@@ -343,6 +337,14 @@ module DB
       @total.delete(resource)
       @idle.delete(resource)
       @resource_lifecycle.delete(resource)
+    end
+
+    # Inform availability_channel about an available resource
+    private def notify_availability : Nil
+      select
+      when @availability_channel.send(nil)
+      else
+      end
     end
 
     # Checks if a resource has exceeded the maximum lifetime
@@ -484,12 +486,19 @@ module DB
 
       return if replenish <= 0
 
-      begin
-        @inflight += replenish
-        unsync { replenish.times { build_resource } }
-      ensure
-        @inflight -= replenish
+      replenish.times do |index|
+        begin
+          @inflight += 1
+          unsync do
+            build_resource
+            notify_availability
+          end
+        ensure
+          @inflight -= 1
+        end
       end
+
+      return true
     end
   end
 end
