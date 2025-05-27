@@ -18,13 +18,13 @@ module DB
       # seconds to wait before a retry attempt
       retry_delay : Float64 = 0.2,
       # maximum number of seconds the resource can persist after being created. 0 to disable.
-      max_lifetime_per_resource : Float64 | Time::Span = 0.0,
+      max_lifetime_per_resource : Float64 | Int32 | Time::Span = 0.0,
       # maximum number of seconds an idle resource can remain unused for being removed. 0 to disable.
-      max_idle_time_per_resource : Float64 | Time::Span = 0.0,
+      max_idle_time_per_resource : Float64 | Int32 | Time::Span = 0.0,
       # whether to enable a background sweeper to remove expired clients. Default is true but it will only be spawned if an expiration is actually set
       expired_resource_sweeper : Bool = true,
       # number of seconds to wait between each run of the expired resource sweeper. When unset (0) this value defaults to the shortest expiration duration
-      resource_sweeper_timer : Float64 | Int32 = 0 do
+      resource_sweeper_timer : Float64 | Int32 | Time::Span = 0 do
       def self.from_http_params(params : HTTP::Params, default = Options.new)
         enabled_sweeper = params.fetch("expired_resource_sweeper", default.expired_resource_sweeper)
         if enabled_sweeper.is_a?(String)
