@@ -480,8 +480,16 @@ module DB
     #
     # Should be called after each expiration batch
     private def ensure_minimum_fresh_resources
-      replenish = (@initial_pool_size - @total.size).clamp(0, @initial_pool_size)
-      unsync { replenish.times { build_resource } } if replenish > 0
+      replenish = (@initial_pool_size - (@total.size + @inflight)).clamp(0, @initial_pool_size)
+
+      return if replenish <= 0
+
+      begin
+        @inflight += replenish
+        unsync { replenish.times { build_resource } }
+      ensure
+        @inflight -= replenish
+      end
     end
   end
 end

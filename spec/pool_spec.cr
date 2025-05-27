@@ -58,6 +58,17 @@ class Closable
   end
 end
 
+class ClosableWithSignal < Closable
+  setter close_signal : Channel(Nil)?
+
+  def initialize(@close_signal)
+  end
+
+  protected def do_close
+    @close_signal.try &.send(nil)
+  end
+end
+
 private def create_pool(**options, &factory : -> T) forall T
   DB::Pool.new(DB::Pool::Options.new(**options), &factory)
 end
@@ -381,6 +392,68 @@ describe DB::Pool do
       all.size.should eq(3 + (i + 1))
       all[i].closed?.should be_true
     end
+  end
+
+  it "Should count inflight resources when ensuring minimum of initial_pool_size non-expired resources" do
+    number_of_factory_calls = 0
+    toggle_long_inflight = false
+
+    close_inflight = Channel(Nil).new
+    resource_closed_signal = Channel(Nil).new
+
+    pool = create_pool(
+      initial_pool_size: 3,
+      max_pool_size: 5,
+      max_idle_pool_size: 5,
+      max_lifetime_per_resource: 2.0,
+      expired_resource_sweeper: false
+    ) do
+      number_of_factory_calls += 1
+      if toggle_long_inflight
+        close_inflight.send(nil)
+      end
+      ClosableWithSignal.new(resource_closed_signal)
+    end
+
+    toggle_long_inflight = true
+    temporary_latch = {pool.checkout, pool.checkout, pool.checkout}
+    spawn { pool.checkout { } }
+
+    # Make existing resources stale
+    sleep 2.seconds
+
+    pool.stats.idle_connections.should eq(0)
+    pool.stats.in_flight_connections.should eq(1)
+
+    # Release latched resources
+    temporary_latch.each do |resource|
+      spawn do
+        pool.release(resource)
+      end
+    end
+
+    # If inflight number is used correctly there should only be a total of
+    # three new pending resources created in total which is used to replace the
+    # expiring ones.
+    #
+    # +1 from the initial checkout (total 3, inflight: 1)
+    # +0 from the first release (total 2, inflight: 1)
+    # +1 from the second release (total: 1, inflight: 2)
+    # +1 from the third release (total: 0, inflight: 3)
+
+    3.times do
+      resource_closed_signal.receive
+      close_inflight.receive
+    end
+
+    # Should close gracefully and without any errors.
+    close_inflight.close
+
+    number_of_factory_calls.should eq(6)
+    pool.stats.idle_connections.should eq(3)
+    pool.stats.open_connections.should eq(3)
+    pool.stats.in_flight_connections.should eq(0)
+    pool.stats.lifetime_expired_connections.should eq(3)
   end
 
   describe "background expired resource sweeper " do
