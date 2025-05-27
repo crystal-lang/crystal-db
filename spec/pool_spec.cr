@@ -239,7 +239,10 @@ describe DB::Pool do
 
   it "should expire resources that exceed maximum lifetime on checkout" do
     all = [] of Closable
-    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_lifetime_per_resource: 0.1) { Closable.new.tap { |c| all << c } }
+    pool = create_pool(
+      max_pool_size: 2, max_idle_pool_size: 1,
+      max_lifetime_per_resource: 0.1, expired_resource_sweeper: false
+    ) { Closable.new.tap { |c| all << c } }
 
     sleep 0.2.seconds
     ex = expect_raises DB::PoolResourceLifetimeExpired(Closable) do
@@ -252,7 +255,11 @@ describe DB::Pool do
 
   it "should expire resources that exceed maximum idle-time on checkout" do
     all = [] of Closable
-    pool = create_pool(max_pool_size: 2, max_idle_pool_size: 1, max_idle_time_per_resource: 0.1, max_lifetime_per_resource: 2.0) { Closable.new.tap { |c| all << c } }
+    pool = create_pool(
+      max_pool_size: 2, max_idle_pool_size: 1,
+      max_idle_time_per_resource: 0.2, max_lifetime_per_resource: 2.0,
+      expired_resource_sweeper: false
+    ) { Closable.new.tap { |c| all << c } }
 
     sleep 0.2.seconds
 
