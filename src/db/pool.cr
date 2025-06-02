@@ -306,7 +306,7 @@ module DB
         rescue e : PoolResourceExpired(T)
           # A `PoolResourceExpired` is raised internally at #checkout
           # and is both closed and deleted from the pool at the time of
-          # raising. Although we can technically let the rescue of 
+          # raising. Although we can technically let the rescue of
           # `PoolResourceLost(T)` handle the retry, we can avoid an expensive
           # mutex lock by doing so manually.
         rescue e : PoolResourceLost(T)
