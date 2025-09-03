@@ -1,3 +1,10 @@
+## v0.14.0 (2025-09-??)
+
+* Allow `Enumerable` for query args instead of `Array` ([#207](https://github.com/crystal-lang/crystal-db/pull/207), thanks @lwakefield)
+* Replaced deprecated splat operator ([#211](https://github.com/crystal-lang/crystal-db/pull/211), thanks @BigBoyBarney)
+* Fix docs typo. ([#208](https://github.com/crystal-lang/crystal-db/pull/208), thanks @jphaward)
+* Update formatting ([#209](https://github.com/crystal-lang/crystal-db/pull/209), thanks @straight-shoota)
+
 ## v0.13.1 (2023-12-21)
 
 * Gracefully allow spec helper to fail on older crystal. ([#202](https://github.com/crystal-lang/crystal-db/pull/202), thanks @bcardiff)
