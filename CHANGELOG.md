@@ -1,4 +1,4 @@
-## v0.14.0 (2025-09-??)
+## v0.14.0 (2025-09-04)
 
 * Allow `Enumerable` for query args instead of `Array` ([#207](https://github.com/crystal-lang/crystal-db/pull/207), thanks @lwakefield)
 * Replaced deprecated splat operator ([#211](https://github.com/crystal-lang/crystal-db/pull/211), thanks @BigBoyBarney)
