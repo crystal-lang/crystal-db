@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.10.1">
+<meta name="crystal_docs.project_version" content="0.14.0">
+<meta name="crystal_docs.project_name" content="db">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="db">
+  <title>DB::QueryMethods(Stmt) - db 0.14.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          db
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.14.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="db/DB" data-name="db">
+      <a href="../DB.html">DB</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Any" data-name="db::any">
+      <a href="../DB/Any.html">Any</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/BeginTransaction" data-name="db::begintransaction">
+      <a href="../DB/BeginTransaction.html">BeginTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ColumnTypeMismatchError" data-name="db::columntypemismatcherror">
+      <a href="../DB/ColumnTypeMismatchError.html">ColumnTypeMismatchError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Connection" data-name="db::connection">
+      <a href="../DB/Connection.html">Connection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Connection/Options" data-name="db::connection::options">
+      <a href="../DB/Connection/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionBuilder" data-name="db::connectionbuilder">
+      <a href="../DB/ConnectionBuilder.html">ConnectionBuilder</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionContext" data-name="db::connectioncontext">
+      <a href="../DB/ConnectionContext.html">ConnectionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionLost" data-name="db::connectionlost">
+      <a href="../DB/ConnectionLost.html">ConnectionLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ConnectionRefused" data-name="db::connectionrefused">
+      <a href="../DB/ConnectionRefused.html">ConnectionRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Database" data-name="db::database">
+      <a href="../DB/Database.html">Database</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Disposable" data-name="db::disposable">
+      <a href="../DB/Disposable.html">Disposable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Driver" data-name="db::driver">
+      <a href="../DB/Driver.html">Driver</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/DriverSpecs" data-name="db::driverspecs(dbanytype)">
+      <a href="../DB/DriverSpecs.html">DriverSpecs</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/DriverSpecs/ColumnDef" data-name="db::driverspecs::columndef">
+      <a href="../DB/DriverSpecs/ColumnDef.html">ColumnDef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Error" data-name="db::error">
+      <a href="../DB/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ExecResult" data-name="db::execresult">
+      <a href="../DB/ExecResult.html">ExecResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Field" data-name="db::field">
+      <a href="../DB/Field.html">Field</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Mappable" data-name="db::mappable">
+      <a href="../DB/Mappable.html">Mappable</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/MappingException" data-name="db::mappingexception">
+      <a href="../DB/MappingException.html">MappingException</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/MetadataValueConverter" data-name="db::metadatavalueconverter">
+      <a href="../DB/MetadataValueConverter.html">MetadataValueConverter</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/NoResultsError" data-name="db::noresultserror">
+      <a href="../DB/NoResultsError.html">NoResultsError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Pool" data-name="db::pool(t)">
+      <a href="../DB/Pool.html">Pool</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Pool/Options" data-name="db::pool::options">
+      <a href="../DB/Pool/Options.html">Options</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Pool/Stats" data-name="db::pool::stats">
+      <a href="../DB/Pool/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolPreparedStatement" data-name="db::poolpreparedstatement">
+      <a href="../DB/PoolPreparedStatement.html">PoolPreparedStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolResourceLost" data-name="db::poolresourcelost(t)">
+      <a href="../DB/PoolResourceLost.html">PoolResourceLost</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolResourceRefused" data-name="db::poolresourcerefused">
+      <a href="../DB/PoolResourceRefused.html">PoolResourceRefused</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolRetryAttemptsExceeded" data-name="db::poolretryattemptsexceeded">
+      <a href="../DB/PoolRetryAttemptsExceeded.html">PoolRetryAttemptsExceeded</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolStatement" data-name="db::poolstatement">
+      <a href="../DB/PoolStatement.html">PoolStatement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolTimeout" data-name="db::pooltimeout">
+      <a href="../DB/PoolTimeout.html">PoolTimeout</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/PoolUnpreparedStatement" data-name="db::poolunpreparedstatement">
+      <a href="../DB/PoolUnpreparedStatement.html">PoolUnpreparedStatement</a>
+      
+    </li>
+  
+  <li class=" current" data-id="db/DB/QueryMethods" data-name="db::querymethods(stmt)">
+      <a href="../DB/QueryMethods.html">QueryMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/ResultSet" data-name="db::resultset">
+      <a href="../DB/ResultSet.html">ResultSet</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Rollback" data-name="db::rollback">
+      <a href="../DB/Rollback.html">Rollback</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SavePointTransaction" data-name="db::savepointtransaction">
+      <a href="../DB/SavePointTransaction.html">SavePointTransaction</a>
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/Serializable" data-name="db::serializable">
+      <a href="../DB/Serializable.html">Serializable</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/Serializable/NonStrict" data-name="db::serializable::nonstrict">
+      <a href="../DB/Serializable/NonStrict.html">NonStrict</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="db/DB/SessionMethods" data-name="db::sessionmethods(session, stmt)">
+      <a href="../DB/SessionMethods.html">SessionMethods</a>
+      
+        <ul>
+  
+  <li class=" " data-id="db/DB/SessionMethods/PreparedQuery" data-name="db::sessionmethods::preparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/PreparedQuery.html">PreparedQuery</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/SessionMethods/UnpreparedQuery" data-name="db::sessionmethods::unpreparedquery(session, stmt)">
+      <a href="../DB/SessionMethods/UnpreparedQuery.html">UnpreparedQuery</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Statement" data-name="db::statement">
+      <a href="../DB/Statement.html">Statement</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StatementMethods" data-name="db::statementmethods">
+      <a href="../DB/StatementMethods.html">StatementMethods</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/StringKeyCache" data-name="db::stringkeycache(t)">
+      <a href="../DB/StringKeyCache.html">StringKeyCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/TopLevelTransaction" data-name="db::topleveltransaction">
+      <a href="../DB/TopLevelTransaction.html">TopLevelTransaction</a>
+      
+    </li>
+  
+  <li class=" " data-id="db/DB/Transaction" data-name="db::transaction">
+      <a href="../DB/Transaction.html">Transaction</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="db/Enum" data-name="enum">
+      <a href="../Enum.html">Enum</a>
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    module
+  </span> DB::<wbr>QueryMethods(Stmt)
+
+</h1>
+
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Methods to allow querying a database.
+All methods accepts a <code>query : String</code> and a set arguments.</p>
+<p>Three kind of statements can be performed:</p>
+<ol>
+<li><code><a href="../DB/QueryMethods.html#exec%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#exec</a></code> waits no record response from the database. An <code><a href="../DB/ExecResult.html">ExecResult</a></code> is returned.</li>
+<li><code><a href="../DB/QueryMethods.html#scalar%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#scalar</a></code> reads a single value of the response. A union of possible values is returned.</li>
+<li><code><a href="../DB/QueryMethods.html#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#query</a></code> returns a <code><a href="../DB/ResultSet.html">ResultSet</a></code> that allows iteration over the rows in the response and column information.</li>
+</ol>
+<p>Arguments can be passed by position or as an array.</p>
+<pre><code class="language-crystal">db.query(<span class="s">&quot;SELECT name FROM ... WHERE age &gt; ?&quot;</span>, age)
+db.query(<span class="s">&quot;SELECT name FROM ... WHERE age &gt; ?&quot;</span>, args: [age])</code></pre>
+<p>Convention of mapping how arguments are mapped to the query depends on each driver.</p>
+<p>Including <code><a href="../DB/QueryMethods.html">QueryMethods</a></code> requires a <code>build(query) : <a href="../DB/Statement.html">Statement</a></code> method that is not expected
+to be called directly.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="direct-including-types" class="anchor" href="#direct-including-types">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Direct including types
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../DB/SessionMethods.html">DB::SessionMethods(Session, Stmt)</a></li>
+    
+      <li class="other-type"><a href="../DB/SessionMethods/PreparedQuery.html">DB::SessionMethods::PreparedQuery(Session, Stmt)</a></li>
+    
+      <li class="other-type"><a href="../DB/SessionMethods/UnpreparedQuery.html">DB::SessionMethods::UnpreparedQuery(Session, Stmt)</a></li>
+    
+  </ul>
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L21" target="_blank">
+        db/query_methods.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#exec%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method" class="signature"><strong>#exec</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Performs the <code><a href="../DB/QueryMethods.html#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#query</a></code> and returns an <code><a href="../DB/ExecResult.html">ExecResult</a></code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method" class="signature"><strong>#query</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> and returns a <code><a href="../DB/ResultSet.html">ResultSet</a></code> with the results.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26%29-instance-method" class="signature"><strong>#query</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> and yields a <code><a href="../DB/ResultSet.html">ResultSet</a></code> with the results.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AArray%28U%29forallU-instance-method" class="signature"><strong>#query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &block : ResultSet -> U) : Array(U) forall U</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> and yield a <code><a href="../DB/ResultSet.html">ResultSet</a></code> positioned at the beginning of each row, returning an array of the values of the blocks.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ATuple%29-instance-method" class="signature"><strong>#query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : Tuple)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> and returns an array where each row is read as a tuple of the given <em>types</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ANamedTuple%29-instance-method" class="signature"><strong>#query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : NamedTuple)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> and returns an array where each row is read as a named tuple of the given <em>types</em> (the keys of the named tuple are not necessarily the column names).</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castype%3AClass%29-instance-method" class="signature"><strong>#query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as type : Class)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> and returns an array where the value of each row is read as the given <em>type</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_each%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26%29-instance-method" class="signature"><strong>#query_each</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> and yields the <code><a href="../DB/ResultSet.html">ResultSet</a></code> once per each row.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AUforallU-instance-method" class="signature"><strong>#query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &block : ResultSet -> U) : U forall U</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects a single row and yields a <code><a href="../DB/ResultSet.html">ResultSet</a></code> positioned at that first row.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ATuple%29-instance-method" class="signature"><strong>#query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : Tuple)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects a single row and returns it as a tuple of the given <em>types</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ANamedTuple%29-instance-method" class="signature"><strong>#query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : NamedTuple)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects a single row and returns it as a named tuple of the given <em>types</em> (the keys of the named tuple are not necessarily the column names).</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castype%3AClass%29-instance-method" class="signature"><strong>#query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as type : Class)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects a single row and returns the first column's value as the given <em>type</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AU%7CNilforallU-instance-method" class="signature"><strong>#query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &block : ResultSet -> U) : U | Nil forall U</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects at most a single row and yields a <code><a href="../DB/ResultSet.html">ResultSet</a></code> positioned at that first row.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ATuple%29-instance-method" class="signature"><strong>#query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : Tuple)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects a single row and returns it as a tuple of the given <em>types</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ANamedTuple%29-instance-method" class="signature"><strong>#query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : NamedTuple)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects a single row and returns it as a named tuple of the given <em>types</em> (the keys of the named tuple are not necessarily the column names).</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castype%3AClass%29-instance-method" class="signature"><strong>#query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as type : Class)</a>
+        
+          <div class="summary"><p>Executes a <em>query</em> that expects a single row and returns the first column's value as the given <em>type</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#scalar%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method" class="signature"><strong>#scalar</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Performs the <code><a href="../DB/QueryMethods.html#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#query</a></code> and returns a single scalar value</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <div class="methods-inherited">
+    
+  </div>
+
+  
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="exec(query,*args_,args:Enumerable|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>exec</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#exec%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Performs the <code><a href="../DB/QueryMethods.html#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#query</a></code> and returns an <code><a href="../DB/ExecResult.html">ExecResult</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L274" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query(query,*args_,args:Enumerable|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>query</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> and returns a <code><a href="../DB/ResultSet.html">ResultSet</a></code> with the results.
+The <code><a href="../DB/ResultSet.html">ResultSet</a></code> must be closed manually.</p>
+<pre><code class="language-crystal">result <span class="o">=</span> db.query <span class="s">&quot;select name from contacts where id = ?&quot;</span>, <span class="n">10</span>
+<span class="k">begin</span>
+  <span class="k">if</span> result.move_next
+    id <span class="o">=</span> result.read(<span class="t">Int32</span>)
+  <span class="k">end</span>
+<span class="k">ensure</span>
+  result.close
+<span class="k">end</span></code></pre>
+<p>Note: to use a dynamic list length of arguments use <code>args:</code> keyword argument.</p>
+<pre><code class="language-crystal">result <span class="o">=</span> db.query <span class="s">&quot;select name from contacts where id = ?&quot;</span>, args: [<span class="n">10</span>]</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L45" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query(query,*args_,args:Enumerable|Nil=nil,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>query</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &)
+
+        <a class="method-permalink" href="#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> and yields a <code><a href="../DB/ResultSet.html">ResultSet</a></code> with the results.
+The <code><a href="../DB/ResultSet.html">ResultSet</a></code> is closed automatically.</p>
+<pre><code class="language-crystal">db.query(<span class="s">&quot;select name from contacts where age &gt; ?&quot;</span>, <span class="n">18</span>) <span class="k">do</span> <span class="o">|</span>rs<span class="o">|</span>
+  rs.each <span class="k">do</span>
+    name <span class="o">=</span> rs.read(<span class="t">String</span>)
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L59" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_all(query,*args_,args:Enumerable|Nil=nil,&amp;block:ResultSet-&gt;U):Array(U)forallU-instance-method">
+      <div class="signature">
+        
+        def <strong>query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &block : <a href="../DB/ResultSet.html">ResultSet</a> -> U) : Array(U) forall U
+
+        <a class="method-permalink" href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AArray%28U%29forallU-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> and yield a <code><a href="../DB/ResultSet.html">ResultSet</a></code> positioned at the beginning
+of each row, returning an array of the values of the blocks.</p>
+<pre><code class="language-crystal">names <span class="o">=</span> db.query_all <span class="s">&quot;select name from contacts&quot;</span>, <span class="o">&amp;</span>.read(<span class="t">String</span>)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L212" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_all(query,*args_,args:Enumerable|Nil=nil,astypes:Tuple)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : Tuple)
+
+        <a class="method-permalink" href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ATuple%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> and returns an array where each row is
+read as a tuple of the given <em>types</em>.</p>
+<pre><code class="language-crystal">contacts <span class="o">=</span> db.query_all <span class="s">&quot;select name, age from contacts&quot;</span>, <span class="k">as</span>: {<span class="t">String</span>, <span class="t">Int32</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L226" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_all(query,*args_,args:Enumerable|Nil=nil,astypes:NamedTuple)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : NamedTuple)
+
+        <a class="method-permalink" href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ANamedTuple%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> and returns an array where each row is
+read as a named tuple of the given <em>types</em> (the keys of the named tuple
+are not necessarily the column names).</p>
+<pre><code class="language-crystal">contacts <span class="o">=</span> db.query_all <span class="s">&quot;select name, age from contacts&quot;</span>, <span class="k">as</span>: {name: <span class="t">String</span>, age: <span class="t">Int32</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L239" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_all(query,*args_,args:Enumerable|Nil=nil,astype:Class)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_all</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as type : Class)
+
+        <a class="method-permalink" href="#query_all%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castype%3AClass%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> and returns an array where the
+value of each row is read as the given <em>type</em>.</p>
+<pre><code class="language-crystal">names <span class="o">=</span> db.query_all <span class="s">&quot;select name from contacts&quot;</span>, <span class="k">as</span>: <span class="t">String</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L251" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_each(query,*args_,args:Enumerable|Nil=nil,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_each</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &)
+
+        <a class="method-permalink" href="#query_each%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> and yields the <code><a href="../DB/ResultSet.html">ResultSet</a></code> once per each row.
+The <code><a href="../DB/ResultSet.html">ResultSet</a></code> is closed automatically.</p>
+<pre><code class="language-crystal">db.query_each <span class="s">&quot;select name from contacts&quot;</span> <span class="k">do</span> <span class="o">|</span>rs<span class="o">|</span>
+  puts rs.read(<span class="t">String</span>)
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L265" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one(query,*args_,args:Enumerable|Nil=nil,&amp;block:ResultSet-&gt;U):UforallU-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &block : <a href="../DB/ResultSet.html">ResultSet</a> -> U) : U forall U
+
+        <a class="method-permalink" href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AUforallU-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects a single row and yields a <code><a href="../DB/ResultSet.html">ResultSet</a></code>
+positioned at that first row.</p>
+<p>The given block must not invoke <code>move_next</code> on the yielded result set.</p>
+<p>Raises <code><a href="../DB/NoResultsError.html">DB::NoResultsError</a></code> if there were no rows.
+Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row.</p>
+<pre><code class="language-crystal">name <span class="o">=</span> db.query_one <span class="s">&quot;select name from contacts where id = ?&quot;</span>, <span class="n">18</span>, <span class="o">&amp;</span>.read(<span class="t">String</span>)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L76" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one(query,*args_,args:Enumerable|Nil=nil,astypes:Tuple)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : Tuple)
+
+        <a class="method-permalink" href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ATuple%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects a single row and returns it
+as a tuple of the given <em>types</em>.</p>
+<p>Raises <code><a href="../DB/NoResultsError.html">DB::NoResultsError</a></code> if there were no rows.
+Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row.</p>
+<pre><code class="language-crystal">db.query_one <span class="s">&quot;select name, age from contacts where id = ?&quot;</span>, <span class="n">1</span>, <span class="k">as</span>: {<span class="t">String</span>, <span class="t">Int32</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L95" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one(query,*args_,args:Enumerable|Nil=nil,astypes:NamedTuple)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : NamedTuple)
+
+        <a class="method-permalink" href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ANamedTuple%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects a single row and returns it
+as a named tuple of the given <em>types</em> (the keys of the named tuple
+are not necessarily the column names).</p>
+<p>Raises <code><a href="../DB/NoResultsError.html">DB::NoResultsError</a></code> if there were no rows.
+Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row.</p>
+<pre><code class="language-crystal">db.query_one <span class="s">&quot;select name, age from contacts where id = ?&quot;</span>, <span class="n">1</span>, <span class="k">as</span>: {name: <span class="t">String</span>, age: <span class="t">Int32</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one(query,*args_,args:Enumerable|Nil=nil,astype:Class)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as type : Class)
+
+        <a class="method-permalink" href="#query_one%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castype%3AClass%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects a single row
+and returns the first column's value as the given <em>type</em>.</p>
+<p>Raises <code><a href="../DB/NoResultsError.html">DB::NoResultsError</a></code> if there were no rows.
+Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row.</p>
+<pre><code class="language-crystal">db.query_one <span class="s">&quot;select name from contacts where id = ?&quot;</span>, <span class="n">1</span>, <span class="k">as</span>: <span class="t">String</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L126" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one?(query,*args_,args:Enumerable|Nil=nil,&amp;block:ResultSet-&gt;U):U|NilforallU-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, &block : <a href="../DB/ResultSet.html">ResultSet</a> -> U) : U | Nil forall U
+
+        <a class="method-permalink" href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2C%26block%3AResultSet-%3EU%29%3AU%7CNilforallU-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects at most a single row and yields a <code><a href="../DB/ResultSet.html">ResultSet</a></code>
+positioned at that first row.</p>
+<p>Returns <code>nil</code>, not invoking the block, if there were no rows.</p>
+<p>Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row
+(this ends up invoking the block once).</p>
+<pre><code class="language-crystal">name <span class="o">=</span> db.query_one? <span class="s">&quot;select name from contacts where id = ?&quot;</span>, <span class="n">18</span>, <span class="o">&amp;</span>.read(<span class="t">String</span>)
+<span class="k">typeof</span>(name) <span class="c"># =&gt; String | Nil</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L144" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one?(query,*args_,args:Enumerable|Nil=nil,astypes:Tuple)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : Tuple)
+
+        <a class="method-permalink" href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ATuple%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects a single row and returns it
+as a tuple of the given <em>types</em>.</p>
+<p>Returns <code>nil</code> if there were no rows.</p>
+<p>Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row.</p>
+<pre><code class="language-crystal">result <span class="o">=</span> db.query_one? <span class="s">&quot;select name, age from contacts where id = ?&quot;</span>, <span class="n">1</span>, <span class="k">as</span>: {<span class="t">String</span>, <span class="t">Int32</span>}
+<span class="k">typeof</span>(result) <span class="c"># =&gt; Tuple(String, Int32) | Nil</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L165" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one?(query,*args_,args:Enumerable|Nil=nil,astypes:NamedTuple)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as types : NamedTuple)
+
+        <a class="method-permalink" href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castypes%3ANamedTuple%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects a single row and returns it
+as a named tuple of the given <em>types</em> (the keys of the named tuple
+are not necessarily the column names).</p>
+<p>Returns <code>nil</code> if there were no rows.</p>
+<p>Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row.</p>
+<pre><code class="language-crystal">result <span class="o">=</span> db.query_one? <span class="s">&quot;select name, age from contacts where id = ?&quot;</span>, <span class="n">1</span>, <span class="k">as</span>: {age: <span class="t">String</span>, name: <span class="t">Int32</span>}
+<span class="k">typeof</span>(result) <span class="c"># =&gt; NamedTuple(age: String, name: Int32) | Nil</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L183" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="query_one?(query,*args_,args:Enumerable|Nil=nil,astype:Class)-instance-method">
+      <div class="signature">
+        
+        def <strong>query_one?</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>, as type : Class)
+
+        <a class="method-permalink" href="#query_one%3F%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%2Castype%3AClass%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Executes a <em>query</em> that expects a single row
+and returns the first column's value as the given <em>type</em>.</p>
+<p>Returns <code>nil</code> if there were no rows.</p>
+<p>Raises <code><a href="../DB/Error.html">DB::Error</a></code> if there were more than one row.</p>
+<pre><code class="language-crystal">name <span class="o">=</span> db.query_one? <span class="s">&quot;select name from contacts where id = ?&quot;</span>, <span class="n">1</span>, <span class="k">as</span>: <span class="t">String</span>
+<span class="k">typeof</span>(name) <span class="c"># =&gt; String?</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L200" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="scalar(query,*args_,args:Enumerable|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>scalar</strong>(query, *args_, args : Enumerable | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#scalar%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Performs the <code><a href="../DB/QueryMethods.html#query%28query%2C%2Aargs_%2Cargs%3AEnumerable%7CNil%3Dnil%29-instance-method">#query</a></code> and returns a single scalar value</p>
+<pre><code class="language-crystal">puts db.scalar(<span class="s">&quot;SELECT MAX(name)&quot;</span>).<span class="k">as</span>(<span class="t">String</span>) <span class="c"># =&gt; (a String)</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/crystal-lang/crystal-db/blob/v0.14.0/src/db/query_methods.cr#L283" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+</body>
+</html>
