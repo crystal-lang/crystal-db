@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.13/DB/Pool/Stats.html
+  - /api/0.14/DB/Pool/Stats.html
 ---

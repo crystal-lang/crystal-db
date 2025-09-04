@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.13/DB/NoResultsError.html
+  - /api/0.14/DB/NoResultsError.html
 ---

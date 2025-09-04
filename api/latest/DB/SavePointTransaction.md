@@ -1,4 +1,4 @@
 ---
 redirect_to:
-  - /api/0.13/DB/SavePointTransaction.html
+  - /api/0.14/DB/SavePointTransaction.html
 ---
