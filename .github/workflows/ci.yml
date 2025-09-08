@@ -14,6 +14,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         crystal: [1.0.0, latest, nightly]
+        exclude:
+          - os: macos-latest
+            crystal: 1.0.0
     runs-on: ${{ matrix.os }}
 
     steps:
