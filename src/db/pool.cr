@@ -200,7 +200,7 @@ module DB
 
       (current_available + @retry_attempts).times do |i|
         begin
-          sleep @retry_delay if i >= current_available
+          sleep @retry_delay.seconds if i >= current_available
           return yield
         rescue e : PoolResourceLost(T)
           # if the connection is lost it will be closed by
