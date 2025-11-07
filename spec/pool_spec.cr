@@ -13,7 +13,7 @@ class ShouldSleepingOp
     s = self
     @is_sleeping = true
     spawn do
-      sleep 0.1
+      sleep 100.milliseconds
       s.is_sleeping.should be_true
       s.sleep_happened.send(nil)
     end

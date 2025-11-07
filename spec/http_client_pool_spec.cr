@@ -12,7 +12,7 @@ describe DB::Pool do
         requests_per_connection[remote_address] ||= 0
         requests_per_connection[remote_address] += 1
       end
-      sleep context.request.query_params["delay"].to_f
+      sleep context.request.query_params["delay"].to_f.seconds
       context.response.print "ok"
     end
     address = server.bind_unused_port "127.0.0.1"
