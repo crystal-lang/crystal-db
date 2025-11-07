@@ -19,14 +19,19 @@ class DummyDriver < DB::Driver
     @@connections = [] of DummyConnection
     @@connections_count = Atomic(Int32).new(0)
 
+    {% if flag?(:preview_mt) %}
+      @@mutex : Mutex = Mutex.new
+    {% end %}
+
     def initialize(options : DB::Connection::Options)
       super(options)
       Fiber.yield
       @@connections_count.add(1)
       @connected = true
-      {% unless flag?(:preview_mt) %}
-        # @@connections is only used in single-threaded mode in specs
-        # for benchmarks we want to avoid the overhead of synchronizing this array
+
+      {% if flag?(:preview_mt) %}
+        @@mutex.synchronize { @@connections << self }
+      {% else %}
         @@connections << self
       {% end %}
     end
@@ -35,18 +40,17 @@ class DummyDriver < DB::Driver
       @@connections_count.get
     end
 
+    # NOTE: thread unsafe!
     def self.connections
-      {% if flag?(:preview_mt) %}
-        raise "DummyConnection.connections is only available in single-threaded mode"
-      {% end %}
       @@connections
     end
 
     def self.clear_connections
       {% if flag?(:preview_mt) %}
-        raise "DummyConnection.clear_connections is only available in single-threaded mode"
+        @@mutex.synchronize { @@connections.clear }
+      {% else %}
+        @@connections.clear
       {% end %}
-      @@connections.clear
     end
 
     def build_prepared_statement(query) : DB::Statement
