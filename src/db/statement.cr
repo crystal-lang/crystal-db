@@ -181,6 +181,11 @@ module DB
     end
 
     # :ditto:
+    def self.arg_to_log(arg : Range) : ::Log::Metadata::Value
+      ::Log::Metadata::Value.new(arg.to_s)
+    end
+
+    # :ditto:
     def self.arg_to_log(arg : Int) : ::Log::Metadata::Value
       ::Log::Metadata::Value.new(arg.to_i64)
     end
