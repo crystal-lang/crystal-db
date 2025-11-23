@@ -39,6 +39,18 @@ module DB
   class PoolResourceRefused < Error
   end
 
+  # Raised when a checked out resource has reached expiration of any kind
+  class PoolResourceExpired(T) < PoolResourceLost(T)
+  end
+
+  # Raised when a checked out resource has exceeded the maximum lifetime
+  class PoolResourceLifetimeExpired(T) < PoolResourceExpired(T)
+  end
+
+  # Raised when a checked out resource has idle expired
+  class PoolResourceIdleExpired(T) < PoolResourceExpired(T)
+  end
+
   # Raised when an established connection is lost
   # probably due to socket/network issues.
   # It is used by the connection pool retry logic.
