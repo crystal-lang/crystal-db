@@ -1,0 +1,42 @@
+site_name: crystal-db
+site_url: https://oprypin.github.io/crystal-db/api/
+repo_url: https://github.com/oprypin/crystal-db
+edit_uri: blob/master/docs/
+use_directory_urls: false
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.sections
+extra:
+  version:
+    provider: mike
+
+extra_css:
+  - css/mkdocstrings.css
+
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - docs/gen_doc_stubs.py
+  - mkdocstrings:
+      default_handler: crystal
+      watch: [src]
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - mike:
+      canonical_version: latest
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.magiclink
+  - pymdownx.saneheaders
+  - pymdownx.superfences
+  - pymdownx.tasklist
+  - deduplicate-toc
+  - toc:
+      permalink: "#"
