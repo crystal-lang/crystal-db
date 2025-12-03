@@ -182,3 +182,15 @@ module DB
     end
   end
 end
+
+module Time::EpochConverter
+  def self.from_rs(rs : ::DB::ResultSet) : Time
+    Time.unix(rs.read.as(Int64)) # This is probably not correct for DBs other than SQLite.
+  end
+end
+
+module Time::EpochMillisConverter
+  def self.from_rs(rs : ::DB::ResultSet) : Time
+    Time.unix_ms(rs.read.as(Int64)) # This is probably not correct for DBs other than SQLite.
+  end
+end
