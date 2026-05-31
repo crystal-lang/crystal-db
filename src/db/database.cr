@@ -21,7 +21,7 @@ module DB
   #   - `max_idle_pool_size` (default 1)
   #   - `checkout_timeout` (default 5.0)
   #   - `retry_attempts` (default 1)
-  #   - `retry_delay` (in seconds, default 1.0)
+  #   - `retry_delay` (in seconds, default 0.2)
   #
   # When querying a database, prepared statements are used by default.
   # This can be changed from the `prepared_statements` URI parameter:
