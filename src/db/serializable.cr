@@ -44,6 +44,7 @@ module DB
   # ```
   #
   # `DB::Field` properties:
+  #
   # * **ignore**: if `true`, skip this field in serialization and deserialization (`false` by default)
   # * **key**: defines which column to read from a `ResultSet` (name of the instance variable by default)
   # * **converter**: defines an alternate type for parsing results. The given type must define `#from_rs(DB::ResultSet)` and return an instance of the included type.
