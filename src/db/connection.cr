@@ -15,6 +15,9 @@ module DB
   # Override `#build_unprepared_statement` method in order to return a unprepared `Statement` to allow querying.
   # See also `Statement` to define how the statements are executed.
   #
+  # Override `#driver_name` to return the name the driver is registered with.
+  # Override `#server_name` and `#server_version` to expose what the server reports about itself.
+  #
   # If at any give moment the connection is lost a DB::ConnectionLost should be raised. This will
   # allow the connection pool to try to reconnect or use another connection if available.
   #
@@ -68,6 +71,27 @@ module DB
 
     # :nodoc:
     abstract def build_unprepared_statement(query) : Statement
+
+    # Returns the canonical name of the driver backing this connection.
+    #
+    # The value is always one of the names the driver registers with `DB.register_driver` (e.g. `"postgres"`, `"mysql"`, `"sqlite3"`).
+    #
+    # TODO: Make this `abstract` once downstream drivers all have added support.
+    def driver_name : String
+      raise NotImplementedError.new("#{self.class}#driver_name")
+    end
+
+    # Returns the product name the server identifies as (e.g. `"PostgreSQL"`, `"MariaDB"`), or `nil` if the driver can't tell.
+    def server_name : String?
+      nil
+    end
+
+    # Returns the version string as reported by the server, unparsed (e.g. `"8.4.9"`, `"12.2.2-MariaDB-ubu2404"`), or `nil` if the driver can't tell.
+    #
+    # The format is server-specific.
+    def server_version : String?
+      nil
+    end
 
     def begin_transaction : Transaction
       raise DB::Error.new("There is an existing transaction in this connection") if @transaction
