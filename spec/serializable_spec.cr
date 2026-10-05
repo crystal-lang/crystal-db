@@ -104,6 +104,23 @@ struct ModelWithEnum
   end
 end
 
+# Ensure types that happen to have the same name as types within the `DB`
+# namespace don't clash here
+struct Transaction
+  include DB::Serializable
+
+  @[DB::Field(key: "c0")]
+  getter id : Int32
+  @[DB::Field(key: "c1")]
+  getter status : Status
+
+  enum Status
+    Pending
+    Complete
+    Canceled
+  end
+end
+
 macro from_dummy(query, type)
   with_dummy do |db|
     rs = db.query({{ query }})
@@ -204,6 +221,13 @@ describe "DB::Serializable" do
     expect_raises DB::MappingException, "Unknown enum ModelWithEnum::MyEnum value: adsf" do
       from_dummy("1,adsf,BBQ", ModelWithEnum)
     end
+  end
+
+  it "should compile when top-level names collide with DB-namespaced names" do
+    expect_model("1,Pending", Transaction, {
+      id:     1,
+      status: Transaction::Status::Pending,
+    })
   end
 
   it "should initialize multiple instances from a single resultset" do
