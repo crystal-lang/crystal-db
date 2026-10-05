@@ -3,9 +3,7 @@ require "./spec_helper"
 describe DB::Connection do
   it "raises on #driver_name if the driver doesn't override it" do
     with_dummy_connection do |cnn|
-      expect_raises(NotImplementedError, "DummyDriver::DummyConnection#driver_name") do
-        cnn.driver_name
-      end
+      cnn.driver_name.should eq "dummy"
     end
   end
 

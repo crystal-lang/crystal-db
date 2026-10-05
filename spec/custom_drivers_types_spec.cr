@@ -69,6 +69,10 @@ class FooDriver < DB::Driver
     def build_unprepared_statement(query) : DB::Statement
       raise "not implemented"
     end
+
+    def driver_name : String
+      "foo"
+    end
   end
 
   class FooStatement < DB::Statement
@@ -141,6 +145,10 @@ class BarDriver < DB::Driver
 
     def build_unprepared_statement(query) : DB::Statement
       raise "not implemented"
+    end
+
+    def driver_name : String
+      "bar"
     end
   end
 
