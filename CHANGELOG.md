@@ -1,3 +1,17 @@
+## v0.15.0 (2026-10-06)
+
+* **(breaking-change)** Add `Connection#driver_name`, `#server_name`, and `#server_version` to expose driver and server info. ([#232](https://github.com/crystal-lang/crystal-db/pull/232), [#233](https://github.com/crystal-lang/crystal-db/pull/233), thanks @Blacksmoke16)
+* Log `Range` as string representation rather than array. ([#223](https://github.com/crystal-lang/crystal-db/pull/223), thanks @mamantoha)
+* Fix `sleep(Number)` deprecation. ([#222](https://github.com/crystal-lang/crystal-db/pull/222), thanks @ysbaddaden)
+* Fix specs with `preview_mt` and/or `execution_context`. ([#221](https://github.com/crystal-lang/crystal-db/pull/221), thanks @ysbaddaden)
+* Fix documentation for `retry_delay`. ([#230](https://github.com/crystal-lang/crystal-db/pull/230), thanks @drum445)
+* Add Mimer SQL to the list of drivers. ([#231](https://github.com/crystal-lang/crystal-db/pull/231), thanks @majorproblem)
+* Exclude macos-latest 1.0.0 check. ([#219](https://github.com/crystal-lang/crystal-db/pull/219), thanks @bcardiff)
+
+### Notes for driver implementors
+
+* Implement `Connection#driver_name`, which is now abstract, to return the name the driver registers with `DB.register_driver`. Override `#server_name` and `#server_version` to expose what the server reports about itself; both default to `nil`. (See [#232](https://github.com/crystal-lang/crystal-db/pull/232), [#233](https://github.com/crystal-lang/crystal-db/pull/233))
+
 ## v0.14.0 (2025-09-04)
 
 * Allow `Enumerable` for query args instead of `Array` ([#207](https://github.com/crystal-lang/crystal-db/pull/207), thanks @lwakefield)
