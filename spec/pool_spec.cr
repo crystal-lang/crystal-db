@@ -57,6 +57,19 @@ class Closable
   end
 end
 
+class Expirable
+  include DB::Disposable
+
+  property? expired = false
+
+  def before_checkout
+    close if expired?
+  end
+
+  private def do_close
+  end
+end
+
 private def create_pool(**options, &factory : -> T) forall T
   DB::Pool.new(DB::Pool::Options.new(**options), &factory)
 end
@@ -192,6 +205,19 @@ describe DB::Pool do
     all[0].closed?.should be_false
     all[1].closed?.should be_true
     all[2].closed?.should be_false
+  end
+
+  it "should not return closed resources from checkout" do
+    pool = create_pool(max_pool_size: 1, max_idle_pool_size: 1) { Expirable.new }
+
+    resource1 = pool.checkout
+    pool.release resource1
+
+    # Expired while idle
+    resource1.expired = true
+
+    resource2 = pool.checkout
+    resource2.should_not eq resource1
   end
 
   it "should not return closed resources to the pool" do

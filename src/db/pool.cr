@@ -135,16 +135,24 @@ module DB
                      else
                        pick_available
                      end
-        end
 
-        @idle.delete resource
+          if resource
+            if resource.responds_to?(:before_checkout)
+              resource.before_checkout
+            end
+
+            @idle.delete resource
+
+            if resource.responds_to?(:closed?) && resource.closed?
+              @total.delete resource
+              resource = nil
+            end
+          end
+        end
 
         resource
       end
 
-      if res.responds_to?(:before_checkout)
-        res.before_checkout
-      end
       res
     end
 
