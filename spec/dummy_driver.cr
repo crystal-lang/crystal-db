@@ -65,6 +65,10 @@ class DummyDriver < DB::Driver
       DummyStatement.new(self, query, false)
     end
 
+    def driver_name : String
+      "dummy"
+    end
+
     def last_insert_id : Int64
       assert_not_closed!
 

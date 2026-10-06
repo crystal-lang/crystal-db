@@ -75,11 +75,7 @@ module DB
     # Returns the canonical name of the driver backing this connection.
     #
     # The value is always one of the names the driver registers with `DB.register_driver` (e.g. `"postgres"`, `"mysql"`, `"sqlite3"`).
-    #
-    # TODO: Make this `abstract` once downstream drivers all have added support.
-    def driver_name : String
-      raise NotImplementedError.new("#{self.class}#driver_name")
-    end
+    abstract def driver_name : String
 
     # Returns the product name the server identifies as (e.g. `"PostgreSQL"`, `"MariaDB"`), or `nil` if the driver can't tell.
     def server_name : String?
