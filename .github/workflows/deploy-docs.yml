@@ -1,0 +1,33 @@
+name: Deploy docs
+on:
+  push:
+  pull_request:
+    branches: [master]
+jobs:
+  build:
+    name: Deploy docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Prevent shallow clone
+      - name: Install Crystal
+        uses: oprypin/install-crystal@v1
+      - name: Install Python
+        uses: actions/setup-python@v2
+      - name: Install Python libs
+        run: |
+          pip install --no-deps -r docs/requirements.txt
+      - name: Configure Git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Build site
+        run: |
+          mkdocs build --strict
+      - name: Deploy to gh-pages
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          mike deploy --push --update-aliases --prefix=api "${GITHUB_REF#refs/tags/v}" latest
+          mike set-default --push --prefix=api "${GITHUB_REF#refs/tags/v}"
