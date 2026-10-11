@@ -109,7 +109,11 @@ module DB
           {% unless ann && ann[:ignore] %}
             {%
               properties[ivar.id] = {
-                type:      ivar.type,
+                type: if ivar.type.union?
+                  "Union(#{ivar.type.union_types.map { |t| "::#{t}".id }.join(" | ").id})".id
+                else
+                  "::#{ivar.type}".id
+                end,
                 key:       ((ann && ann[:key]) || ivar).id.stringify,
                 default:   ivar.default_value,
                 nilable:   ivar.type.nilable?,
