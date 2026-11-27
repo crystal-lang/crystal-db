@@ -224,4 +224,15 @@ describe DB::Pool do
 
     all.size.should eq 4
   end
+
+  it "preserves the original cause when retries are exhausted" do
+    pool = create_pool(retry_attempts: 1, retry_delay: 0.0) { Closable.new }
+    original = DB::ConnectionRefused.new("unreachable")
+
+    error = expect_raises(DB::PoolRetryAttemptsExceeded) do
+      pool.retry { raise original }
+    end
+
+    error.cause.should be(original)
+  end
 end

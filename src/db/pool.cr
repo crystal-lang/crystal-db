@@ -190,6 +190,7 @@ module DB
     # but if a new connection is needed there is a `retry_delay` seconds delay.
     def retry(&)
       current_available = 0
+      last_error : Exception? = nil
 
       sync do
         current_available = @idle.size
@@ -207,13 +208,15 @@ module DB
           # the exception to release resources
           # we still need to remove it from the known pool.
           sync { delete(e.resource) }
+          last_error = e
         rescue e : PoolResourceRefused
           # a ConnectionRefused means a new connection
           # was intended to be created,
           # nothing to do but to retry soon
+          last_error = e
         end
       end
-      raise PoolRetryAttemptsExceeded.new
+      raise PoolRetryAttemptsExceeded.new(cause: last_error)
     end
 
     # :nodoc:
